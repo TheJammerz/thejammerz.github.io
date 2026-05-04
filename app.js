@@ -3,6 +3,23 @@
    GSAP + ScrollTrigger + Lenis smooth scroll + interactions
    ==================================================================== */
 
+// Active la classe gsap-ready UNIQUEMENT si GSAP + ScrollTrigger sont disponibles.
+// Si ces libs ne chargent pas, le contenu reste visible (fallback de sécurité).
+if (window.gsap && window.ScrollTrigger) {
+  document.documentElement.classList.add('gsap-ready');
+}
+
+// Filet de sécurité ABSOLU : après 4s, si du contenu est encore caché, on le révèle.
+setTimeout(() => {
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    const cs = getComputedStyle(el);
+    if (parseFloat(cs.opacity) < 0.1) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    }
+  });
+}, 4000);
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- 1. LOADER ---------- */
@@ -10,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('load', () => {
     setTimeout(() => loader.classList.add('hidden'), 600);
   });
+  // Filet : cache le loader après 3s même si load ne fire pas
+  setTimeout(() => loader && loader.classList.add('hidden'), 3000);
 
   /* ---------- 2. YEAR ---------- */
   const yearEl = document.getElementById('year');
@@ -116,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 88%',
+            start: 'top bottom-=50',
             toggleActions: 'play none none none'
           }
         }
