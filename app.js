@@ -166,23 +166,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Stats counter
+    // Stats counter (avec suffixe optionnel : %, H, etc.)
     gsap.utils.toArray('.stat-num[data-count]').forEach(el => {
       const target = parseInt(el.dataset.count, 10);
-      gsap.fromTo(el,
-        { innerText: 0 },
-        {
-          innerText: target,
-          duration: 2.2,
-          ease: 'power2.out',
-          snap: { innerText: 1 },
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
+      const suffix = el.dataset.suffix || '';
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 2.2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        },
+        onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; }
+      });
     });
 
     // Background blobs parallax
@@ -239,8 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     );
 
-    // Songs list reveal
-    gsap.utils.toArray('.songs li').forEach((li, i) => {
+    // Songs list reveal (uniquement le set actif au scroll initial — les autres
+    // s'animent via le handler de tab pour eviter qu'ils restent invisibles)
+    gsap.utils.toArray('.songs.songs-active li').forEach((li, i) => {
       gsap.fromTo(li,
         { opacity: 0, x: -30 },
         {
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
           delay: i * 0.02,
           scrollTrigger: {
             trigger: li,
-            start: 'top 92%',
+            start: 'top bottom-=20',
             toggleActions: 'play none none none'
           }
         }
@@ -283,31 +283,50 @@ document.addEventListener('DOMContentLoaded', () => {
       tab.classList.add('tab-active');
       document.querySelectorAll('[data-tab-content]').forEach(c => c.classList.remove('songs-active'));
       const content = document.querySelector(`[data-tab-content="${target}"]`);
-      if (content) {
-        content.classList.add('songs-active');
-        if (window.gsap) {
-          gsap.fromTo(content.querySelectorAll('li'),
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.03, ease: 'power2.out' }
-          );
-        }
-        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      if (!content) return;
+      content.classList.add('songs-active');
+      // Force visibilite immediate des li (en cas ou scrollTrigger les a mis a opacity:0)
+      content.querySelectorAll('li').forEach(li => {
+        li.style.opacity = '1';
+        li.style.transform = 'none';
+      });
+      if (window.gsap) {
+        gsap.fromTo(content.querySelectorAll('li'),
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.03, ease: 'power2.out',
+            clearProps: 'transform' }
+        );
       }
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
     });
   });
 
   /* ---------- 8. VIDEO LAZY LOAD ---------- */
+  function loadVideo(wrap) {
+    const id = wrap.dataset.video;
+    if (!id || wrap.dataset.loaded === '1') return;
+    wrap.dataset.loaded = '1';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    iframe.title = 'The Jammerz - vidéo YouTube';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    iframe.setAttribute('frameborder', '0');
+    wrap.innerHTML = '';
+    wrap.appendChild(iframe);
+  }
+
   document.querySelectorAll('.video-wrap[data-video]').forEach(wrap => {
-    wrap.addEventListener('click', () => {
-      const id = wrap.dataset.video;
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-      iframe.title = 'YouTube video player';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      wrap.innerHTML = '';
-      wrap.appendChild(iframe);
-    }, { once: true });
+    // Click sur n'importe quelle partie du wrap (thumb, bouton play, label) declenche le load
+    const handler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      loadVideo(wrap);
+    };
+    wrap.addEventListener('click', handler);
+    // Backup : bouton play directement
+    const btn = wrap.querySelector('.video-play');
+    if (btn) btn.addEventListener('click', handler);
   });
 
   /* ---------- 9. CONTACT FORM ---------- */
