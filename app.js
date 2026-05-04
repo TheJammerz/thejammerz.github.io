@@ -345,33 +345,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- 8. VIDEO LAZY LOAD ---------- */
-  function loadVideo(wrap) {
-    const id = wrap.dataset.video;
-    if (!id || wrap.dataset.loaded === '1') return;
-    wrap.dataset.loaded = '1';
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-    iframe.title = 'The Jammerz - vidéo YouTube';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    iframe.allowFullscreen = true;
-    iframe.setAttribute('frameborder', '0');
-    wrap.innerHTML = '';
-    wrap.appendChild(iframe);
-  }
-
-  document.querySelectorAll('.video-wrap[data-video]').forEach(wrap => {
-    // Click sur n'importe quelle partie du wrap (thumb, bouton play, label) declenche le load
-    const handler = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      loadVideo(wrap);
-    };
-    wrap.addEventListener('click', handler);
-    // Backup : bouton play directement
-    const btn = wrap.querySelector('.video-play');
-    if (btn) btn.addEventListener('click', handler);
-  });
+  /* ---------- 8. VIDEOS ----------
+     Les iframes YouTube sont desormais embedees directement dans le HTML.
+     Le visiteur clique sur Play du player YouTube natif -> ca part.
+     Plus de logique custom de lazy-load qui pouvait casser. */
 
   /* ---------- 9. CONTACT FORM ---------- */
   const form = document.getElementById('contactForm');
