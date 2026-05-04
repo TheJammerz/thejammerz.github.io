@@ -259,40 +259,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ---------- 6.5 STATS COUNTERS (IntersectionObserver - independant de GSAP) ---------- */
-  const counterEls = document.querySelectorAll('.stat-num[data-count]');
-  const animateCounter = (el) => {
-    if (el.dataset.animated === '1') return;
-    el.dataset.animated = '1';
-    const target = parseInt(el.dataset.count, 10);
-    const suffix = el.dataset.suffix || '';
-    const duration = 1800;
-    const start = performance.now();
-    const tick = (now) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-      const value = Math.round(target * eased);
-      el.textContent = value + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
-      else el.textContent = target + suffix;
-    };
-    requestAnimationFrame(tick);
-  };
-  if ('IntersectionObserver' in window) {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounter(entry.target);
-          obs.unobserve(entry.target);
-        }
+  /* ---------- 6.5 STATS COUNTERS (bulletproof) ----------
+     STRATEGIE :
+     1. Les valeurs finales sont DEJA dans le HTML (6, 35, 100%, 4H).
+        Donc meme sans JS, l'utilisateur voit les bonnes donnees.
+     2. Le JS optionnellement reset a 0 puis anime jusqu'a target.
+        Si quoi que ce soit foire, on ne cache pas la donnee.
+     ------------------------------------------------------------- */
+  function setupCounters() {
+    var els = document.querySelectorAll('.stat-num[data-count]');
+    if (!els.length) return;
+
+    function animate(el) {
+      if (el.dataset.animated === '1') return;
+      el.dataset.animated = '1';
+      var target = parseInt(el.dataset.count, 10);
+      var suffix = el.dataset.suffix || '';
+      // Reset visuel a 0 juste avant l'anim (sinon on voit la valeur fixe sauter)
+      el.textContent = '0' + suffix;
+      var duration = 1800;
+      var start = performance.now();
+      function tick(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function inViewport(el) {
+      var r = el.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      return r.top < vh * 0.9 && r.bottom > 0;
+    }
+
+    // Fire pour les elements deja visibles AU CHARGEMENT
+    els.forEach(function(el){ if (inViewport(el)) animate(el); });
+
+    // Sur scroll : check les autres
+    var onScroll = function() {
+      els.forEach(function(el){
+        if (el.dataset.animated !== '1' && inViewport(el)) animate(el);
       });
-    }, { threshold: 0.25 });
-    counterEls.forEach(el => obs.observe(el));
-  } else {
-    // Fallback : anime tout immediatement
-    counterEls.forEach(animateCounter);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    // Filet : si scroll ne fire pas, on anime tout apres 5s
+    setTimeout(function() {
+      els.forEach(function(el){ if (el.dataset.animated !== '1') animate(el); });
+    }, 5000);
   }
+
+  // Lance immediatement (DOMContentLoaded est deja fire ici)
+  setupCounters();
+  // Re-check apres window load (au cas ou)
+  window.addEventListener('load', setupCounters);
 
   /* ---------- 7. REPERTOIRE TABS ---------- */
   document.querySelectorAll('.tab').forEach(tab => {
