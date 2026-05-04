@@ -166,23 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Stats counter (avec suffixe optionnel : %, H, etc.)
-    gsap.utils.toArray('.stat-num[data-count]').forEach(el => {
-      const target = parseInt(el.dataset.count, 10);
-      const suffix = el.dataset.suffix || '';
-      const obj = { val: 0 };
-      gsap.to(obj, {
-        val: target,
-        duration: 2.2,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none none'
-        },
-        onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; }
-      });
-    });
+    // Stats counter — voir bloc plus bas (IntersectionObserver, plus robuste)
 
     // Background blobs parallax
     gsap.to('.blob-1', { y: -150, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
@@ -273,6 +257,41 @@ document.addEventListener('DOMContentLoaded', () => {
       const link = document.querySelector(`.nav-menu a[href="#${id}"]`);
       if (link) link.classList.add('active');
     }
+  }
+
+  /* ---------- 6.5 STATS COUNTERS (IntersectionObserver - independant de GSAP) ---------- */
+  const counterEls = document.querySelectorAll('.stat-num[data-count]');
+  const animateCounter = (el) => {
+    if (el.dataset.animated === '1') return;
+    el.dataset.animated = '1';
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    const tick = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const value = Math.round(target * eased);
+      el.textContent = value + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = target + suffix;
+    };
+    requestAnimationFrame(tick);
+  };
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    counterEls.forEach(el => obs.observe(el));
+  } else {
+    // Fallback : anime tout immediatement
+    counterEls.forEach(animateCounter);
   }
 
   /* ---------- 7. REPERTOIRE TABS ---------- */
