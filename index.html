@@ -3,117 +3,559 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎵 The Jammerz - Groupe de Musique</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #333;
-    }
-    .container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-      max-width: 900px;
-      padding: 70px 50px;
-      text-align: center;
-      animation: fadeIn 0.8s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 { 
-      color: #1e3c72; 
-      font-size: 3.5em; 
-      margin-bottom: 15px; 
-      letter-spacing: 2px;
-    }
-    .subtitle { 
-      color: #2a5298; 
-      font-size: 1.5em; 
-      margin-bottom: 40px; 
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
-    .description { 
-      color: #555; 
-      font-size: 1.15em; 
-      line-height: 1.8; 
-      margin-bottom: 50px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .contact-box {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      padding: 30px;
-      border-radius: 12px;
-      margin: 40px 0;
-      border-left: 5px solid #1e3c72;
-    }
-    .contact-box p { 
-      margin: 15px 0; 
-      font-size: 1.1em;
-    }
-    .contact-box strong { 
-      color: #1e3c72; 
-      font-weight: 600;
-    }
-    .status {
-      margin-top: 50px;
-      padding: 20px;
-      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-      border-left: 5px solid #28a745;
-      border-radius: 8px;
-      color: #155724;
-      font-size: 1.1em;
-      font-weight: 500;
-    }
-    .social {
-      margin-top: 40px;
-      font-size: 0.95em;
-      color: #888;
-    }
-    .footer {
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 2px solid #eee;
-      color: #999;
-      font-size: 0.9em;
-    }
-  </style>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>The Jammerz — Groupe de Musique Funk, Soul & Groove • Pays Basque</title>
+  <meta name="description" content="The Jammerz, groupe de musique live du Pays Basque. Funk, Soul, Groove, Rock, Jazz. Bars, mariages, festivals, soirées privées. Réservez votre événement.">
+  <meta name="keywords" content="The Jammerz, groupe musique pays basque, funk, soul, groove, live, mariage, concert, bayonne, biarritz">
+  <meta name="author" content="The Jammerz">
+  <meta name="theme-color" content="#0A0A14">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thejammerz.github.io/">
+  <meta property="og:title" content="The Jammerz — Groupe de Musique Funk, Soul & Groove">
+  <meta property="og:description" content="Le groove du Pays Basque. Funk, Soul, Rock, Jazz live. Réservez le groupe pour votre événement.">
+  <meta property="og:image" content="https://thejammerz.github.io/assets/images/logo-full.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://thejammerz.github.io/">
+  <meta property="twitter:title" content="The Jammerz — Groupe de Musique Funk, Soul & Groove">
+  <meta property="twitter:description" content="Le groove du Pays Basque. Funk, Soul, Rock, Jazz live.">
+  <meta property="twitter:image" content="https://thejammerz.github.io/assets/images/logo-full.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/logo-full.png">
+
+  <!-- Schema.org MusicGroup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "The Jammerz",
+    "alternateName": "Jammerz",
+    "url": "https://thejammerz.github.io/",
+    "logo": "https://thejammerz.github.io/assets/images/logo-full.png",
+    "image": "https://thejammerz.github.io/assets/images/logo-full.png",
+    "description": "Groupe de musique live du Pays Basque mêlant Funk, Soul, Groove, Rock, Jazz et musiques latines.",
+    "genre": ["Funk", "Soul", "Groove", "Rock", "Jazz"],
+    "foundingDate": "2026",
+    "foundingLocation": {
+      "@type": "Place",
+      "name": "Pays Basque, France"
+    },
+    "member": [
+      {"@type":"Person","name":"Lotfi","roleName":"Chant / Guitare"},
+      {"@type":"Person","name":"Quentin","roleName":"Basse / Chant"},
+      {"@type":"Person","name":"Thomas","roleName":"Guitare soliste"},
+      {"@type":"Person","name":"Tristan","roleName":"Batterie"},
+      {"@type":"Person","name":"Andréa","roleName":"Chant"},
+      {"@type":"Person","name":"Camilo","roleName":"Saxophone (Guest)"}
+    ],
+    "email": "thejammerz64@gmail.com",
+    "telephone": "+33671857524",
+    "sameAs": [
+      "https://www.instagram.com/the.jammerz/",
+      "https://www.tiktok.com/@thejammerz64",
+      "https://www.youtube.com/@thejammerz"
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts: Bungee (display) + Montserrat (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🎵 THE JAMMERZ 🎵</h1>
-    <p class="subtitle">Groupe de Musique — Prospection Concerts</p>
-    
-    <p class="description">
-      Bienvenue sur le site officiel de The Jammerz. Nous sommes un groupe de musiciens passionnés à la recherche de nouvelles opportunités de concerts et de collaborations. Explorez notre univers musical et contactez-nous pour discuter de vos projets !
-    </p>
-    
-    <div class="contact-box">
-      <p><strong>📧 Email</strong><br>thejammerz64@gmail.com</p>
-      <p><strong>🎯 Statut</strong><br>En prospection active — Tours, collaborations & festivals</p>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-logo">THE <span>JAMMERZ</span></div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Background blobs animés -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <span class="nav-logo-the">THE</span>
+        <span class="nav-logo-name">JAMMERZ</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#about" data-link>À propos</a></li>
+        <li><a href="#members" data-link>Membres</a></li>
+        <li><a href="#live" data-link>Live</a></li>
+        <li><a href="#repertoire" data-link>Répertoire</a></li>
+        <li><a href="#tarifs" data-link>Tarifs</a></li>
+        <li><a href="#contact" data-link class="nav-cta">Réserver</a></li>
+      </ul>
+      <button class="nav-burger" id="navBurger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    
-    <div class="status">
-      ✅ Site en ligne et opérationnel
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <p class="hero-tag" data-reveal>FUNK · SOUL · GROOVE · LIVE</p>
+      <h1 class="hero-title">
+        <span class="hero-the" data-reveal>THE</span>
+        <span class="hero-name" data-reveal>JAMMERZ</span>
+      </h1>
+      <p class="hero-subtitle" data-reveal>Le groove du Pays Basque · 6 musiciens · 1 énergie</p>
+      <div class="hero-actions" data-reveal>
+        <a href="#contact" class="btn btn-primary">Réserver le groupe</a>
+        <a href="#live" class="btn btn-ghost">▶ Voir un live</a>
+      </div>
     </div>
-    
-    <div class="social">
-      <p>Suivez-nous pour les dernières actualités !</p>
+    <div class="hero-scroll">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
     </div>
-    
-    <div class="footer">
-      <p>© 2026 The Jammerz • All rights reserved</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section about">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>01</span>
+        <h2 class="section-title" data-reveal>L'<span class="accent">histoire</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text" data-reveal>
+          <p class="lead">The Jammerz, c'est avant tout une rencontre entre musiciens du <strong>Pays Basque</strong> passionnés qui partagent la même obsession : <em>le groove et l'énergie live</em>.</p>
+          <p>Issus d'horizons différents — jazz, funk, musiques latines, rock, électro — les membres du groupe ont accumulé des années d'expérience sur scène, en studio et aux côtés d'artistes reconnus.</p>
+          <p>Rencontrés en jam sessions, l'envie de réunir toutes ces influences dans un projet commun s'est imposée comme une évidence.</p>
+          <blockquote class="about-quote">
+            « L'équilibre entre <span class="accent">atmosphère</span> et <span class="accent">puissance</span>, technique et feeling, finesse et impact. »
+          </blockquote>
+        </div>
+        <div class="about-stats">
+          <div class="stat" data-reveal>
+            <div class="stat-num" data-count="6">0</div>
+            <div class="stat-label">Musiciens</div>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat-num" data-count="50">0</div>
+            <div class="stat-label">Morceaux au répertoire</div>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat-num" data-count="100">0</div>
+            <div class="stat-label">% improvisation live</div>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat-num" data-count="4">0</div>
+            <div class="stat-label">Heures de live possible</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MINDSET marquee -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee">
+      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span><span>JAZZ</span><span>•</span><span>LATIN</span><span>•</span><span>ÉLECTRO</span><span>•</span>
+      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span><span>JAZZ</span><span>•</span><span>LATIN</span><span>•</span><span>ÉLECTRO</span><span>•</span>
     </div>
   </div>
+
+  <!-- MEMBERS -->
+  <section id="members" class="section members">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>02</span>
+        <h2 class="section-title" data-reveal>Le <span class="accent">crew</span></h2>
+        <p class="section-sub" data-reveal>6 personnalités, 1 énergie collective</p>
+      </div>
+
+      <div class="members-grid">
+        <article class="member-card" data-reveal>
+          <div class="member-photo"><img src="assets/members/lotfi.png" alt="Lotfi - Chant et Guitare" loading="lazy"></div>
+          <div class="member-info">
+            <h3 class="member-name">LOTFI</h3>
+            <p class="member-role">Chant / Guitare</p>
+            <p class="member-bio">Moteur émotionnel du groupe. Fondateur des Jam Deus à Biarritz, gagnant d'une étape de The Voice. Son jeu privilégie la respiration, les nuances, la clarté.</p>
+            <ul class="member-tags"><li>Son dreamy</li><li>Groove subtil</li><li>Ambiances live</li></ul>
+          </div>
+        </article>
+
+        <article class="member-card" data-reveal>
+          <div class="member-photo"><img src="assets/members/quentin.png" alt="Quentin - Basse et Chant" loading="lazy"></div>
+          <div class="member-info">
+            <h3 class="member-name">QUENTIN</h3>
+            <p class="member-role">Basse / Chant</p>
+            <p class="member-bio">Bassiste instinctif et pilier rythmique. Issu d'un univers groove/funk/rock, il construit son jeu autour du placement et de la cohésion collective. Albums solo sur iTunes.</p>
+            <ul class="member-tags"><li>Placement précis</li><li>Funk / Rock</li><li>Solidité scénique</li></ul>
+          </div>
+        </article>
+
+        <article class="member-card" data-reveal>
+          <div class="member-photo"><img src="assets/members/thomas.png" alt="Thomas - Guitare soliste" loading="lazy"></div>
+          <div class="member-info">
+            <h3 class="member-name">THOMAS</h3>
+            <p class="member-role">Guitare soliste</p>
+            <p class="member-bio">Autodidacte passionné, 28 ans de guitare. A partagé la scène avec Robben Ford, Larry Carlton, Eric Clapton, Ben Harper, Gojira, Lara Fabian. Démos pour Ibanez et Fender.</p>
+            <ul class="member-tags"><li>Improvisation jazz</li><li>Fusion / blues</li><li>Virtuosité</li></ul>
+          </div>
+        </article>
+
+        <article class="member-card" data-reveal>
+          <div class="member-photo"><img src="assets/members/tristan.png" alt="Tristan - Batterie" loading="lazy"></div>
+          <div class="member-info">
+            <h3 class="member-name">TRISTAN</h3>
+            <p class="member-role">Batterie</p>
+            <p class="member-bio">Issu d'une famille de musiciens professionnels. Formé au conservatoire en piano, membre de la Zarpai Banda en percussions. ADN musical jazz, funk et latino.</p>
+            <ul class="member-tags"><li>Groove funk</li><li>Influences jazz</li><li>Polyvalence</li></ul>
+          </div>
+        </article>
+
+        <article class="member-card" data-reveal>
+          <div class="member-photo"><img src="assets/members/andrea.png" alt="Andréa - Chant" loading="lazy"></div>
+          <div class="member-info">
+            <h3 class="member-name">ANDRÉA</h3>
+            <p class="member-role">Chant</p>
+            <p class="member-bio">Voix soul singulière et expressive. Autodidacte guitare 10+ ans, batterie 4 ans, 8 ans de piano-solfège au conservatoire. Authenticité et sensibilité artistique.</p>
+            <ul class="member-tags"><li>Voix soul</li><li>Authenticité</li><li>Polyvalence</li></ul>
+          </div>
+        </article>
+
+        <article class="member-card member-guest" data-reveal>
+          <div class="member-photo"><img src="assets/members/camilo.png" alt="Camilo - Saxophone (Guest)" loading="lazy"></div>
+          <div class="member-info">
+            <span class="guest-badge">GUEST</span>
+            <h3 class="member-name">CAMILO</h3>
+            <p class="member-role">Saxophone</p>
+            <p class="member-bio">Clarinettiste de formation, débute en Colombie. Collabore avec Nassaï, I Sens, Hermafrodisiac. En 2024, single « SAX'TENTATION ». Fusion électro / live.</p>
+            <ul class="member-tags"><li>Sax + DJ</li><li>Latino</li><li>Live electronics</li></ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE -->
+  <section id="live" class="section live">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>03</span>
+        <h2 class="section-title" data-reveal>Le <span class="accent">live</span></h2>
+        <p class="section-sub" data-reveal>Vidéos officielles — voir et entendre le groove en action</p>
+      </div>
+
+      <div class="live-grid">
+        <div class="live-main" data-reveal>
+          <div class="video-wrap" data-video="ORGKd1ntL4w">
+            <div class="video-thumb" style="background-image: url('https://i.ytimg.com/vi/ORGKd1ntL4w/maxresdefault.jpg');">
+              <button class="video-play" aria-label="Lire la vidéo presskit">
+                <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38"/><polygon points="32,24 60,40 32,56"/></svg>
+              </button>
+              <span class="video-label">PRESS KIT — Découvrez le groupe</span>
+            </div>
+          </div>
+        </div>
+        <div class="live-side" data-reveal>
+          <div class="video-wrap video-vertical" data-video="05GayswAIxE">
+            <div class="video-thumb" style="background-image: url('https://i.ytimg.com/vi/05GayswAIxE/maxresdefault.jpg');">
+              <button class="video-play" aria-label="Lire la démo live">
+                <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38"/><polygon points="32,24 60,40 32,56"/></svg>
+              </button>
+              <span class="video-label">DÉMO LIVE — 1 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPERTOIRE -->
+  <section id="repertoire" class="section repertoire">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>04</span>
+        <h2 class="section-title" data-reveal>Le <span class="accent">répertoire</span></h2>
+        <p class="section-sub" data-reveal>50+ morceaux travaillés et improvisés — des classiques au funk moderne</p>
+      </div>
+
+      <div class="repertoire-tabs" data-reveal>
+        <button class="tab tab-active" data-tab="principal">SET PRINCIPAL</button>
+        <button class="tab" data-tab="secondaire">SET SECONDAIRE (impro)</button>
+      </div>
+
+      <div class="repertoire-content">
+        <ul class="songs songs-active" data-tab-content="principal">
+          <li>Voodoochild / Superstition</li>
+          <li>It's your life — Lenny Kravitz</li>
+          <li>Good Time — Chic</li>
+          <li>I want your love / Hot Stepper</li>
+          <li>Le freak — Chic</li>
+          <li>I feel good — James Brown</li>
+          <li>Starlight / Sorry for party rocking</li>
+          <li>The Wall — Pink Floyd</li>
+          <li>Blow — Bruno Mars</li>
+          <li>Machistador — M</li>
+          <li>La bohème / Daft Punk</li>
+          <li>Fly Away — Lenny Kravitz</li>
+          <li>I belong to you — Lenny Kravitz</li>
+          <li>Ghostbusters / Uptown Funk</li>
+          <li>I wish — Stevie Wonder</li>
+          <li>I just might — Bruno Mars</li>
+          <li>In the Air Tonight — Phil Collins</li>
+          <li>Thriller / Higher Ground</li>
+          <li>Need your love — Curtis Harding</li>
+          <li>Hear Me — The Buttshakers</li>
+          <li>100 Days, 100 Nights — Sharon Jones</li>
+          <li>Everybody Needs Somebody — Blues Brothers</li>
+        </ul>
+        <ul class="songs" data-tab-content="secondaire">
+          <li>Wicked Game</li>
+          <li>You can leave your hat on</li>
+          <li>Old Town Road</li>
+          <li>Shout / Wonderwall</li>
+          <li>Bittersweet Symphony</li>
+          <li>Radioactive</li>
+          <li>Owner of a lonely heart</li>
+          <li>Mad World</li>
+          <li>Crazy</li>
+          <li>Adventure of a Lifetime</li>
+          <li>We Will Rock You</li>
+          <li>Hey Joe</li>
+          <li>Johnny B. Goode</li>
+          <li>Killing in the Name</li>
+          <li>Come Together</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARIFS -->
+  <section id="tarifs" class="section tarifs">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>05</span>
+        <h2 class="section-title" data-reveal>Les <span class="accent">prestations</span></h2>
+        <p class="section-sub" data-reveal>À la carte — adaptables à votre événement (1h à 4h de live)</p>
+      </div>
+
+      <div class="tarifs-grid">
+        <article class="tarif-card" data-reveal>
+          <div class="tarif-icon">🍻</div>
+          <h3>Concert Bar</h3>
+          <p class="tarif-desc">Soirée publique, ambiance live, bar / restaurant.</p>
+          <div class="tarif-price">500 € <span>– 2 500 €</span></div>
+        </article>
+
+        <article class="tarif-card tarif-card-featured" data-reveal>
+          <div class="tarif-icon">💍</div>
+          <h3>Mariage / Événement privé</h3>
+          <p class="tarif-desc">Concert privé pour votre cérémonie ou événement d'entreprise.</p>
+          <div class="tarif-price">500 € <span>– 1 500 €</span></div>
+        </article>
+
+        <article class="tarif-card" data-reveal>
+          <div class="tarif-icon">🎸</div>
+          <h3>Acoustique solo / duo</h3>
+          <p class="tarif-desc">Format intimiste, parfait pour cocktails et moments calmes.</p>
+          <div class="tarif-price">400 €</div>
+        </article>
+
+        <article class="tarif-card" data-reveal>
+          <div class="tarif-icon">🎪</div>
+          <h3>Festival / Salle de concert</h3>
+          <p class="tarif-desc">Format scène publique, sonorisation pro, full band.</p>
+          <div class="tarif-price">1 700 € <span>– 2 500 €</span></div>
+        </article>
+
+        <article class="tarif-card" data-reveal>
+          <div class="tarif-icon">🌙</div>
+          <h3>Soirée complète 5h-6h</h3>
+          <p class="tarif-desc">Set complet pour votre soirée du début à la fin.</p>
+          <div class="tarif-price">2 000 €</div>
+        </article>
+
+        <article class="tarif-card tarif-card-info" data-reveal>
+          <div class="tarif-icon">📍</div>
+          <h3>Frais de déplacement</h3>
+          <p class="tarif-desc">Au-delà de 20 km de Bayonne : <strong>8 € / km</strong>. Variations liées à la durée, logistique, présence du saxophoniste.</p>
+          <a href="#contact" class="tarif-cta">Demander un devis →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>06</span>
+        <h2 class="section-title" data-reveal>On <span class="accent">joue</span> chez vous ?</h2>
+        <p class="section-sub" data-reveal>Décrivez-nous votre événement, on revient vers vous sous 24h.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info" data-reveal>
+          <h3>Parlons-en</h3>
+          <p>Concert, mariage, festival, anniversaire, soirée d'entreprise — on s'adapte. Plus le brief est précis, plus la proposition l'est.</p>
+          <ul class="contact-list">
+            <li>
+              <span class="contact-label">Email</span>
+              <a href="mailto:thejammerz64@gmail.com">thejammerz64@gmail.com</a>
+            </li>
+            <li>
+              <span class="contact-label">Téléphone</span>
+              <a href="tel:+33671857524">06 71 85 75 24</a>
+            </li>
+            <li>
+              <span class="contact-label">Localisation</span>
+              <span>Bayonne · Pays Basque</span>
+            </li>
+          </ul>
+
+          <div class="socials">
+            <a href="https://www.instagram.com/the.jammerz/" target="_blank" rel="noopener" class="social" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.39C1.34 2.69.93 3.36.62 4.15.32 4.91.12 5.79.06 7.06.01 8.34 0 8.75 0 12.01s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.39 2.13.67.67 1.34 1.08 2.13 1.39.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.39.67-.67 1.08-1.34 1.39-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.39-2.13C21.31 1.34 20.64.93 19.85.62c-.76-.3-1.64-.5-2.91-.56C15.66.01 15.25 0 12 0z"/><path d="M12 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zm0 10.16a4 4 0 110-8 4 4 0 010 8z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=The.Jammerz" target="_blank" rel="noopener" class="social" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24h-1.918c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@thejammerz64" target="_blank" rel="noopener" class="social" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/the-jammerz/" target="_blank" rel="noopener" class="social" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://youtube.com/@thejammerz" target="_blank" rel="noopener" class="social" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm" action="https://formsubmit.co/thejammerz64@gmail.com" method="POST" data-reveal>
+          <!-- Formsubmit config (hidden inputs) -->
+          <input type="hidden" name="_subject" value="🎵 Nouvelle demande contact - The Jammerz">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="true">
+          <input type="hidden" name="_next" value="https://thejammerz.github.io/?sent=1">
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="form-row">
+            <label class="form-field">
+              <span>Nom *</span>
+              <input type="text" name="nom" required placeholder="Votre nom">
+            </label>
+            <label class="form-field">
+              <span>Email *</span>
+              <input type="email" name="email" required placeholder="vous@exemple.com">
+            </label>
+          </div>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Téléphone</span>
+              <input type="tel" name="telephone" placeholder="06 12 34 56 78">
+            </label>
+            <label class="form-field">
+              <span>Type d'événement</span>
+              <select name="type_evenement">
+                <option value="">Choisir...</option>
+                <option>Concert bar / soirée publique</option>
+                <option>Mariage</option>
+                <option>Événement privé / entreprise</option>
+                <option>Festival / salle de concert</option>
+                <option>Acoustique solo/duo</option>
+                <option>Autre</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Date souhaitée</span>
+              <input type="date" name="date_evenement">
+            </label>
+            <label class="form-field">
+              <span>Lieu</span>
+              <input type="text" name="lieu" placeholder="Ville / salle">
+            </label>
+          </div>
+          <label class="form-field">
+            <span>Votre message *</span>
+            <textarea name="message" rows="5" required placeholder="Parlez-nous de votre événement : nombre de personnes, ambiance souhaitée, contraintes..."></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Envoyer la demande</span>
+            <span class="btn-arrow">→</span>
+          </button>
+          <p class="form-note">* Champs obligatoires · Réponse sous 24h</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">THE <span>JAMMERZ</span></div>
+          <p>Funk · Soul · Groove · Live<br>Pays Basque · France</p>
+        </div>
+        <div class="footer-col">
+          <h4>Le groupe</h4>
+          <ul>
+            <li><a href="#about" data-link>L'histoire</a></li>
+            <li><a href="#members" data-link>Membres</a></li>
+            <li><a href="#repertoire" data-link>Répertoire</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Booking</h4>
+          <ul>
+            <li><a href="#tarifs" data-link>Prestations</a></li>
+            <li><a href="#contact" data-link>Demander un devis</a></li>
+            <li><a href="mailto:thejammerz64@gmail.com">thejammerz64@gmail.com</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Suivez-nous</h4>
+          <ul>
+            <li><a href="https://www.instagram.com/the.jammerz/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="https://www.tiktok.com/@thejammerz64" target="_blank" rel="noopener">TikTok</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=The.Jammerz" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="year">2026</span> The Jammerz · Tous droits réservés</p>
+        <p class="footer-credit">Site fait avec ❤️ et beaucoup de groove</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast confirmation -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span class="toast-text">Demande envoyée — on revient vers vous très vite !</span>
+  </div>
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
