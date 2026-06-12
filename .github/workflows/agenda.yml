@@ -1,0 +1,50 @@
+name: Mise à jour agenda
+
+# Régénère la rubrique « Nos prochains lives » depuis le Google Agenda public.
+on:
+  schedule:
+    - cron: "0 5 * * *"        # tous les jours 05:00 UTC (07h Paris l'été, 06h l'hiver)
+  workflow_dispatch:            # bouton « Run workflow » manuel
+  push:                         # première exécution dès l'ajout du script/workflow
+    paths:
+      - "scripts/update_agenda.py"
+      - ".github/workflows/agenda.yml"
+
+permissions:
+  contents: write
+
+# Évite que deux exécutions se marchent dessus.
+concurrency:
+  group: agenda-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dépendances
+        run: pip install --quiet icalendar recurring-ical-events
+
+      - name: Régénérer l'agenda
+        run: python scripts/update_agenda.py
+
+      - name: Commit si changement
+        run: |
+          if [ -n "$(git status --porcelain index.html)" ]; then
+            git config user.name  "jammerz-agenda-bot"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "chore(agenda): maj auto des prochains lives"
+            git push
+            echo "Agenda mis à jour et poussé."
+          else
+            echo "Rien à mettre à jour."
+          fi
