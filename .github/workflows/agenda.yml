@@ -43,7 +43,9 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add index.html
             git commit -m "chore(agenda): maj auto des prochains lives"
-            git push
+            # Robuste aux courses : on rebase sur le remote avant de pousser.
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
             echo "Agenda mis à jour et poussé."
           else
             echo "Rien à mettre à jour."
