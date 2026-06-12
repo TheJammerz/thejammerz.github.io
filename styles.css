@@ -531,27 +531,60 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   .reels-row { grid-template-columns: 1fr; max-width: 320px; }
 }
 
-/* ----- 13b. AGENDA / PROCHAINS LIVES ----- */
-.gigs {
-  display: flex; flex-direction: column; gap: 20px;
-  max-width: 940px; margin: 0 auto;
+/* ----- 13b. AGENDA / PROCHAINS LIVES (carrousel horizontal) ----- */
+.gigs-carousel {
+  max-width: 980px;
+  margin: 0 auto;
 }
+
+/* Zone défilable */
+.gigs-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 4px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Fondu sur les bords : suggère qu'on peut faire défiler */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30px, #000 calc(100% - 30px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 30px, #000 calc(100% - 30px), transparent 100%);
+}
+.gigs-viewport::-webkit-scrollbar { display: none; }
+.gigs-viewport:focus-visible {
+  outline: 2px solid var(--c-red);
+  outline-offset: 4px;
+  border-radius: var(--radius);
+}
+
+.gigs-track {
+  display: flex;
+  gap: 20px;
+  padding: 10px 4px 28px;     /* marge pour le lift au survol + l'ombre */
+  min-width: 100%;
+  width: max-content;          /* grandit avec le contenu */
+}
+
+/* Carte = slide vertical à largeur fixe */
 .gig-card {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: clamp(20px, 4vw, 40px);
-  padding: 28px clamp(22px, 4vw, 40px);
+  flex: 0 0 auto;
+  width: clamp(264px, 80vw, 322px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 26px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
   border: 1px solid rgba(255,255,255,0.08);
   position: relative; overflow: hidden;
   transition: transform .5s cubic-bezier(.22,1,.36,1), border-color .5s ease, box-shadow .5s ease;
 }
 .gig-card::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  content: ''; position: absolute; left: 0; top: 0; right: 0; height: 4px;
   background: var(--grad-primary);
-  transform: scaleY(0); transform-origin: top;
+  transform: scaleX(0); transform-origin: left;
   transition: transform .5s cubic-bezier(.22,1,.36,1);
 }
 .gig-card:hover {
@@ -559,29 +592,31 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   border-color: rgba(255, 61, 46, 0.4);
   box-shadow: 0 24px 60px rgba(255, 61, 46, 0.18);
 }
-.gig-card:hover::before { transform: scaleY(1); }
+.gig-card:hover::before { transform: scaleX(1); }
 
+/* Date : pastille horizontale en haut de la carte */
 .gig-date {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-width: 104px; padding: 16px 20px; line-height: 1;
-  border-radius: var(--radius);
-  background: rgba(255,255,255,0.03);
+  display: inline-flex; align-items: baseline; gap: 8px;
+  align-self: flex-start;
+  padding: 9px 16px; line-height: 1;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
 }
 .gig-day {
   font-family: var(--f-display);
-  font-size: clamp(38px, 5vw, 54px);
+  font-size: 28px;
   background: var(--grad-primary);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .gig-month {
   font-family: var(--f-body); font-weight: 700;
-  font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--c-text); margin-top: 8px;
+  font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--c-text);
 }
-.gig-year { font-size: 12px; letter-spacing: 0.2em; color: var(--c-text-dim); margin-top: 4px; }
+.gig-year { font-size: 12px; letter-spacing: 0.14em; color: var(--c-text-dim); }
 
-.gig-body { min-width: 0; }
+.gig-body { min-width: 0; flex: 1 1 auto; }
 .gig-badge {
   display: inline-block;
   font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
@@ -591,24 +626,25 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 }
 .gig-title {
   font-family: var(--f-display);
-  font-size: clamp(20px, 2.4vw, 30px);
-  line-height: 1.1; letter-spacing: 0.01em;
+  font-size: clamp(19px, 4.6vw, 23px);
+  line-height: 1.14; letter-spacing: 0.01em;
   color: var(--c-text); margin-bottom: 14px;
 }
-.gig-meta { display: flex; flex-wrap: wrap; gap: 6px 24px; margin-bottom: 8px; }
+.gig-meta { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
 .gig-meta li {
   display: flex; align-items: center; gap: 8px;
   font-size: 14px; font-weight: 500; color: var(--c-text);
 }
-.gig-ico { font-size: 15px; }
+.gig-ico { font-size: 15px; flex: 0 0 auto; }
 .gig-addr { font-size: 13px; color: var(--c-text-dim); }
 
-.gig-actions { display: flex; flex-direction: column; gap: 10px; }
+.gig-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .gig-btn {
+  flex: 1 1 auto;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 22px; border-radius: 100px; white-space: nowrap;
-  font-family: var(--f-body); font-weight: 700; font-size: 13px;
-  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 12px 16px; border-radius: 100px; white-space: nowrap;
+  font-family: var(--f-body); font-weight: 700; font-size: 12.5px;
+  letter-spacing: 0.04em; text-transform: uppercase;
   transition: all .35s cubic-bezier(.22,1,.36,1);
 }
 .gig-btn-primary {
@@ -623,6 +659,52 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 }
 .gig-btn-ghost:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); }
 
+/* Barre de contrôle (flèches + progression) */
+.gigs-controls {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  max-width: 420px; margin: 16px auto 0;
+}
+.gigs-nav {
+  flex: 0 0 auto;
+  width: 46px; height: 46px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--c-text);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.16);
+  transition: transform .3s cubic-bezier(.22,1,.36,1), background .3s ease, border-color .3s ease, opacity .3s ease, box-shadow .3s ease;
+}
+.gigs-nav:hover:not(:disabled) {
+  background: var(--grad-primary);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(255, 61, 46, 0.4);
+}
+.gigs-nav:active:not(:disabled) { transform: translateY(0) scale(0.94); }
+.gigs-nav:disabled { opacity: 0.3; cursor: default; }
+.gigs-nav:focus-visible { outline: 2px solid var(--c-red); outline-offset: 3px; }
+
+.gigs-progress {
+  position: relative;
+  flex: 1 1 auto; max-width: 220px; height: 4px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+.gigs-progress-thumb {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: 30%;
+  border-radius: 100px;
+  background: var(--grad-primary);
+  transition: left .2s ease, width .2s ease;
+}
+
+/* Tout tient sans défilement : on centre et on masque les contrôles */
+.gigs-carousel.is-static .gigs-viewport {
+  -webkit-mask-image: none; mask-image: none;
+}
+.gigs-carousel.is-static .gigs-track { justify-content: center; }
+.gigs-carousel.is-static .gigs-controls { display: none; }
+
 .gigs-note {
   text-align: center; margin-top: 36px;
   font-size: 15px; color: var(--c-text-dim);
@@ -636,16 +718,14 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-@media (max-width: 720px) {
-  .gig-card { grid-template-columns: 1fr; gap: 18px; }
-  .gig-date {
-    flex-direction: row; align-items: baseline; gap: 10px;
-    align-self: flex-start; min-width: 0; padding: 10px 18px;
-  }
-  .gig-day { font-size: 32px; }
-  .gig-month, .gig-year { margin-top: 0; }
-  .gig-actions { flex-direction: row; flex-wrap: wrap; }
-  .gig-btn { flex: 1 1 auto; }
+@media (prefers-reduced-motion: reduce) {
+  .gigs-viewport { scroll-behavior: auto; }
+  .gig-card, .gigs-nav, .gigs-progress-thumb { transition: none; }
+}
+
+@media (max-width: 480px) {
+  .gig-card { width: 84vw; }
+  .gigs-controls { gap: 12px; }
 }
 
 /* ----- 14. REPERTOIRE ----- */

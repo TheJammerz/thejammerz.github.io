@@ -35,24 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------- 3. LENIS SMOOTH SCROLL ---------- */
-  const lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 2
-  });
-  function raf(time) {
-    lenis.raf(time);
+  // Garde-fou : si le CDN Lenis ne charge pas (unpkg bloque par ORB, coupure
+  // reseau, bloqueur de pub...), on degrade proprement au lieu de casser TOUT
+  // le JS de la page. Le scroll natif prend alors le relais.
+  let lenis = null;
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2
+    });
+    const raf = (time) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
     requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
 
-  if (window.gsap && window.ScrollTrigger) {
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+  } else if (window.gsap && window.ScrollTrigger) {
+    // Lenis absent : on enregistre quand meme ScrollTrigger pour les animations.
     gsap.registerPlugin(ScrollTrigger);
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
   }
 
   /* ---------- 4. CUSTOM CURSOR ---------- */
@@ -99,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Smooth scroll via Lenis pour les liens internes
+  // Smooth scroll pour les liens internes (Lenis si dispo, sinon natif)
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const targetId = anchor.getAttribute('href');
@@ -107,7 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = document.querySelector(targetId);
       if (target) {
         e.preventDefault();
-        lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+        if (lenis) {
+          lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+        } else {
+          const y = target.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
       }
     });
   });
@@ -319,6 +333,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-check apres window load (au cas ou)
   window.addEventListener('load', setupCounters);
 
+  /* ---------- 6.6 CARROUSEL AGENDA ----------
+     Le controleur du carrousel « Nos prochains lives » est volontairement place
+     HORS de ce handler (en bas du fichier, IIFE autonome initGigsCarousel) pour
+     qu'il fonctionne meme si une lib externe (GSAP/Lenis) casse ce bloc. */
+
   /* ---------- 7. REPERTOIRE TABS ---------- */
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -378,3 +397,92 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', () => ScrollTrigger.refresh());
   }
 });
+
+/* ====================================================================
+   CARROUSEL AGENDA / PROCHAINS LIVES  —  IIFE AUTONOME
+   Volontairement HORS du handler DOMContentLoaded principal : si une lib
+   externe (GSAP/Lenis) casse ce handler, le carrousel continue de marcher.
+   Defilement horizontal natif (scroll-snap) + fleches + barre de progression.
+   Si tout tient dans la largeur -> mode statique (cartes centrees, controles
+   caches). Auto-init que le DOM soit deja pret ou non. Aucune dependance.
+   ==================================================================== */
+(function initGigsCarousel() {
+  function setup() {
+    const carousel = document.querySelector('.gigs-carousel');
+    if (!carousel || carousel.dataset.gigsReady === '1') return;
+    const viewport = carousel.querySelector('.gigs-viewport');
+    const track = carousel.querySelector('.gigs-track');
+    if (!viewport || !track) return;          // cartes pas encore la : on reessaiera au load
+    carousel.dataset.gigsReady = '1';
+
+    const prevBtn = carousel.querySelector('.gigs-prev');
+    const nextBtn = carousel.querySelector('.gigs-next');
+    const thumb = carousel.querySelector('.gigs-progress-thumb');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cards = () => track.querySelectorAll('.gig-card');
+
+    // Pas de defilement = largeur d'une carte + gap (mesure reelle).
+    function stepSize() {
+      const list = cards();
+      if (list.length < 2) return viewport.clientWidth;
+      const d = Math.abs(list[1].getBoundingClientRect().left -
+                         list[0].getBoundingClientRect().left);
+      return d > 0 ? d : list[0].getBoundingClientRect().width + 20;
+    }
+    function maxScroll() { return Math.max(0, track.scrollWidth - viewport.clientWidth); }
+    function currentIndex() { return Math.round(viewport.scrollLeft / stepSize()); }
+
+    function scrollToIndex(i) {
+      const max = cards().length - 1;
+      const clamped = Math.max(0, Math.min(i, max));
+      viewport.scrollTo({ left: Math.round(clamped * stepSize()),
+                          behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    function refresh() {
+      const max = maxScroll();
+      const overflow = max > 4;
+      carousel.classList.toggle('is-static', !overflow);
+      const x = viewport.scrollLeft;
+      if (prevBtn) prevBtn.disabled = !overflow || x <= 2;
+      if (nextBtn) nextBtn.disabled = !overflow || x >= max - 2;
+      if (thumb) {
+        const sw = track.scrollWidth || 1;
+        const frac = Math.min(1, viewport.clientWidth / sw);
+        const room = 100 - frac * 100;
+        thumb.style.width = (frac * 100) + '%';
+        thumb.style.left = (max > 0 ? (x / max) * room : 0) + '%';
+      }
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => scrollToIndex(currentIndex() - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => scrollToIndex(currentIndex() + 1));
+
+    viewport.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(currentIndex() + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); scrollToIndex(currentIndex() - 1); }
+    });
+
+    let ticking = false;
+    viewport.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { refresh(); ticking = false; });
+    }, { passive: true });
+
+    window.addEventListener('resize', refresh, { passive: true });
+    window.addEventListener('load', refresh);
+    // Plusieurs passes : polices/images peuvent modifier les largeurs apres coup.
+    refresh();
+    setTimeout(refresh, 300);
+    setTimeout(refresh, 1200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+  // Filet : si les cartes arrivent tard (polices/agenda), on retente au load.
+  window.addEventListener('load', setup);
+})();

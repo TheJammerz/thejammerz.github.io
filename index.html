@@ -311,7 +311,9 @@
         <p class="section-sub" data-reveal>Où nous voir sur scène — venez groover avec nous</p>
       </div>
 
-      <div class="gigs">
+      <div class="gigs-carousel" data-reveal aria-roledescription="carrousel" aria-label="Nos prochains lives">
+        <div class="gigs-viewport" tabindex="0" role="group" aria-label="Faites défiler les prochaines dates" data-lenis-prevent>
+          <div class="gigs-track">
         <!-- AGENDA:AUTO:START — contenu généré automatiquement, ne pas éditer à la main -->
         <article class="gig-card" data-reveal>
           <div class="gig-date">
@@ -352,6 +354,18 @@
           </div>
         </article>
         <!-- AGENDA:AUTO:END -->
+          </div>
+        </div>
+
+        <div class="gigs-controls">
+          <button type="button" class="gigs-nav gigs-prev" aria-label="Voir la date précédente">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="gigs-progress" aria-hidden="true"><span class="gigs-progress-thumb"></span></div>
+          <button type="button" class="gigs-nav gigs-next" aria-label="Voir la date suivante">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
       </div>
 
       <p class="gigs-note" data-reveal>Une date à proposer pour votre événement ? <a href="#contact" data-link>Réservez le groupe →</a></p>
