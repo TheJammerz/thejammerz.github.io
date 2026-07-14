@@ -13,6 +13,7 @@ Lancé 1x/jour par GitHub Actions (.github/workflows/agenda.yml).
 from __future__ import annotations
 
 import html
+import re
 import sys
 import urllib.parse
 import urllib.request
@@ -39,6 +40,53 @@ INDEX = ROOT / "index.html"
 JOURS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 MOIS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin",
         "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]
+
+
+# --------------------------------------------------------------------------- #
+# Filtre « vrai live » — l'agenda sert AUSSI à l'organisation interne du groupe
+# (installations, balances, répètes, réunions...). Seuls les VRAIS concerts /
+# lives PUBLICS vont sur le site. On EXCLUT la logistique/prépa (même quand le
+# mot « concert » apparaît, ex. « Installation Concert ») et tout ce qui n'est
+# pas explicitement un gig public. Zéro invention : on ne publie que ce qui est
+# écrit noir sur blanc dans la source. Aligné sur le poller CM
+# `jammerz_calendar_poll.py` (même calendrier, même philosophie).
+# --------------------------------------------------------------------------- #
+
+# Un event est un GIG public si son titre contient un de ces mots.
+GIG_RX = re.compile(
+    r"(concert|\blives?\b|\bgig\b|jam[\s-]*session|\bjam\b|showcase|festival|"
+    r"f[eê]te\s+de\s+la\s+musique|sur\s+sc[eè]ne|\bsc[eè]ne\b|plateau|"
+    r"tremplin|ap[eé]ro[\s-]*concert|guinguette|release\s+party|open\s+mic)",
+    re.IGNORECASE)
+
+# Logistique / prépa : JAMAIS sur le site. Cette liste PRIME sur GIG_RX
+# (« Installation Concert » contient « concert » mais reste de la prépa).
+LOGISTICS_RX = re.compile(
+    r"(installation|balance|soundcheck|sound\s?check|r[ée]p[ée]t|montage|"
+    r"d[ée]montage|d[ée]ballage|load\s?in|filage|raccord|pr[ée]pa|"
+    r"mise\s+en\s+place|r[ée]union|d[ée]brief)",
+    re.IGNORECASE)
+
+# Live PRIVÉ (mot ÉCRIT dans la source) : pas de lieu public à montrer,
+# donc pas sur le site public. « privé » ne se DÉDUIT jamais (leçon Anaïak 04/07).
+PRIVATE_RX = re.compile(
+    r"(\bpriv[ée]e?s?\b|sur\s+invitation|huis\s+clos|ferm[ée]s?\s+au\s+public|"
+    r"soir[ée]e?\s+priv|invit[ée]s?\s+seulement|\binterne\b)",
+    re.IGNORECASE)
+
+
+def is_public_gig(summary: str, category: str, status: str) -> tuple[bool, str]:
+    """True seulement pour un vrai live/concert PUBLIC. Retourne (garde, raison)."""
+    if (status or "").upper() == "CANCELLED":
+        return False, "annulé"
+    text = f"{summary}\n{category}"
+    if LOGISTICS_RX.search(text):          # prime : prépa/logistique
+        return False, "logistique/prépa (pas un gig public)"
+    if PRIVATE_RX.search(text):            # live privé -> pas sur le site public
+        return False, "live privé (pas de lieu public)"
+    if GIG_RX.search(text):
+        return True, "gig public"
+    return False, "pas un gig (organisation interne)"
 
 
 # --------------------------------------------------------------------------- #
@@ -104,6 +152,7 @@ def collect_events() -> list[dict]:
         summary = str(comp.get("SUMMARY", "")).strip()
         location = str(comp.get("LOCATION", "")).strip()
         description = str(comp.get("DESCRIPTION", "")).strip()
+        status = str(comp.get("STATUS", "")).strip()
         cats = comp.get("CATEGORIES")
         category = ""
         if cats is not None:
@@ -111,6 +160,15 @@ def collect_events() -> list[dict]:
                 category = str(cats.cats[0]) if hasattr(cats, "cats") else str(cats)
             except Exception:
                 category = ""
+
+        # Filtre : seuls les vrais lives publics (l'agenda contient aussi
+        # la logistique et l'organisation interne du groupe).
+        keep, why = is_public_gig(summary, category, status)
+        if not keep:
+            print(f"[agenda] ignoré ({why}) : "
+                  f"{start.astimezone(PARIS):%Y-%m-%d %H:%M} | {summary}",
+                  file=sys.stderr)
+            continue
 
         key = (summary, start.isoformat())
         if key in seen:
