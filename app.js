@@ -170,17 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scrub: true
       }
     });
-    gsap.to('.hero-tag, .hero-subtitle, .hero-actions', {
-      y: -100,
-      opacity: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true
-      }
-    });
+    // (fix 22/07/2026 : l'ancien fondu parallaxe de .hero-tag/.hero-subtitle/
+    //  .hero-actions au scroll est retiré — demande Quentin, la zone sous le
+    //  logo doit rester visible et défiler naturellement.)
 
     // Stats counter — voir bloc plus bas (IntersectionObserver, plus robuste)
 
@@ -190,14 +182,16 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to('.blob-3', { y: -200, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.5 } });
 
     // Section title : entrée 3D « claquée » depuis la profondeur.
-    // clearProps retire le transform inline en fin d'anim pour laisser
-    // la bascule CSS :hover (relief) prendre le relais.
+    // SANS translation verticale (fix 22/07 : avec y:80 le titre traversait le
+    // sous-titre pendant l'anim → superposition). Pivot en bas du titre pour
+    // que rien ne déborde vers le bas. clearProps retire le transform inline
+    // en fin d'anim pour laisser la bascule CSS :hover prendre le relais.
     gsap.utils.toArray('.section-title').forEach(title => {
       gsap.fromTo(title,
-        { opacity: 0, y: 80, scale: 0.9, rotateX: 45, transformPerspective: 900 },
+        { opacity: 0, scale: 0.92, rotateX: 60, transformPerspective: 900, transformOrigin: '50% 100%' },
         {
-          opacity: 1, y: 0, scale: 1, rotateX: 0,
-          duration: 1.4,
+          opacity: 1, scale: 1, rotateX: 0,
+          duration: 1.2,
           ease: 'expo.out',
           clearProps: 'transform',
           scrollTrigger: {
