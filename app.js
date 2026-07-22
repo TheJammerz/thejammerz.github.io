@@ -140,7 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Reveal generic animation
-    gsap.utils.toArray('[data-reveal]').forEach((el, i) => {
+    // (les .section-title sont exclus : ils ont leur propre entrée 3D plus bas,
+    //  et un double tween laisserait un transform inline qui bloque le survol)
+    gsap.utils.toArray('[data-reveal]').filter(el => !el.classList.contains('section-title')).forEach((el, i) => {
       gsap.fromTo(el,
         { opacity: 0, y: 50 },
         {
@@ -187,14 +189,17 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to('.blob-2', { y: -300, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
     gsap.to('.blob-3', { y: -200, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.5 } });
 
-    // Section title split-like reveal
+    // Section title : entrée 3D « claquée » depuis la profondeur.
+    // clearProps retire le transform inline en fin d'anim pour laisser
+    // la bascule CSS :hover (relief) prendre le relais.
     gsap.utils.toArray('.section-title').forEach(title => {
       gsap.fromTo(title,
-        { opacity: 0, y: 80, scale: 0.9 },
+        { opacity: 0, y: 80, scale: 0.9, rotateX: 45, transformPerspective: 900 },
         {
-          opacity: 1, y: 0, scale: 1,
+          opacity: 1, y: 0, scale: 1, rotateX: 0,
           duration: 1.4,
           ease: 'expo.out',
+          clearProps: 'transform',
           scrollTrigger: {
             trigger: title,
             start: 'top 80%',
@@ -485,4 +490,62 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   // Filet : si les cartes arrivent tard (polices/agenda), on retente au load.
   window.addEventListener('load', setup);
+})();
+
+/* ====================================================================
+   FX 3D — pack validé 2026-07-22 — IIFE AUTONOME
+   Tilt 3D des cartes membres (+ reflet qui suit la souris) et pause
+   hors écran du vinyle / de l'équalizer. Aucune dépendance (ni GSAP,
+   ni Lenis) : si une lib externe casse, ces effets tiennent seuls.
+   Réversible : supprimer ce bloc + le bloc « 24. FX 3D » de styles.css
+   + les 2 inserts HTML (vinyle répertoire, équalizer footer).
+   ==================================================================== */
+(function initFx3D() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setup() {
+    if (document.body.dataset.fx3dReady === '1') return;
+    document.body.dataset.fx3dReady = '1';
+
+    /* Vinyle + équalizer : n'animent que quand ils sont visibles */
+    var runners = document.querySelectorAll('.vinyl-fx, .eq-footer');
+    if ('IntersectionObserver' in window && runners.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          en.target.classList.toggle('fx-run', en.isIntersecting && !reduced);
+        });
+      });
+      runners.forEach(function (el) { io.observe(el); });
+    } else {
+      runners.forEach(function (el) { if (!reduced) el.classList.add('fx-run'); });
+    }
+
+    /* Tilt 3D cartes membres — souris uniquement */
+    if (reduced || !window.matchMedia('(pointer: fine)').matches) return;
+    document.querySelectorAll('.member-card').forEach(function (card) {
+      var glare = document.createElement('div');
+      glare.className = 'card-glare';
+      card.appendChild(glare);
+
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / r.width - 0.5;
+        var ny = (e.clientY - r.top) / r.height - 0.5;
+        card.classList.add('tilting');
+        card.style.transform = 'translateY(-8px) rotateX(' + (ny * -9).toFixed(2) + 'deg) rotateY(' + (nx * 9).toFixed(2) + 'deg)';
+        card.style.setProperty('--gx', ((nx + 0.5) * 100).toFixed(1) + '%');
+        card.style.setProperty('--gy', ((ny + 0.5) * 100).toFixed(1) + '%');
+      });
+      card.addEventListener('pointerleave', function () {
+        card.classList.remove('tilting');
+        card.style.transform = '';
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
 })();
