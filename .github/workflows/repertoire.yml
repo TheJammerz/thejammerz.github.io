@@ -1,0 +1,62 @@
+name: Mise à jour répertoire
+
+# Régénère la rubrique « Le répertoire » depuis la set list publiée par le VPS
+# (source de vérité = le Sheet « SETS — The Jammerz »).
+on:
+  schedule:
+    - cron: "20 5 * * *"        # tous les jours 05:20 UTC — même cadence que l'agenda,
+                                # décalé de 20 min pour ne pas pousser en même temps que lui
+  workflow_dispatch:            # bouton « Run workflow » manuel
+  push:                         # première exécution dès l'ajout du script/workflow
+    paths:
+      - "scripts/update_repertoire.py"
+      - ".github/workflows/repertoire.yml"
+
+permissions:
+  contents: write
+
+# Évite que deux exécutions se marchent dessus.
+concurrency:
+  group: repertoire-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Aucune dépendance à installer : le script n'utilise que la bibliothèque
+      # standard (urllib + json). Rien à télécharger, rien à épingler.
+
+      # L'adresse de la source n'est écrite NULLE PART dans ce dépôt : il est
+      # public et le VPS qui sert la set list héberge aussi d'autres services.
+      # Elle vient du secret JAMMERZ_SETLIST_URL (Settings > Secrets and
+      # variables > Actions). Sans lui, le script s'arrête en rouge plutôt que
+      # de deviner — c'est voulu : mieux vaut un run rouge qu'un site figé en
+      # silence.
+      - name: Régénérer le répertoire
+        env:
+          JAMMERZ_SETLIST_URL: ${{ secrets.JAMMERZ_SETLIST_URL }}
+        run: python scripts/update_repertoire.py
+
+      - name: Commit si changement
+        run: |
+          if [ -n "$(git status --porcelain index.html)" ]; then
+            git config user.name  "jammerz-repertoire-bot"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "chore(repertoire): maj auto de la set list"
+            # Robuste aux courses : on rebase sur le remote avant de pousser.
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Répertoire mis à jour et poussé."
+          else
+            echo "Rien à mettre à jour."
+          fi
