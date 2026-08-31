@@ -43,6 +43,9 @@
   bar, restaurant, festival ou soirée publique au Pays Basque et dans le Sud des Landes
 - [Mariage](https://thejammerz.com/mariage/) : groupe live pour mariage au
   Pays Basque et dans le Sud des Landes
+- [Soirée d’entreprise](https://thejammerz.com/soiree-entreprise/) : groupe live
+  pour soirée d’entreprise, séminaire, comité d’entreprise ou repas d’entreprise,
+  au Pays Basque et dans le Sud des Landes
 - [Sud des Landes](https://thejammerz.com/sud-landes/) : concerts et soirées
   dans le Sud des Landes (Capbreton, Hossegor, Soustons, Tyrosse, Dax, Tarnos)
 - [Villes desservies](https://thejammerz.com/zones/) : liste des villes où le
