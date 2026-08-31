@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable — The Jammerz</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0A0A14">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Polices chargees SANS bloquer l affichage : la feuille Google Fonts
+       bloquait le premier affichage ~800 ms sur mobile. Le media="print"
+       la sort du chemin critique, le onload la remet en jeu. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"></noscript>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Montserrat',-apple-system,'Segoe UI',sans-serif;background:#0a0a14;color:#f4f4f8;
+         min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;line-height:1.6}
+    .box{max-width:560px}
+    img{max-width:220px;height:auto;margin:0 auto 32px;display:block}
+    h1{font-size:clamp(28px,6vw,44px);font-weight:800;margin-bottom:16px;
+       background:linear-gradient(135deg,#ff3d2e 0%,#e91e63 50%,#7b2cbf 100%);
+       -webkit-background-clip:text;background-clip:text;color:transparent}
+    p{color:#b4b4c4;margin-bottom:32px}
+    .links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+    a.btn{padding:14px 26px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;color:#fff;
+          background:linear-gradient(135deg,#ff3d2e 0%,#e91e63 50%,#7b2cbf 100%)}
+    a.ghost{background:none;border:1px solid rgba(255,255,255,.2);color:#f4f4f8}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img src="/assets/images/logo-720.webp" alt="The Jammerz" width="720" height="576">
+    <h1>Cette page n'existe pas</h1>
+    <p>Le lien est peut-être ancien, ou la page a changé d'adresse. Tout se retrouve depuis l'accueil.</p>
+    <div class="links">
+      <a class="btn" href="/">Retour à l'accueil</a>
+      <a class="btn ghost" href="/#agenda">Prochaines dates</a>
+      <a class="btn ghost" href="/#contact">Nous contacter</a>
+    </div>
+  </div>
+</body>
+</html>

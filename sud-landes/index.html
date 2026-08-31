@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Groupe de musique live dans le Sud des Landes — The Jammerz</title>
+  <meta name="description" content="Groupe live de 5 musiciens pour vos concerts et soirées dans le Sud des Landes : Capbreton, Hossegor, Soustons, Tyrosse, Dax, Tarnos. Funk, soul, blues, rock.">
+  <meta name="author" content="The Jammerz">
+  <meta name="theme-color" content="#0A0A14">
+  <link rel="canonical" href="https://thejammerz.github.io/sud-landes/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Jammerz">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://thejammerz.github.io/sud-landes/">
+  <meta property="og:title" content="Groupe de musique live dans le Sud des Landes">
+  <meta property="og:description" content="Groupe live de 5 musiciens pour vos concerts et soirées dans le Sud des Landes : Capbreton, Hossegor, Soustons, Tyrosse, Dax, Tarnos. Funk, soul, blues, rock.">
+  <meta property="og:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Groupe de musique live dans le Sud des Landes — The Jammerz">
+  <meta name="twitter:description" content="Groupe live de 5 musiciens pour vos concerts et soirées dans le Sud des Landes : Capbreton, Hossegor, Soustons, Tyrosse, Dax, Tarnos. Funk, soul, blues, rock.">
+  <meta name="twitter:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon-180.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Polices chargees SANS bloquer l affichage : media="print" les sort du
+       chemin critique, onload les remet en jeu. Le saut visuel a l arrivee
+       des polices est neutralise par les replis a metriques calees
+       (@font-face "Anton repli" / "Montserrat repli" dans styles.css). -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap"></noscript>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Page autonome : aucun JS, donc rien qui depende de GSAP ni du loader. */
+    .lp-nav { position: sticky; top: 0; z-index: 50; background: rgba(10,10,20,.88);
+              backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .lp-nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+                    display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .lp-nav img { height: 44px; width: auto; }
+    .lp-hero { padding: 84px 0 56px; text-align: center; }
+    .lp-hero h1 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400; letter-spacing: .5px;
+                  font-size: clamp(30px, 5.4vw, 60px); line-height: 1.08; margin-bottom: 20px; }
+    .lp-hero p.lead { max-width: 720px; margin: 0 auto 30px; color: var(--c-text-dim);
+                      font-size: clamp(16px, 1.9vw, 19px); }
+    .lp-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .lp-sec { padding: 52px 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .lp-sec h2 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400;
+                 font-size: clamp(22px, 3.4vw, 34px); margin-bottom: 20px; line-height: 1.15; }
+    .lp-sec h3 { font-size: clamp(16px, 2vw, 19px); margin-bottom: 8px; }
+    .lp-sec p, .lp-sec li { color: var(--c-text-dim); }
+    .lp-sec p { margin-bottom: 16px; max-width: 780px; }
+    .lp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .lp-box { padding: 26px 22px; border-radius: var(--radius-lg);
+              background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+    .lp-box .price { font-family: 'Anton', "Anton repli", sans-serif; font-size: 26px; color: var(--c-pink); margin-top: 10px; }
+    .lp-list { display: grid; gap: 10px; margin-bottom: 16px; }
+    .lp-list li { padding-left: 22px; position: relative; }
+    .lp-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--c-pink); }
+    .lp-villes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .lp-villes span { padding: 7px 15px; border-radius: 999px; font-size: 14px;
+                      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); }
+    .lp-foot { padding: 40px 0 56px; border-top: 1px solid rgba(255,255,255,.07);
+               color: var(--c-text-dim); font-size: 14px; }
+    .lp-foot a { color: var(--c-pink); text-decoration: underline; }
+    .lp-more { display: inline-block; color: var(--c-text-dim); font-size: 14px; }
+    .lp-more:hover { color: var(--c-pink); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://thejammerz.github.io/sud-landes/#page",
+        "url": "https://thejammerz.github.io/sud-landes/",
+        "name": "Groupe de musique live dans le Sud des Landes - The Jammerz",
+        "description": "Groupe live de 5 musiciens base a Bayonne, a quelques minutes des Landes : concerts en bar, festivals, mariages et soirees privees a Capbreton, Hossegor, Seignosse, Soustons, Dax.",
+        "inLanguage": "fr-FR",
+        "isPartOf": { "@id": "https://thejammerz.github.io/#site" },
+        "about": { "@id": "https://thejammerz.github.io/#groupe" },
+        "primaryImageOfPage": "https://thejammerz.github.io/assets/images/og-image.jpg",
+        "breadcrumb": { "@id": "https://thejammerz.github.io/sud-landes/#fil" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://thejammerz.github.io/sud-landes/#fil",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://thejammerz.github.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Sud des Landes" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://thejammerz.github.io/sud-landes/#faq",
+        "isPartOf": { "@id": "https://thejammerz.github.io/sud-landes/#page" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "The Jammerz se deplace-t-il dans les Landes ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Oui. Le groupe part de Bayonne, a quelques minutes de la limite des Landes : Tarnos, Ondres, Labenne, Capbreton, Hossegor, Seignosse, Soustons, Saint-Vincent-de-Tyrosse et Dax sont dans le rayon habituel d'environ 1 h de route. Mont-de-Marsan est possible sur demande." }
+          },
+          {
+            "@type": "Question",
+            "name": "Quels sont les frais de deplacement dans les Landes ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Au-dela de 20 km de Bayonne, les frais de route sont de 8 EUR par kilometre. Pour Tarnos, Ondres ou Labenne, la distance depuis Bayonne est tres courte." }
+          },
+          {
+            "@type": "Question",
+            "name": "Quel type de soiree le groupe assure-t-il dans le Sud des Landes ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Concert en bar ou en restaurant, fete locale, festival, mariage, soiree privee ou soiree d'entreprise. De 500 EUR a 1 900 EUR selon le format, 400 EUR en acoustique solo ou duo." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <nav class="lp-nav">
+    <div class="lp-nav-inner">
+      <a href="/" aria-label="The Jammerz - retour accueil">
+        <img src="/assets/images/logo-nav.webp" alt="The Jammerz" width="140" height="112">
+      </a>
+      <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+    </div>
+  </nav>
+
+  <header class="lp-hero">
+    <div class="container">
+      <h1>Groupe de musique live<br>dans le <span class="accent">Sud des Landes</span></h1>
+      <p class="lead">Basés à <strong>Bayonne</strong>, on est à quelques minutes de la limite des Landes. Capbreton, Hossegor, Seignosse, Soustons, Tyrosse, Dax : c’est notre terrain de jeu habituel. Cinq musiciens, du <strong>funk</strong>, de la <strong>soul</strong>, du <strong>blues</strong> et du <strong>rock</strong>.</p>
+      <div class="lp-cta">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="/#live" class="btn btn-ghost">▶ Voir un live</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Les communes où nous jouons</h2>
+      <p>Le Sud des Landes commence à dix minutes de Bayonne. Concrètement, ces communes sont toutes dans notre rayon habituel :</p>
+      <div class="lp-villes">
+        <span>Tarnos</span><span>Ondres</span><span>Labenne</span><span>Capbreton</span>
+        <span>Soorts-Hossegor</span><span>Seignosse</span><span>Soustons</span><span>Vieux-Boucau</span>
+        <span>Saint-Vincent-de-Tyrosse</span><span>Saubrigues</span><span>Saint-Martin-de-Hinx</span>
+        <span>Peyrehorade</span><span>Dax</span><span>Saint-Paul-lès-Dax</span><span>Pouillon</span>
+        <span>Magescq</span><span>Saint-Geours-de-Maremne</span><span>Léon</span><span>Messanges</span>
+      </div>
+      <p>Mont-de-Marsan et le Nord des Landes sont possibles sur demande. Au-delà de 20 km de Bayonne, les frais de route sont de <strong>8 € par kilomètre</strong> — autant dire très peu pour Tarnos, Ondres ou Labenne.</p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Pour quel type d’événement</h2>
+      <ul class="lp-list">
+        <li><strong>Concert en bar, en restaurant ou en terrasse</strong> — très demandé l’été sur la côte landaise.</li>
+        <li><strong>Fête locale, guinguette, marché nocturne</strong> — répertoire grand public et dansant.</li>
+        <li><strong>Mariage</strong> — vin d’honneur, repas ou soirée dansante. <a href="/mariage/" class="lp-more">→ Page mariage</a></li>
+        <li><strong>Festival et salle de concert</strong> — formation complète, sur devis.</li>
+        <li><strong>Soirée d’entreprise ou soirée privée</strong> — format adapté au lieu.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Les tarifs</h2>
+      <div class="lp-grid">
+        <div class="lp-box">
+          <h3>Concert bar / soirée publique</h3>
+          <p>1 h à 4 h de live, cinq musiciens.</p>
+          <div class="price">500 € – 1 500 €</div>
+        </div>
+        <div class="lp-box">
+          <h3>Mariage / événement privé</h3>
+          <p>Vin d’honneur, repas ou soirée dansante.</p>
+          <div class="price">500 € – 1 900 €</div>
+        </div>
+        <div class="lp-box">
+          <h3>Acoustique solo ou duo</h3>
+          <p>Format intimiste, cocktail ou apéro.</p>
+          <div class="price">400 €</div>
+        </div>
+        <div class="lp-box">
+          <h3>Festival / soirée complète</h3>
+          <p>Scène publique ou soirée de 5 h à 6 h.</p>
+          <div class="price">Sur devis</div>
+        </div>
+      </div>
+      <p><a href="/#tarifs" class="lp-more">→ Voir toutes les prestations</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Le groupe</h2>
+      <p>Cinq musiciens : <strong>Quentin</strong> à la basse et au chant, <strong>Thomas</strong> à la guitare soliste, <strong>Tristan</strong> à la batterie, <strong>Andrea</strong> au chant et <strong>Camilo</strong> au saxophone, en invité. Un premier groupe en 2024, une restructuration en 2026 sous le nom The Jammerz.</p>
+      <p>Au répertoire : Stevie Wonder, James Brown, Aretha Franklin, Chic, Sharon Jones, Lenny Kravitz, Jamiroquai, Queen, Bruno Mars, Jimi Hendrix, les Blues Brothers… deux sets complets, tenus à jour.</p>
+      <p><a href="/#members" class="lp-more">→ Voir les membres</a> · <a href="/concerts/" class="lp-more">→ Page concerts</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Nous contacter</h2>
+      <p>Donnez-nous la <strong>date</strong>, la <strong>commune</strong> et la <strong>durée</strong> souhaitée : on vous répond sous 24 h avec un chiffrage précis.</p>
+      <div class="lp-cta" style="justify-content:flex-start">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="mailto:thejammerz64@gmail.com" class="btn btn-ghost">thejammerz64@gmail.com</a>
+        <a href="tel:+33671857524" class="btn btn-ghost">06 71 85 75 24</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lp-foot">
+    <div class="container">
+      <p><a href="/concerts/">Groupe pour concert live</a> · <a href="/mariage/">Groupe pour mariage</a></p>
+      <p><a href="/">&larr; Retour à l’accueil</a> · <a href="/#agenda">Prochaines dates</a> · <a href="/#tarifs">Toutes les prestations</a> · <a href="/#faq">Questions fréquentes</a></p>
+      <p>The Jammerz — groupe de musique live funk, soul, blues et rock. Bayonne, Pays Basque et Sud des Landes.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

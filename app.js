@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => loader.classList.add('hidden'), 600);
   });
   // Filet : cache le loader après 3s même si load ne fire pas
-  setTimeout(() => loader && loader.classList.add('hidden'), 3000);
+  setTimeout(() => loader && loader.classList.add('hidden'), 1200);
 
   /* ---------- 2. YEAR ---------- */
   const yearEl = document.getElementById('year');

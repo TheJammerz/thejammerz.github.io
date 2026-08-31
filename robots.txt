@@ -1,0 +1,7 @@
+# The Jammerz — https://thejammerz.github.io/
+# Tout le site est public et indexable.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://thejammerz.github.io/sitemap.xml

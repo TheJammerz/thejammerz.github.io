@@ -5,59 +5,444 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>The Jammerz — Groupe de Musique Funk, Soul & Groove • Pays Basque</title>
-  <meta name="description" content="The Jammerz, groupe de musique live du Pays Basque. Funk, Soul, Groove, Rock, Jazz. Bars, mariages, festivals, soirées privées. Réservez votre événement.">
-  <meta name="keywords" content="The Jammerz, groupe musique pays basque, funk, soul, groove, live, mariage, concert, bayonne, biarritz">
+  <title>The Jammerz — Groupe de musique live Pays Basque &amp; Sud Landes</title>
+  <meta name="description" content="Groupe live de 5 musiciens à Bayonne : funk, soul, blues, rock. Concerts en bar, festival, mariage et soirée privée au Pays Basque et dans le Sud des Landes.">
   <meta name="author" content="The Jammerz">
   <meta name="theme-color" content="#0A0A14">
+  <link rel="canonical" href="https://thejammerz.github.io/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Jammerz">
+  <meta property="og:locale" content="fr_FR">
   <meta property="og:url" content="https://thejammerz.github.io/">
-  <meta property="og:title" content="The Jammerz — Groupe de Musique Funk, Soul & Groove">
-  <meta property="og:description" content="Le groove du Pays Basque. Funk, Soul, Rock, Jazz live. Réservez le groupe pour votre événement.">
-  <meta property="og:image" content="https://thejammerz.github.io/assets/images/logo.png">
+  <meta property="og:title" content="The Jammerz — Groupe de musique live Pays Basque &amp; Sud Landes">
+  <meta property="og:description" content="Groupe live de 5 musiciens à Bayonne : funk, soul, blues, rock. Concerts en bar, festival, mariage et soirée privée au Pays Basque et dans le Sud des Landes.">
+  <meta property="og:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo du groupe The Jammerz">
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://thejammerz.github.io/">
-  <meta property="twitter:title" content="The Jammerz — Groupe de Musique Funk, Soul & Groove">
-  <meta property="twitter:description" content="Le groove du Pays Basque. Funk, Soul, Rock, Jazz live.">
-  <meta property="twitter:image" content="https://thejammerz.github.io/assets/images/logo.png">
+  <!-- Twitter (name= et non property= : c'est la syntaxe que Twitter lit) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Jammerz — Groupe de musique live Pays Basque &amp; Sud Landes">
+  <meta name="twitter:description" content="Groupe live de 5 musiciens à Bayonne : funk, soul, blues, rock. Concerts et soirées privées au Pays Basque et dans le Sud des Landes.">
+  <meta name="twitter:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
 
-  <!-- Schema.org MusicGroup -->
+  <!-- Preconnect vers les CDN de scripts (gain de latence sur la 3e origine) -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+
+  <!-- Schema.org : graphe d'entite (MusicGroup + WebSite relies par @id) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": "The Jammerz",
-    "alternateName": "Jammerz",
-    "url": "https://thejammerz.github.io/",
-    "logo": "https://thejammerz.github.io/assets/images/logo.png",
-    "image": "https://thejammerz.github.io/assets/images/logo.png",
-    "description": "Groupe de musique live du Pays Basque mêlant Funk, Soul, Groove, Rock, Jazz et musiques latines.",
-    "genre": ["Funk", "Soul", "Groove", "Rock", "Jazz"],
-    "foundingDate": "2026",
-    "foundingLocation": {
-      "@type": "Place",
-      "name": "Pays Basque, France"
-    },
-    "member": [
-      {"@type":"Person","name":"Quentin","roleName":"Basse / Chant"},
-      {"@type":"Person","name":"Thomas","roleName":"Guitare soliste"},
-      {"@type":"Person","name":"Tristan","roleName":"Batterie"},
-      {"@type":"Person","name":"Andréa","roleName":"Chant"},
-      {"@type":"Person","name":"Camilo","roleName":"Saxophone (Guest)"}
-    ],
-    "email": "thejammerz64@gmail.com",
-    "telephone": "+33671857524",
-    "sameAs": [
-      "https://www.instagram.com/the.jammerz/",
-      "https://www.tiktok.com/@thejammerz64",
-      "https://www.facebook.com/profile.php?id=61578490353313"
+    "@graph": [
+      {
+        "@type": "MusicGroup",
+        "@id": "https://thejammerz.github.io/#groupe",
+        "name": "The Jammerz",
+        "alternateName": "Jammerz",
+        "url": "https://thejammerz.github.io/",
+        "logo": "https://thejammerz.github.io/assets/images/og-image.jpg",
+        "image": "https://thejammerz.github.io/assets/images/og-image.jpg",
+        "description": "Groupe de musique live de 5 musiciens base a Bayonne. Funk, soul, blues, rock et groove pour concerts en bar et restaurant, festivals, mariages, soirees privees et soirees d'entreprise, dans un rayon d'environ 1 h de route autour de Bayonne : tout le Pays Basque et le Sud des Landes.",
+        "genre": [
+          "Funk",
+          "Soul",
+          "Blues",
+          "Rock",
+          "Groove",
+          "Jazz",
+          "Musique latine"
+        ],
+        "foundingDate": "2026",
+        "foundingLocation": {
+          "@type": "Place",
+          "name": "Pays Basque, France"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bayonne",
+          "postalCode": "64100",
+          "addressRegion": "Pyrenees-Atlantiques",
+          "addressCountry": "FR"
+        },
+        "areaServed": [
+          {
+            "@type": "GeoCircle",
+            "name": "Environ 1 h de route autour de Bayonne",
+            "geoMidpoint": {
+              "@type": "GeoCoordinates",
+              "latitude": 43.4844,
+              "longitude": -1.4611
+            },
+            "geoRadius": "70000"
+          },
+          {
+            "@type": "City",
+            "name": "Bayonne"
+          },
+          {
+            "@type": "City",
+            "name": "Anglet"
+          },
+          {
+            "@type": "City",
+            "name": "Biarritz"
+          },
+          {
+            "@type": "City",
+            "name": "Boucau"
+          },
+          {
+            "@type": "City",
+            "name": "Bidart"
+          },
+          {
+            "@type": "City",
+            "name": "Guethary"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Jean-de-Luz"
+          },
+          {
+            "@type": "City",
+            "name": "Ciboure"
+          },
+          {
+            "@type": "City",
+            "name": "Urrugne"
+          },
+          {
+            "@type": "City",
+            "name": "Hendaye"
+          },
+          {
+            "@type": "City",
+            "name": "Ascain"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Pee-sur-Nivelle"
+          },
+          {
+            "@type": "City",
+            "name": "Ustaritz"
+          },
+          {
+            "@type": "City",
+            "name": "Cambo-les-Bains"
+          },
+          {
+            "@type": "City",
+            "name": "Espelette"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Palais"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Jean-Pied-de-Port"
+          },
+          {
+            "@type": "City",
+            "name": "Hasparren"
+          },
+          {
+            "@type": "City",
+            "name": "Mauleon-Licharre"
+          },
+          {
+            "@type": "City",
+            "name": "Tarnos"
+          },
+          {
+            "@type": "City",
+            "name": "Ondres"
+          },
+          {
+            "@type": "City",
+            "name": "Labenne"
+          },
+          {
+            "@type": "City",
+            "name": "Capbreton"
+          },
+          {
+            "@type": "City",
+            "name": "Soorts-Hossegor"
+          },
+          {
+            "@type": "City",
+            "name": "Seignosse"
+          },
+          {
+            "@type": "City",
+            "name": "Soustons"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Vincent-de-Tyrosse"
+          },
+          {
+            "@type": "City",
+            "name": "Vieux-Boucau-les-Bains"
+          },
+          {
+            "@type": "City",
+            "name": "Dax"
+          },
+          {
+            "@type": "City",
+            "name": "Saint-Paul-les-Dax"
+          },
+          {
+            "@type": "City",
+            "name": "Peyrehorade"
+          },
+          {
+            "@type": "City",
+            "name": "Mont-de-Marsan"
+          },
+          {
+            "@type": "City",
+            "name": "Pau"
+          },
+          {
+            "@type": "City",
+            "name": "Orthez"
+          },
+          {
+            "@type": "City",
+            "name": "Salies-de-Bearn"
+          },
+          {
+            "@type": "City",
+            "name": "Oloron-Sainte-Marie"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Pays Basque"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Cote Basque"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Sud des Landes"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Landes"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Bearn"
+          },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Pyrenees-Atlantiques"
+          }
+        ],
+        "member": [
+          {
+            "@type": "OrganizationRole",
+            "roleName": "Basse / Chant",
+            "member": {
+              "@type": "Person",
+              "name": "Quentin"
+            }
+          },
+          {
+            "@type": "OrganizationRole",
+            "roleName": "Guitare soliste",
+            "member": {
+              "@type": "Person",
+              "name": "Thomas"
+            }
+          },
+          {
+            "@type": "OrganizationRole",
+            "roleName": "Batterie",
+            "member": {
+              "@type": "Person",
+              "name": "Tristan"
+            }
+          },
+          {
+            "@type": "OrganizationRole",
+            "roleName": "Chant",
+            "member": {
+              "@type": "Person",
+              "name": "Andrea"
+            }
+          },
+          {
+            "@type": "OrganizationRole",
+            "roleName": "Saxophone (guest)",
+            "member": {
+              "@type": "Person",
+              "name": "Camilo"
+            }
+          }
+        ],
+        "email": "thejammerz64@gmail.com",
+        "telephone": "+33671857524",
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "name": "Concert bar / soiree publique",
+            "description": "Concert live en bar, en restaurant ou en soiree ouverte au public : reprises funk, soul, blues et rock, au Pays Basque et dans le Sud des Landes.",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": 500,
+              "maxPrice": 1500,
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Mariage / evenement prive",
+            "description": "Concert prive pour une ceremonie, un vin d'honneur, un cocktail ou une soiree d'entreprise.",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": 500,
+              "maxPrice": 1900,
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Prestation acoustique (solo / duo)",
+            "description": "Format intimiste, adapte aux cocktails et aux moments calmes.",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": 400,
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Festival / salle de concert publique",
+            "description": "Format scene publique, sonorisation pro, formation complete.",
+            "availability": "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            "name": "Soiree complete (5h-6h)",
+            "description": "Set complet pour une soiree du debut a la fin.",
+            "availability": "https://schema.org/InStock"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/the.jammerz/",
+          "https://www.tiktok.com/@thejammerz64",
+          "https://www.facebook.com/profile.php?id=61578490353313",
+          "https://www.youtube.com/@TheJammerz-64"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://thejammerz.github.io/#site",
+        "url": "https://thejammerz.github.io/",
+        "name": "The Jammerz",
+        "inLanguage": "fr-FR",
+        "publisher": {
+          "@id": "https://thejammerz.github.io/#groupe"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://thejammerz.github.io/#faq",
+        "isPartOf": {
+          "@id": "https://thejammerz.github.io/#site"
+        },
+        "about": {
+          "@id": "https://thejammerz.github.io/#groupe"
+        },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Combien coûte un groupe de musique pour un mariage au Pays Basque ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pour un mariage ou un événement privé, comptez entre 500 € et 1 900 € pour 1 h à 4 h de live à cinq musiciens. En format acoustique solo ou duo, c'est 400 €. Une soirée complète de 5 h à 6 h se chiffre sur devis. À cela s'ajoutent les frais de déplacement au-delà de 20 km de Bayonne (8 € par kilomètre)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Dans quelles villes du Pays Basque et des Landes The Jammerz se déplace-t-il ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Le groupe part de Bayonne et se déplace dans un rayon d'environ 1 h de route, c'est-à-dire tout le Pays Basque et le Sud des Landes : Anglet, Biarritz, Bidart, Guéthary, Saint-Jean-de-Luz, Ciboure, Hendaye, Ustaritz, Cambo-les-Bains, Espelette, Saint-Jean-Pied-de-Port, Tarnos, Ondres, Labenne, Capbreton, Hossegor, Seignosse, Soustons, Saint-Vincent-de-Tyrosse, Dax, Peyrehorade, et plus loin Mont-de-Marsan, Pau ou Orthez. Au-delà de 20 km de Bayonne, les frais de route sont de 8 € par kilomètre."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quels styles de musique joue The Jammerz ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Funk, soul, blues et rock, avec un gros travail sur le groove. Les musiciens viennent d'horizons differents (jazz, funk, musiques latines, rock, electro), ce qui elargit le repertoire au-dela des reprises classiques."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "The Jammerz joue-t-il en concert dans les bars et les restaurants ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Oui : le concert en bar, en restaurant ou en soiree ouverte au public est la formule principale du groupe, entre 500 EUR et 1 500 EUR selon la duree et le format. Le groupe se deplace dans tout le Pays Basque et le Sud des Landes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Combien de temps joue le groupe ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Les prestations vont de 1 h à 4 h de live, découpées en sets selon le déroulé de la soirée. Une soirée complète de 5 h à 6 h est possible et se chiffre sur devis."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Combien de musiciens y a-t-il dans le groupe ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Jammerz réunit cinq musiciens : Quentin à la basse et au chant, Thomas à la guitare soliste, Tristan à la batterie, Andrea au chant et Camilo au saxophone en invité. Un format acoustique réduit en solo ou en duo est également possible."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quel est le répertoire de The Jammerz ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Jammerz est un groupe de reprises funk, soul, blues et rock : Stevie Wonder, James Brown, Aretha Franklin, Chic, Sharon Jones, Lenny Kravitz, Jamiroquai, Queen, Bruno Mars, Jimi Hendrix, Chuck Berry, les Blues Brothers. Le répertoire complet est publié en deux sets sur le site et tenu à jour."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "The Jammerz joue-t-il pour des soirées d'entreprise ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Oui. Les soirées d'entreprise entrent dans la formule Mariage / Événement privé, entre 500 € et 1 900 € selon la durée et le format. Le groupe joue aussi en bar, en restaurant, en festival et en salle de concert."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Comment demander un devis à The Jammerz ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Par le formulaire de contact du site, par mail à thejammerz64@gmail.com ou par téléphone au 06 71 85 75 24. Il faut préciser la date, le lieu et la durée souhaitée pour obtenir un chiffrage."
+            }
+          }
+        ]
+      }
     ]
   }
   </script>
@@ -65,10 +450,17 @@
   <!-- Google Fonts: Bungee (display) + Montserrat (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <!-- Polices chargees SANS bloquer l affichage : la feuille Google Fonts
+       bloquait le premier affichage ~800 ms sur mobile. Le media="print"
+       la sort du chemin critique, le onload la remet en jeu. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap"></noscript>
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Sans JavaScript, le loader plein ecran laisserait un ecran noir : on le neutralise -->
+  <noscript><style>.loader{display:none !important}</style></noscript>
 </head>
 <body>
 
@@ -92,7 +484,7 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#hero" class="nav-logo" aria-label="The Jammerz - retour accueil">
-        <img src="assets/images/logo.png" alt="The Jammerz" class="nav-logo-img">
+        <img src="assets/images/logo-nav.webp" alt="The Jammerz" class="nav-logo-img" width="140" height="112">
       </a>
       <ul class="nav-menu">
         <li><a href="#about" data-link>À propos</a></li>
@@ -101,6 +493,7 @@
         <li><a href="#agenda" data-link>Dates</a></li>
         <li><a href="#repertoire" data-link>Répertoire</a></li>
         <li><a href="#tarifs" data-link>Tarifs</a></li>
+        <li><a href="#faq" data-link>FAQ</a></li>
         <li><a href="#contact" data-link class="nav-cta">Réserver</a></li>
       </ul>
       <button class="nav-burger" id="navBurger" aria-label="Menu">
@@ -112,13 +505,17 @@
   <!-- HERO -->
   <section id="hero" class="hero">
     <div class="hero-content">
-      <img src="assets/images/logo.png" alt="The Jammerz" class="hero-logo" data-reveal>
-      <p class="hero-subtitle" data-reveal>Le groove du Pays Basque · 5 musiciens · 1 énergie</p>
-      <p class="hero-tag" data-reveal>FUNK · SOUL · GROOVE · ROCK</p>
+      <img src="assets/images/logo-720.webp"
+           srcset="assets/images/logo-720.webp 720w, assets/images/logo-1440.webp 1440w"
+           sizes="(max-width: 480px) 280px, (max-width: 1200px) 60vw, 720px"
+           alt="The Jammerz" class="hero-logo" width="720" height="576" fetchpriority="high">
+      <h1 class="hero-subtitle" data-reveal>Groupe de musique live au Pays Basque &amp; dans le Sud des Landes · 5 musiciens</h1>
+      <p class="hero-tag" data-reveal>FUNK · SOUL · BLUES · ROCK · GROOVE</p>
       <div class="hero-actions" data-reveal>
         <a href="#contact" class="btn btn-primary">Réserver le groupe</a>
         <a href="#live" class="btn btn-ghost">▶ Voir un live</a>
       </div>
+      <p class="hero-zone" data-reveal>Basés à <strong>Bayonne</strong> — on se déplace à <strong>1 h de route</strong> : Anglet, Biarritz, Saint-Jean-de-Luz, Hendaye, Capbreton, Hossegor, Dax… · <a href="tel:+33671857524">06 71 85 75 24</a></p>
     </div>
     <div class="hero-scroll">
       <span>SCROLL</span>
@@ -169,9 +566,9 @@
   <!-- MINDSET marquee -->
   <div class="marquee-wrap" aria-hidden="true">
     <div class="marquee">
-      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
-      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
-      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
+      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>BLUES</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
+      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>BLUES</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
+      <span>FUNK</span><span>•</span><span>SOUL</span><span>•</span><span>BLUES</span><span>•</span><span>GROOVE</span><span>•</span><span>ROCK</span><span>•</span>
     </div>
   </div>
 
@@ -186,7 +583,7 @@
 
       <div class="members-grid">
         <article class="member-card" data-reveal>
-          <div class="member-photo"><img src="assets/members/quentin.png" alt="Quentin - Basse et Chant" loading="lazy"></div>
+          <div class="member-photo"><img src="assets/members/quentin.webp" alt="Quentin - Basse et Chant" loading="lazy" width="528" height="794"></div>
           <div class="member-info">
             <h3 class="member-name">QUENTIN</h3>
             <p class="member-role">Basse / Chant</p>
@@ -196,7 +593,7 @@
         </article>
 
         <article class="member-card" data-reveal>
-          <div class="member-photo"><img src="assets/members/thomas.png" alt="Thomas - Guitare soliste" loading="lazy"></div>
+          <div class="member-photo"><img src="assets/members/thomas.webp" alt="Thomas - Guitare soliste" loading="lazy" width="528" height="794"></div>
           <div class="member-info">
             <h3 class="member-name">THOMAS</h3>
             <p class="member-role">Guitare soliste</p>
@@ -206,7 +603,7 @@
         </article>
 
         <article class="member-card" data-reveal>
-          <div class="member-photo"><img src="assets/members/tristan.png" alt="Tristan - Batterie" loading="lazy"></div>
+          <div class="member-photo"><img src="assets/members/tristan.webp" alt="Tristan - Batterie" loading="lazy" width="526" height="793"></div>
           <div class="member-info">
             <h3 class="member-name">TRISTAN</h3>
             <p class="member-role">Batterie</p>
@@ -216,7 +613,7 @@
         </article>
 
         <article class="member-card" data-reveal>
-          <div class="member-photo"><img src="assets/members/andrea.png" alt="Andréa - Chant" loading="lazy"></div>
+          <div class="member-photo"><img src="assets/members/andrea.webp" alt="Andréa - Chant" loading="lazy" width="528" height="794"></div>
           <div class="member-info">
             <h3 class="member-name">ANDRÉA</h3>
             <p class="member-role">Chant</p>
@@ -226,7 +623,7 @@
         </article>
 
         <article class="member-card member-guest" data-reveal>
-          <div class="member-photo"><img src="assets/members/camilo.png" alt="Camilo - Saxophone (Guest)" loading="lazy"></div>
+          <div class="member-photo"><img src="assets/members/camilo.webp" alt="Camilo - Saxophone (Guest)" loading="lazy" width="523" height="780"></div>
           <div class="member-info">
             <span class="guest-badge">GUEST</span>
             <h3 class="member-name">CAMILO</h3>
@@ -299,16 +696,16 @@
         <h3 class="reels-title">Plus de live sur Instagram</h3>
         <div class="reels-row">
           <div class="reel-wrap" data-reel="DU3f1a-gnYM">
-            <iframe src="https://www.instagram.com/reel/DU3f1a-gnYM/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+            <iframe title="Extrait live The Jammerz sur Instagram (1)" src="https://www.instagram.com/reel/DU3f1a-gnYM/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
           </div>
           <div class="reel-wrap" data-reel="DUkr7ODAoKi">
-            <iframe src="https://www.instagram.com/reel/DUkr7ODAoKi/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+            <iframe title="Extrait live The Jammerz sur Instagram (2)" src="https://www.instagram.com/reel/DUkr7ODAoKi/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
           </div>
           <div class="reel-wrap" data-reel="DavSIf9C45h">
-            <iframe src="https://www.instagram.com/p/DavSIf9C45h/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+            <iframe title="Extrait live The Jammerz sur Instagram (3)" src="https://www.instagram.com/p/DavSIf9C45h/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
           </div>
           <div class="reel-wrap" data-reel="Da5EaNciE0X">
-            <iframe src="https://www.instagram.com/p/Da5EaNciE0X/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+            <iframe title="Extrait live The Jammerz sur Instagram (4)" src="https://www.instagram.com/p/Da5EaNciE0X/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
           </div>
         </div>
       </div>
@@ -348,6 +745,31 @@
             <a class="gig-btn gig-btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Guinguette%20Dax%2C%2019%20Av.%20Jules%20Bastiat%2C%2040100%20Dax%2C%20France" target="_blank" rel="noopener">Itinéraire</a>
           </div>
         </article>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "MusicEvent",
+              "name": "Concert - Guinguette Dax",
+              "startDate": "2026-11-07T20:00:00+01:00",
+              "eventStatus": "https://schema.org/EventScheduled",
+              "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+              "url": "https://thejammerz.github.io/#agenda",
+              "image": "https://thejammerz.github.io/assets/images/og-image.jpg",
+              "location": {
+                "@type": "Place",
+                "name": "La Guinguette Dax, 19 Av. Jules Bastiat, 40100 Dax, France",
+                "address": "La Guinguette Dax, 19 Av. Jules Bastiat, 40100 Dax, France"
+              },
+              "performer": {
+                "@id": "https://thejammerz.github.io/#groupe"
+              },
+              "endDate": "2026-11-07T23:30:00+01:00"
+            }
+          ]
+        }
+        </script>
         <!-- AGENDA:AUTO:END -->
           </div>
         </div>
@@ -465,21 +887,23 @@
         <article class="tarif-card" data-reveal>
           <div class="tarif-icon">🍻</div>
           <h3>Concert Bar / Soirée publique</h3>
-          <p class="tarif-desc">Ambiance live, bar / restaurant, soirée ouverte au public.</p>
+          <p class="tarif-desc">Concert live dans un bar, un restaurant ou une soirée ouverte au public, partout au <strong>Pays Basque</strong> et dans le <strong>Sud des Landes</strong>. Groupe de reprises funk, soul, blues et rock.</p>
           <div class="tarif-price">500 € <span>– 1 500 €</span></div>
+          <a href="/concerts/" class="tarif-cta">Groupe pour concert live →</a>
         </article>
 
         <article class="tarif-card tarif-card-featured" data-reveal>
           <div class="tarif-icon">💍</div>
           <h3>Mariage / Événement privé</h3>
-          <p class="tarif-desc">Concert privé pour votre cérémonie ou événement d'entreprise.</p>
+          <p class="tarif-desc">Animation musicale de votre mariage ou de votre soirée d'entreprise : vin d'honneur, repas ou soirée dansante, selon le moment que vous choisissez. Un orchestre live de 5 musiciens.</p>
           <div class="tarif-price">500 € <span>– 1 900 €</span></div>
+          <a href="/mariage/" class="tarif-cta">Groupe de musique pour mariage →</a>
         </article>
 
         <article class="tarif-card" data-reveal>
           <div class="tarif-icon">🎸</div>
           <h3>Prestation acoustique (solo / duo)</h3>
-          <p class="tarif-desc">Format intimiste, parfait pour cocktails et moments calmes.</p>
+          <p class="tarif-desc">Format intimiste en solo ou en duo, parfait pour un cocktail, un vin d'honneur ou un moment calme.</p>
           <div class="tarif-price">400 €</div>
         </article>
 
@@ -500,9 +924,67 @@
         <article class="tarif-card tarif-card-info" data-reveal>
           <div class="tarif-icon">📍</div>
           <h3>Frais de déplacement</h3>
-          <p class="tarif-desc">Au-delà de 20 km de Bayonne : <strong>8 € / km</strong>. Variations liées à la durée, logistique, présence du saxophoniste.</p>
+          <p class="tarif-desc">Nous partons de <strong>Bayonne</strong> et jouons dans un rayon d’environ <strong>1 h de route</strong> : tout le <strong>Pays Basque</strong> (Anglet, Biarritz, Bidart, Guéthary, Saint-Jean-de-Luz, Ciboure, Hendaye, Ustaritz, Cambo-les-Bains, Espelette, Saint-Jean-Pied-de-Port) et le <strong>Sud des Landes</strong> (Tarnos, Ondres, Labenne, Capbreton, Hossegor, Seignosse, Soustons, Saint-Vincent-de-Tyrosse, Dax, Peyrehorade). Plus loin sur demande : Mont-de-Marsan, Pau, Orthez, le <strong>Béarn</strong>. Au-delà de 20 km de Bayonne : <strong>8 € / km</strong>. Variations liées à la durée, à la logistique et à la présence du saxophoniste.</p>
           <a href="#contact" class="tarif-cta">Demander un devis →</a>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ — repond aux questions reellement posees avant de reserver. Bloc manuel : hors marqueurs AUTO. -->
+  <section id="faq" class="section faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num" data-reveal>07</span>
+        <h2 class="section-title" data-reveal>Vos <span class="accent">questions</span></h2>
+        <p class="section-sub" data-reveal>Ce qu'on nous demande avant de réserver</p>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item" data-reveal>
+          <summary><h3>Combien coûte un groupe de musique pour un mariage au Pays Basque ?</h3></summary>
+          <div class="faq-answer"><p>Pour un mariage ou un événement privé, comptez entre <strong>500 € et 1 900 €</strong> pour 1 h à 4 h de live à cinq musiciens. En format acoustique solo ou duo, c'est <strong>400 €</strong>. Une soirée complète de 5 h à 6 h se chiffre sur devis. À cela s'ajoutent les frais de déplacement au-delà de 20 km de Bayonne (8 € / km).</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Dans quelles villes du Pays Basque et des Landes vous déplacez-vous ?</h3></summary>
+          <div class="faq-answer"><p>Nous partons de <strong>Bayonne</strong> et nous jouons dans un rayon d’environ <strong>1 h de route</strong>. C’est-à-dire tout le <strong>Pays Basque</strong> — Anglet, Biarritz, Bidart, Guéthary, Saint-Jean-de-Luz, Ciboure, Urrugne, Hendaye, Ascain, Saint-Pée-sur-Nivelle, Ustaritz, Cambo-les-Bains, Espelette, Hasparren, Saint-Palais, Saint-Jean-Pied-de-Port — et tout le <strong>Sud des Landes</strong> — Tarnos, Ondres, Labenne, Capbreton, Hossegor, Seignosse, Soustons, Vieux-Boucau, Saint-Vincent-de-Tyrosse, Dax, Saint-Paul-lès-Dax, Peyrehorade. Plus loin sur demande : Mont-de-Marsan, Pau, Orthez, Oloron. Au-delà de 20 km de Bayonne, les frais de route sont de 8 € par kilomètre.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Quels styles de musique jouez-vous ?</h3></summary>
+          <div class="faq-answer"><p><strong>Funk, soul, blues et rock</strong>, avec un gros travail sur le groove. Les cinq musiciens viennent d’horizons différents — jazz, funk, musiques latines, rock, électro — ce qui élargit le répertoire au-delà des reprises classiques.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Jouez-vous en concert dans les bars et les restaurants ?</h3></summary>
+          <div class="faq-answer"><p>Oui, c’est notre formule principale : <strong>concert en bar, en restaurant ou en soirée ouverte au public</strong>, entre <strong>500 € et 1 500 €</strong> selon la durée et le format. Nous nous déplaçons dans tout le Pays Basque et le Sud des Landes. <a href="/concerts/">Voir la page concerts →</a></p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Combien de temps jouez-vous ?</h3></summary>
+          <div class="faq-answer"><p>Nos prestations vont de <strong>1 h à 4 h de live</strong>, découpées en sets selon le déroulé de votre soirée. Pour tenir une soirée complète de 5 h à 6 h, c'est possible : la prestation est alors chiffrée sur devis.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Combien de musiciens y a-t-il dans le groupe ?</h3></summary>
+          <div class="faq-answer"><p>The Jammerz, c'est <strong>cinq musiciens</strong> : Quentin à la basse et au chant, Thomas à la guitare soliste, Tristan à la batterie, Andrea au chant et Camilo au saxophone (en invité). Un format acoustique réduit en solo ou en duo est également possible.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Quel est votre répertoire ?</h3></summary>
+          <div class="faq-answer"><p>Nous sommes un <strong>groupe de reprises funk, soul, blues et rock</strong>. Au programme : Stevie Wonder, James Brown, Aretha Franklin, Chic, Sharon Jones, Lenny Kravitz, Jamiroquai, Queen, Bruno Mars, Jimi Hendrix, Chuck Berry, les Blues Brothers… Le répertoire complet, en deux sets, est publié un peu plus haut sur cette page et tenu à jour.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Jouez-vous pour des soirées d'entreprise ?</h3></summary>
+          <div class="faq-answer"><p>Oui. Les soirées d'entreprise entrent dans la formule « Mariage / Événement privé », entre 500 € et 1 900 € selon la durée et le format. Nous jouons aussi en bar, en restaurant, en festival et en salle de concert.</p></div>
+        </details>
+
+        <details class="faq-item" data-reveal>
+          <summary><h3>Comment demander un devis ?</h3></summary>
+          <div class="faq-answer"><p>Par le <a href="#contact">formulaire de contact</a> en bas de cette page, par mail à <a href="mailto:thejammerz64@gmail.com">thejammerz64@gmail.com</a> ou par téléphone au <a href="tel:+33671857524">06 71 85 75 24</a>. Précisez la date, le lieu et la durée souhaitée : c'est ce qui nous permet de chiffrer.</p></div>
+        </details>
       </div>
     </div>
   </section>
@@ -511,7 +993,7 @@
   <section id="contact" class="section contact">
     <div class="container">
       <div class="section-head">
-        <span class="section-num" data-reveal>07</span>
+        <span class="section-num" data-reveal>08</span>
         <h2 class="section-title" data-reveal>On <span class="accent">joue</span> chez vous ?</h2>
         <p class="section-sub" data-reveal>Décrivez-nous votre événement, on revient vers vous sous 24h.</p>
       </div>
@@ -530,8 +1012,8 @@
               <a href="tel:+33671857524">06 71 85 75 24</a>
             </li>
             <li>
-              <span class="contact-label">Localisation</span>
-              <span>Bayonne · Pays Basque</span>
+              <span class="contact-label">Zone de jeu</span>
+              <span>Bayonne · Pays Basque · Sud des Landes<br><small>1 h de route autour de Bayonne</small></span>
             </li>
           </ul>
 
@@ -578,7 +1060,8 @@
               <span>Type d'événement</span>
               <select name="type_evenement">
                 <option value="">Choisir...</option>
-                <option>Concert bar / soirée publique</option>
+                <option>Concert bar / restaurant</option>
+                <option>Soirée publique / fête locale</option>
                 <option>Mariage</option>
                 <option>Événement privé / entreprise</option>
                 <option>Festival / salle de concert</option>
@@ -621,7 +1104,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">THE <span>JAMMERZ</span></div>
-          <p>Funk · Soul · Groove · Live<br>Pays Basque · France</p>
+          <p>Funk · Soul · Blues · Rock · Live<br>Bayonne · Pays Basque · Sud des Landes</p>
         </div>
         <div class="footer-col">
           <h4>Le groupe</h4>
@@ -636,6 +1119,10 @@
           <h4>Booking</h4>
           <ul>
             <li><a href="#tarifs" data-link>Prestations</a></li>
+            <li><a href="/concerts/">Concert live (bar, festival)</a></li>
+            <li><a href="/mariage/">Mariage au Pays Basque</a></li>
+            <li><a href="/sud-landes/">Sud des Landes</a></li>
+            <li><a href="#faq" data-link>Questions fréquentes</a></li>
             <li><a href="#contact" data-link>Demander un devis</a></li>
             <li><a href="mailto:thejammerz64@gmail.com">thejammerz64@gmail.com</a></li>
           </ul>
@@ -664,9 +1151,9 @@
   </div>
 
   <!-- GSAP + ScrollTrigger + Lenis -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

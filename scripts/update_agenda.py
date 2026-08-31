@@ -13,6 +13,7 @@ Lancé 1x/jour par GitHub Actions (.github/workflows/agenda.yml).
 from __future__ import annotations
 
 import html
+import json
 import re
 import sys
 import urllib.parse
@@ -29,6 +30,7 @@ ICS_URL = (
 )
 PARIS = ZoneInfo("Europe/Paris")
 MAX_EVENTS = 12
+NL = "\n"
 HORIZON_DAYS = 400
 
 START_MARK = "<!-- AGENDA:AUTO:START"
@@ -292,6 +294,63 @@ def render_card(ev: dict) -> str:
     )
 
 
+def iso_paris(dt_utc: datetime, all_day: bool) -> str:
+    """Date ISO 8601 en heure de Paris, decalage compris : ce qu'attend Google."""
+    loc = dt_utc.astimezone(PARIS)
+    return f"{loc:%Y-%m-%d}" if all_day else loc.isoformat()
+
+
+def render_events_jsonld(events: list[dict]) -> str:
+    """Balisage MusicEvent des dates a venir.
+
+    Genere ici, et jamais a la main dans index.html : les cartes de l'agenda
+    sont reecrites a chaque passage du script, donc tout balisage ecrit entre
+    les marqueurs AGENDA:AUTO serait efface au prochain cron.
+
+    Regle : un evenement sans lieu n'est PAS balise. `location` est obligatoire
+    pour Google, et on n'invente pas une adresse.
+    """
+    nodes = []
+    for ev in events:
+        if not ev["location"]:
+            print("[agenda] pas de balisage (lieu absent) : " + ev["summary"],
+                  file=sys.stderr)
+            continue
+        node = {
+            "@type": "MusicEvent",
+            "name": ev["summary"] or "Concert de The Jammerz",
+            "startDate": iso_paris(ev["start"], ev["all_day"]),
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "url": "https://thejammerz.github.io/#agenda",
+            "image": "https://thejammerz.github.io/assets/images/og-image.jpg",
+            "location": {
+                "@type": "Place",
+                "name": ev["location"],
+                "address": ev["location"],
+            },
+            "performer": {"@id": "https://thejammerz.github.io/#groupe"},
+        }
+        if ev["end"] is not None:
+            node["endDate"] = iso_paris(ev["end"], ev["all_day"])
+        if ev["description"]:
+            node["description"] = ev["description"][:400]
+        nodes.append(node)
+
+    if not nodes:
+        return ""
+
+    payload = json.dumps(
+        {"@context": "https://schema.org", "@graph": nodes},
+        ensure_ascii=False, indent=2,
+    )
+    # Un "</" dans une valeur fermerait la balise <script> : on l'echappe.
+    payload = payload.replace("</", "<\\/")
+    body = NL.join("        " + ln for ln in payload.splitlines())
+    return ('        <script type="application/ld+json">' + NL
+            + body + NL + "        </script>")
+
+
 def render_block(events: list[dict]) -> str:
     if not events:
         return (
@@ -299,7 +358,11 @@ def render_block(events: list[dict]) -> str:
             'le moment — revenez bientôt ou <a href="#contact" data-link>réservez '
             'le groupe →</a></p>'
         )
-    return "\n".join(render_card(ev) for ev in events)
+    parts = [render_card(ev) for ev in events]
+    jsonld = render_events_jsonld(events)
+    if jsonld:
+        parts.append(jsonld)
+    return "\n".join(parts)
 
 
 # --------------------------------------------------------------------------- #
