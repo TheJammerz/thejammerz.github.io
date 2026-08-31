@@ -38,6 +38,13 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
+  <!-- Preload de l'image LCP : meme srcset/sizes que la balise image du hero,
+       sinon le navigateur telecharge le logo deux fois -->
+  <link rel="preload" as="image" href="assets/images/logo-720.webp"
+        imagesrcset="assets/images/logo-720.webp 720w, assets/images/logo-1440.webp 1440w"
+        imagesizes="(max-width: 480px) 280px, (max-width: 1200px) 60vw, 720px"
+        fetchpriority="high">
+
   <!-- Schema.org : graphe d'entite (MusicGroup + WebSite relies par @id) -->
   <script type="application/ld+json">
   {
@@ -807,8 +814,14 @@
               "image": "https://thejammerz.com/assets/images/og-image.jpg",
               "location": {
                 "@type": "Place",
-                "name": "La Guinguette Dax, 19 Av. Jules Bastiat, 40100 Dax, France",
-                "address": "La Guinguette Dax, 19 Av. Jules Bastiat, 40100 Dax, France"
+                "name": "La Guinguette Dax",
+                "address": {
+                  "@type": "PostalAddress",
+                  "postalCode": "40100",
+                  "addressLocality": "Dax",
+                  "streetAddress": "19 Av. Jules Bastiat",
+                  "addressCountry": "FR"
+                }
               },
               "performer": {
                 "@id": "https://thejammerz.com/#groupe"

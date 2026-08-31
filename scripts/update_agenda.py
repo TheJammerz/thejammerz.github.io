@@ -255,8 +255,8 @@ def render_card(ev: dict) -> str:
     )
     if ev["location"]:
         gcal += f"&location={urllib.parse.quote(ev['location'])}"
-    if ev["description"]:
-        gcal += f"&details={urllib.parse.quote(ev['description'])}"
+    # meme raison : la DESCRIPTION de l'agenda est un bloc-notes interne, elle
+    # ne part pas dans l'URL du bouton "ajouter a mon agenda".
 
     actions = (
         f'\n            <a class="gig-btn gig-btn-primary" href="{attr(gcal)}" '
@@ -300,6 +300,35 @@ def iso_paris(dt_utc: datetime, all_day: bool) -> str:
     return f"{loc:%Y-%m-%d}" if all_day else loc.isoformat()
 
 
+def place_jsonld(location: str) -> dict:
+    """`Place` schema.org a partir de la chaine LOCATION de l'agenda.
+
+    Google comprend beaucoup mieux une PostalAddress qu'une adresse en un seul
+    bloc. On decoupe sur les virgules : "Salle, rue, 40100 Dax, France".
+    Rien n'est devine : s'il n'y a pas de code postal reconnaissable, on
+    retombe sur la chaine telle quelle.
+    """
+    parts = [p.strip() for p in location.split(",") if p.strip()]
+    cp = None
+    for i, p in enumerate(parts):
+        m = re.match(r"^(\d{5})\s+(.+)$", p)
+        if m:
+            cp = (i, m.group(1), m.group(2).strip())
+            break
+    if cp is None or len(parts) < 2:
+        return {"@type": "Place", "name": parts[0] if parts else location,
+                "address": location}
+
+    i, code, ville = cp
+    adresse = {"@type": "PostalAddress", "postalCode": code, "addressLocality": ville}
+    rue = ", ".join(parts[1:i])
+    if rue:
+        adresse["streetAddress"] = rue
+    if len(parts) > i + 1 and parts[i + 1].lower() in ("france", "fr"):
+        adresse["addressCountry"] = "FR"
+    return {"@type": "Place", "name": parts[0], "address": adresse}
+
+
 def render_events_jsonld(events: list[dict]) -> str:
     """Balisage MusicEvent des dates a venir.
 
@@ -324,17 +353,14 @@ def render_events_jsonld(events: list[dict]) -> str:
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
             "url": "https://thejammerz.com/#agenda",
             "image": "https://thejammerz.com/assets/images/og-image.jpg",
-            "location": {
-                "@type": "Place",
-                "name": ev["location"],
-                "address": ev["location"],
-            },
+            "location": place_jsonld(ev["location"]),
             "performer": {"@id": "https://thejammerz.com/#groupe"},
         }
         if ev["end"] is not None:
             node["endDate"] = iso_paris(ev["end"], ev["all_day"])
-        if ev["description"]:
-            node["description"] = ev["description"][:400]
+        # Pas de "description" : le champ DESCRIPTION de l'agenda sert de
+        # bloc-notes interne (line-up a decider, indisponibilites, demandes du
+        # lieu). Il n'a rien a faire dans une page publique.
         nodes.append(node)
 
     if not nodes:
