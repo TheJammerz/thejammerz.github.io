@@ -71,6 +71,21 @@
     .lp-foot a { color: var(--c-pink); text-decoration: underline; }
     .lp-more { display: inline-block; color: var(--c-text-dim); font-size: 14px; }
     .lp-more:hover { color: var(--c-pink); }
+  
+    /* FAQ visible : un FAQPage dont le texte n'est pas a l'ecran est interdit
+       par Google. Meme markup <details> que l'accueil, style des .lp-*. */
+    .lp-faq { display: grid; gap: 12px; max-width: 820px; }
+    .lp-faq details { border-radius: var(--radius); background: rgba(255,255,255,.03);
+                      border: 1px solid rgba(255,255,255,.08); }
+    .lp-faq summary { padding: 15px 20px; cursor: pointer; list-style: none;
+                      display: flex; gap: 12px; align-items: baseline; }
+    .lp-faq summary::-webkit-details-marker { display: none; }
+    .lp-faq summary::before { content: '+'; color: var(--c-pink); flex: none;
+                              font-family: 'Anton', "Anton repli", sans-serif; font-size: 20px; }
+    .lp-faq details[open] summary::before { content: '–'; }
+    .lp-faq summary h3 { margin: 0; font-size: clamp(15px, 1.9vw, 17px); }
+    .lp-faq .rep { padding: 0 20px 16px 44px; }
+    .lp-faq .rep p { margin: 0; max-width: none; }
   </style>
 
   <script type="application/ld+json">
@@ -226,6 +241,26 @@
         <span>Salies-de-Béarn</span><span>Orthez</span><span>Pau</span><span>Mont-de-Marsan</span>
       </div>
       <p>Même les plus éloignées restent à portée : Orthez à environ 55 min, <strong>Pau</strong> à 1 h 10, <strong>Mont-de-Marsan</strong> à 1 h 15. Au-delà, comme Oloron, sur demande. <a href="/sud-landes/" class="lp-more">→ Détail pour le Sud des Landes</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="faq">
+    <div class="container">
+      <h2>Questions fréquentes sur les concerts</h2>
+      <div class="lp-faq">
+        <details>
+          <summary><h3>Combien coûte un groupe de musique pour un concert en bar ?</h3></summary>
+          <div class="rep"><p>Entre 500 EUR et 1 500 EUR selon la duree et le format, pour un concert live de 1 h a 4 h avec cinq musiciens. En solo ou en duo acoustique, c'est 400 EUR. Au-dela de 20 km de Bayonne, les frais de route sont de 8 EUR par kilometre.</p></div>
+        </details>
+        <details>
+          <summary><h3>The Jammerz joue-t-il en festival ou en salle de concert ?</h3></summary>
+          <div class="rep"><p>Oui. Le format scene publique, sonorisation pro et formation complete se chiffre sur devis, selon la duree, la logistique et la distance.</p></div>
+        </details>
+        <details>
+          <summary><h3>Quel materiel faut-il prevoir pour nous accueillir ?</h3></summary>
+          <div class="rep"><p>Cela depend du lieu et de la formule : le mieux est de nous decrire la salle ou la terrasse, on vous dit tout de suite ce qu'il faut.</p></div>
+        </details>
+      </div>
     </div>
   </section>
 

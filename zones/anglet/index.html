@@ -76,6 +76,21 @@
     .z-fait b { display: block; font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400;
                 font-size: 26px; color: var(--c-pink); line-height: 1.1; margin-bottom: 4px; }
     .z-fait span { font-size: 13px; color: var(--c-text-dim); }
+  
+    /* FAQ visible : un FAQPage dont le texte n'est pas a l'ecran est interdit
+       par Google. Meme markup <details> que l'accueil, style des .lp-*. */
+    .lp-faq { display: grid; gap: 12px; max-width: 820px; }
+    .lp-faq details { border-radius: var(--radius); background: rgba(255,255,255,.03);
+                      border: 1px solid rgba(255,255,255,.08); }
+    .lp-faq summary { padding: 15px 20px; cursor: pointer; list-style: none;
+                      display: flex; gap: 12px; align-items: baseline; }
+    .lp-faq summary::-webkit-details-marker { display: none; }
+    .lp-faq summary::before { content: '+'; color: var(--c-pink); flex: none;
+                              font-family: 'Anton', "Anton repli", sans-serif; font-size: 20px; }
+    .lp-faq details[open] summary::before { content: '–'; }
+    .lp-faq summary h3 { margin: 0; font-size: clamp(15px, 1.9vw, 17px); }
+    .lp-faq .rep { padding: 0 20px 16px 44px; }
+    .lp-faq .rep p { margin: 0; max-width: none; }
   </style>
 
   <script type="application/ld+json">
@@ -268,6 +283,26 @@
       <p>Et les villes du secteur, avec leur temps de route depuis Bayonne :</p>
       <div class="lp-villes"><a href="/zones/tarnos/">Tarnos &#8212; 10&nbsp;min</a><a href="/zones/biarritz/">Biarritz &#8212; 15&nbsp;min</a><a href="/zones/saint-jean-de-luz/">Saint-Jean-de-Luz &#8212; 20&nbsp;min</a><a href="/zones/cambo-les-bains/">Cambo-les-Bains &#8212; 25&nbsp;min</a><a href="/zones/hossegor/">Hossegor &#8212; 25&nbsp;min</a><a href="/zones/hendaye/">Hendaye &#8212; 30&nbsp;min</a></div>
       <p><a href="/zones/" class="lp-more">&#8594; Toutes les villes o&#249; le groupe se d&#233;place</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="faq">
+    <div class="container">
+      <h2>Questions fréquentes — Anglet</h2>
+      <div class="lp-faq">
+        <details>
+          <summary><h3>The Jammerz se déplace-t-il à Anglet ?</h3></summary>
+          <div class="rep"><p>Oui. Le groupe part de Bayonne et Anglet est à environ 10 min de route, donc dans la zone de déplacement habituelle (environ 1 h 30 autour de Bayonne). Au-delà de 20 km de Bayonne, les frais de route sont de 8 euros par kilomètre.</p></div>
+        </details>
+        <details>
+          <summary><h3>Quel style de musique joue le groupe ?</h3></summary>
+          <div class="rep"><p>Du funk, de la soul, du blues et du rock : des reprises dansantes et grand public, jouées à cinq musiciens. Une formule acoustique en solo ou en duo est possible pour les moments plus calmes.</p></div>
+        </details>
+        <details>
+          <summary><h3>Combien coûte le groupe pour une soirée à Anglet ?</h3></summary>
+          <div class="rep"><p>De 500 à 1 900 euros selon le format et la durée, en groupe complet ; 400 euros en solo ou duo acoustique. Le détail des formules est sur la page des tarifs. Au-delà de 20 km de Bayonne, les frais de route sont de 8 euros par kilomètre.</p></div>
+        </details>
+      </div>
     </div>
   </section>
 

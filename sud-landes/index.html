@@ -71,6 +71,21 @@
     .lp-foot a { color: var(--c-pink); text-decoration: underline; }
     .lp-more { display: inline-block; color: var(--c-text-dim); font-size: 14px; }
     .lp-more:hover { color: var(--c-pink); }
+  
+    /* FAQ visible : un FAQPage dont le texte n'est pas a l'ecran est interdit
+       par Google. Meme markup <details> que l'accueil, style des .lp-*. */
+    .lp-faq { display: grid; gap: 12px; max-width: 820px; }
+    .lp-faq details { border-radius: var(--radius); background: rgba(255,255,255,.03);
+                      border: 1px solid rgba(255,255,255,.08); }
+    .lp-faq summary { padding: 15px 20px; cursor: pointer; list-style: none;
+                      display: flex; gap: 12px; align-items: baseline; }
+    .lp-faq summary::-webkit-details-marker { display: none; }
+    .lp-faq summary::before { content: '+'; color: var(--c-pink); flex: none;
+                              font-family: 'Anton', "Anton repli", sans-serif; font-size: 20px; }
+    .lp-faq details[open] summary::before { content: '–'; }
+    .lp-faq summary h3 { margin: 0; font-size: clamp(15px, 1.9vw, 17px); }
+    .lp-faq .rep { padding: 0 20px 16px 44px; }
+    .lp-faq .rep p { margin: 0; max-width: none; }
   </style>
 
   <script type="application/ld+json">
@@ -209,6 +224,26 @@
       <p>Au répertoire : Stevie Wonder, James Brown, Aretha Franklin, Chic, Sharon Jones, Lenny Kravitz, Jamiroquai, Queen, Bruno Mars, Jimi Hendrix, les Blues Brothers… deux sets complets, tenus à jour.</p>
       <p><strong>On amène le son.</strong> Le groupe a sa propre sono et beaucoup d'enceintes : rien à louer de votre côté, il faut juste un accès pour décharger et des prises de courant.</p>
       <p><a href="/#members" class="lp-more">→ Voir les membres</a> · <a href="/concerts/" class="lp-more">→ Page concerts</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="faq">
+    <div class="container">
+      <h2>Questions fréquentes — Sud des Landes</h2>
+      <div class="lp-faq">
+        <details>
+          <summary><h3>The Jammerz se deplace-t-il dans les Landes ?</h3></summary>
+          <div class="rep"><p>Oui. Le groupe part de Bayonne, a quelques minutes de la limite des Landes : Tarnos, Ondres, Labenne, Capbreton, Hossegor, Seignosse, Soustons, Saint-Vincent-de-Tyrosse et Dax sont dans le rayon habituel d'environ 1 h 30 de route. Mont-de-Marsan est possible sur demande.</p></div>
+        </details>
+        <details>
+          <summary><h3>Quels sont les frais de deplacement dans les Landes ?</h3></summary>
+          <div class="rep"><p>Au-dela de 20 km de Bayonne, les frais de route sont de 8 EUR par kilometre. Pour Tarnos, Ondres ou Labenne, la distance depuis Bayonne est tres courte.</p></div>
+        </details>
+        <details>
+          <summary><h3>Quel type de soiree le groupe assure-t-il dans le Sud des Landes ?</h3></summary>
+          <div class="rep"><p>Concert en bar ou en restaurant, fete locale, festival, mariage, soiree privee ou soiree d'entreprise. De 500 EUR a 1 900 EUR selon le format, 400 EUR en acoustique solo ou duo.</p></div>
+        </details>
+      </div>
     </div>
   </section>
 
