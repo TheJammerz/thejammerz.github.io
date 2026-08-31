@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Groupe de musique à Biarritz — funk, soul, blues, rock | The Jammerz</title>
+  <meta name="description" content="Groupe de musique live à Biarritz : 5 musiciens basés à Bayonne, à environ 15 min de route. Funk, soul, blues et rock pour concerts, soirées privées et mariages. Devis en 24 h.">
+  <meta name="author" content="The Jammerz">
+  <meta name="theme-color" content="#0A0A14">
+  <link rel="canonical" href="https://thejammerz.github.io/zones/biarritz/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Jammerz">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://thejammerz.github.io/zones/biarritz/">
+  <meta property="og:title" content="Groupe de musique live à Biarritz">
+  <meta property="og:description" content="Groupe de musique live à Biarritz : 5 musiciens basés à Bayonne, à environ 15 min de route. Funk, soul, blues et rock pour concerts, soirées privées et mariages. Devis en 24 h.">
+  <meta property="og:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Groupe de musique à Biarritz — funk, soul, blues, rock | The Jammerz">
+  <meta name="twitter:description" content="Groupe de musique live à Biarritz : 5 musiciens basés à Bayonne, à environ 15 min de route. Funk, soul, blues et rock pour concerts, soirées privées et mariages. Devis en 24 h.">
+  <meta name="twitter:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon-180.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap"></noscript>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Page autonome : aucun JS, donc rien qui depende de GSAP ni du loader. */
+    .lp-nav { position: sticky; top: 0; z-index: 50; background: rgba(10,10,20,.88);
+              backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .lp-nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+                    display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .lp-nav img { height: 44px; width: auto; }
+    .lp-hero { padding: 84px 0 56px; text-align: center; }
+    .lp-hero h1 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400; letter-spacing: .5px;
+                  font-size: clamp(30px, 5.4vw, 60px); line-height: 1.08; margin-bottom: 20px; }
+    .lp-hero p.lead { max-width: 720px; margin: 0 auto 30px; color: var(--c-text-dim);
+                      font-size: clamp(16px, 1.9vw, 19px); }
+    .lp-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .lp-sec { padding: 52px 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .lp-sec h2 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400;
+                 font-size: clamp(22px, 3.4vw, 34px); margin-bottom: 20px; line-height: 1.15; }
+    .lp-sec h3 { font-size: clamp(16px, 2vw, 19px); margin-bottom: 8px; }
+    .lp-sec p, .lp-sec li { color: var(--c-text-dim); }
+    .lp-sec p { margin-bottom: 16px; max-width: 780px; }
+    .lp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .lp-box { padding: 26px 22px; border-radius: var(--radius-lg);
+              background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+    .lp-box .price { font-family: 'Anton', "Anton repli", sans-serif; font-size: 26px; color: var(--c-pink); margin-top: 10px; }
+    .lp-list { display: grid; gap: 10px; margin-bottom: 16px; }
+    .lp-list li { padding-left: 22px; position: relative; }
+    .lp-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--c-pink); }
+    .lp-villes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .lp-villes span, .lp-villes a { padding: 7px 15px; border-radius: 999px; font-size: 14px;
+                      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); }
+    .lp-villes a { color: var(--c-text); text-decoration: none; }
+    .lp-villes a:hover { border-color: var(--c-pink); color: var(--c-pink); }
+    .lp-foot { padding: 40px 0 56px; border-top: 1px solid rgba(255,255,255,.07);
+               color: var(--c-text-dim); font-size: 14px; }
+    .lp-foot a { color: var(--c-pink); text-decoration: underline; }
+    .lp-more { display: inline-block; color: var(--c-text-dim); font-size: 14px; }
+    .lp-more:hover { color: var(--c-pink); }
+    /* fiche chiffree propre a ces pages */
+    .z-faits { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .z-fait { padding: 18px 18px 16px; border-radius: var(--radius);
+              background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+    .z-fait b { display: block; font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400;
+                font-size: 26px; color: var(--c-pink); line-height: 1.1; margin-bottom: 4px; }
+    .z-fait span { font-size: 13px; color: var(--c-text-dim); }
+  </style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://thejammerz.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Villes",
+          "item": "https://thejammerz.github.io/zones/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Biarritz"
+        }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://thejammerz.github.io/zones/biarritz/#page",
+      "url": "https://thejammerz.github.io/zones/biarritz/",
+      "name": "Groupe de musique à Biarritz — funk, soul, blues, rock | The Jammerz",
+      "description": "Groupe de musique live à Biarritz : 5 musiciens basés à Bayonne, à environ 15 min de route. Funk, soul, blues et rock pour concerts, soirées privées et mariages. Devis en 24 h.",
+      "inLanguage": "fr-FR",
+      "isPartOf": {
+        "@id": "https://thejammerz.github.io/#site"
+      },
+      "about": {
+        "@id": "https://thejammerz.github.io/#groupe"
+      },
+      "primaryImageOfPage": "https://thejammerz.github.io/assets/images/og-image.jpg"
+    },
+    {
+      "@type": "MusicGroup",
+      "@id": "https://thejammerz.github.io/#groupe",
+      "name": "The Jammerz",
+      "url": "https://thejammerz.github.io/",
+      "genre": [
+        "Funk",
+        "Soul",
+        "Blues",
+        "Rock"
+      ],
+      "telephone": "+33671857524",
+      "areaServed": {
+        "@type": "City",
+        "name": "Biarritz",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Biarritz",
+          "addressRegion": "Pyrénées-Atlantiques",
+          "addressCountry": "FR"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://thejammerz.github.io/zones/biarritz/#faq",
+      "isPartOf": {
+        "@id": "https://thejammerz.github.io/zones/biarritz/#page"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "The Jammerz se déplace-t-il à Biarritz ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui. Le groupe part de Bayonne et Biarritz est à environ 15 min de route, donc dans la zone de déplacement habituelle (environ 1 h 30 autour de Bayonne). Au-delà de 20 km de Bayonne, les frais de route sont de 8 euros par kilomètre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel style de musique joue le groupe ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Du funk, de la soul, du blues et du rock : des reprises dansantes et grand public, jouées à cinq musiciens. Une formule acoustique en solo ou en duo est possible pour les moments plus calmes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien coûte le groupe pour une soirée à Biarritz ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De 500 à 1 900 euros selon le format et la durée, en groupe complet ; 400 euros en solo ou duo acoustique. Le détail des formules est sur la page des tarifs. Au-delà de 20 km de Bayonne, les frais de route sont de 8 euros par kilomètre."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+  <nav class="lp-nav">
+    <div class="lp-nav-inner">
+      <a href="/" aria-label="The Jammerz - retour accueil">
+        <img src="/assets/images/logo-nav.webp" alt="The Jammerz" width="140" height="112">
+      </a>
+      <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+    </div>
+  </nav>
+
+  <header class="lp-hero">
+    <div class="container">
+      <h1>Groupe de musique live<br>&#224; Biarritz</h1>
+      <p class="lead">Biarritz vit au rythme de sa Grande Plage, de son phare et d’une saison qui s’étire du printemps à l’automne. The&nbsp;Jammerz, cinq musiciens bas&#233;s &#224; Bayonne,
+        sont &#224; environ <strong>15 min de route</strong> : funk, soul, blues et rock,
+        pour vos concerts, soir&#233;es priv&#233;es et mariages.</p>
+      <div class="lp-cta">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="/#live" class="btn btn-ghost">&#201;couter un extrait</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Venir jouer &#224; Biarritz</h2>
+      <div class="z-faits">
+        <div class="z-fait"><b>15 min</b><span>de route depuis Bayonne (environ)</span></div>
+        <div class="z-fait"><b>26 206</b><span>habitants &#224; Biarritz</span></div>
+        <div class="z-fait"><b>5</b><span>musiciens sur sc&#232;ne</span></div>
+        <div class="z-fait"><b>8&#8239;&#8364;/km</b><span>au-del&#224; de 20&#8239;km de Bayonne</span></div>
+      </div>
+      <p>C’est une ville où les événements s’enchaînent : hôtels, terrasses, villas privées, soirées d’entreprise. La vraie contrainte, l’été, c’est le stationnement et l’accès au lieu — on en parle en amont pour arriver sans stress.</p>
+      <p>Le groupe se d&#233;place dans un rayon d&#8217;environ <strong>1&nbsp;h&nbsp;30 de route</strong>
+        autour de Bayonne. Biarritz (Pyrénées-Atlantiques) est dedans, donc pas de suppl&#233;ment de
+        d&#233;placement exceptionnel : seuls s&#8217;appliquent les frais de route habituels,
+        <strong>8&#8239;&#8364; par kilom&#232;tre au-del&#224; de 20&#8239;km de Bayonne</strong>.</p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Ce qu&#8217;on joue</h2>
+      <p>Un r&#233;pertoire de <strong>reprises funk, soul, blues et rock</strong> : de Stevie Wonder
+        aux Blues Brothers, d&#8217;Aretha Franklin &#224; Jamiroquai, en passant par Bruno Mars et
+        les classiques du rock. Du groove qui fait danser, jou&#233; par cinq musiciens
+        &#8212; chant, guitare, basse, batterie, claviers, et le saxophone selon la formule.</p>
+      <p>Pour un vin d&#8217;honneur, un cocktail ou un moment plus calme, une
+        <strong>version acoustique en solo ou en duo</strong> est possible.
+        <a href="/#repertoire" class="lp-more">&#8594; Voir le r&#233;pertoire complet</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Pour quel genre de soir&#233;e &#224; Biarritz ?</h2>
+      <p>Typiquement : soirées d’hôtel, cocktails et lancements de marque, mariages en villa, apéros-concerts. Le groupe s&#8217;adapte au lieu et &#224; la jauge,
+        de la terrasse de bar &#224; la salle des f&#234;tes.</p>
+      <div class="lp-grid">
+        <div class="lp-box">
+          <h3>Concert en bar ou restaurant</h3>
+          <p>Deux sets, un public debout, un son cal&#233; pour le lieu.</p>
+          <p class="price">&#224; partir de 500&#8239;&#8364;</p>
+        </div>
+        <div class="lp-box">
+          <h3>Mariage &amp; soir&#233;e priv&#233;e</h3>
+          <p>Vin d&#8217;honneur, repas, soir&#233;e dansante &#8212; ou les trois.</p>
+          <p class="price">de 500 &#224; 1&#8239;900&#8239;&#8364;</p>
+        </div>
+        <div class="lp-box">
+          <h3>Festival &amp; f&#234;te locale</h3>
+          <p>Un set cal&#233; sur votre programmation et votre budget.</p>
+          <p class="price">sur devis</p>
+        </div>
+      </div>
+      <p style="margin-top:20px"><a href="/#tarifs" class="lp-more">&#8594; Le d&#233;tail des formules et des tarifs</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Autour de Biarritz</h2>
+      <p>Les communes voisines sont dans la m&#234;me sortie de route. Si votre lieu est
+        &#224; quelques kilom&#232;tres de Biarritz, c&#8217;est bon aussi :</p>
+      <div class="lp-villes"><span>Anglet</span><span>Bidart</span><span>Bassussarry</span><span>Arbonne</span><span>Arcangues</span><span>Guéthary</span><span>Ahetze</span><span>Bayonne</span><span>Boucau</span><span>Saint-Pierre-d'Irube</span><span>Villefranque</span><span>Tarnos</span></div>
+      <p>Et les villes du secteur, avec leur temps de route depuis Bayonne :</p>
+      <div class="lp-villes"><a href="/zones/saint-jean-de-luz/">Saint-Jean-de-Luz</a><a href="/zones/tarnos/">Tarnos</a><a href="/zones/capbreton/">Capbreton</a><a href="/zones/anglet/">Anglet</a><a href="/zones/cambo-les-bains/">Cambo-les-Bains</a><a href="/zones/hossegor/">Hossegor</a></div>
+      <p><a href="/zones/" class="lp-more">&#8594; Toutes les villes o&#249; le groupe se d&#233;place</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container" style="text-align:center">
+      <h2>Une date &#224; Biarritz ?</h2>
+      <p style="margin:0 auto 26px">Dites-nous la date, le lieu et le type de soir&#233;e.
+        R&#233;ponse sous 24&nbsp;h, devis clair, pas de surprise.</p>
+      <div class="lp-cta">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="tel:+33671857524" class="btn btn-ghost">06 71 85 75 24</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lp-foot">
+    <div class="container">
+      <p><a href="/zones/">Toutes les villes</a> &#183; <a href="/concerts/">Concerts</a>
+         &#183; <a href="/mariage/">Mariage</a> &#183; <a href="/sud-landes/">Sud des Landes</a></p>
+      <p><a href="/">&larr; Retour &#224; l&#8217;accueil</a> &#183; <a href="/#agenda">Prochaines dates</a>
+         &#183; <a href="/#tarifs">Toutes les prestations</a> &#183; <a href="/#faq">Questions fr&#233;quentes</a></p>
+      <p>The Jammerz &#8212; groupe de musique live funk, soul, blues et rock.
+         Bayonne, Pays Basque, Sud des Landes et B&#233;arn.</p>
+    </div>
+  </footer>
+
+  <!-- Bouton WhatsApp flottant -->
+  <a class="wa-float" href="https://wa.me/33671857524?text=Bonjour%20%21%20Je%20vous%20%C3%A9cris%20depuis%20votre%20page%20Biarritz%20%3A%20j%E2%80%99aimerais%20vous%20faire%20jouer."
+     target="_blank" rel="noopener"
+     aria-label="&#201;crire &#224; The Jammerz sur WhatsApp">
+    <span class="wa-float__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.21-3.71.97.99-3.62-.23-.37a9.79 9.79 0 0 1-1.5-5.22C2.24 6.6 6.64 2.2 12.06 2.2c2.62 0 5.08 1.02 6.93 2.88a9.74 9.74 0 0 1 2.87 6.93c0 5.42-4.4 9.79-9.81 9.79zM20.52 3.49A11.72 11.72 0 0 0 12.05.01C5.52.01.21 5.32.21 11.85c0 2.09.55 4.13 1.59 5.93L.11 24l6.36-1.67a11.83 11.83 0 0 0 5.58 1.42h.01c6.53 0 11.84-5.31 11.84-11.84 0-3.17-1.23-6.14-3.38-8.42z"/></svg>
+    </span>
+    <span class="wa-float__txt">WhatsApp</span>
+  </a>
+</body>
+</html>

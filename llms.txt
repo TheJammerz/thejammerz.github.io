@@ -14,7 +14,7 @@
   Espelette, Hasparren, Saint-Palais, Saint-Jean-Pied-de-Port, Tarnos, Ondres,
   Labenne, Capbreton, Hossegor, Seignosse, Soustons, Vieux-Boucau,
   Saint-Vincent-de-Tyrosse, Dax, Saint-Paul-lès-Dax, Peyrehorade).
-  Aussi dans la zone : Salies-de-Béarn (45 min), Orthez (55 min), Pau (1 h 10)
+  Aussi dans la zone (temps de route approximatifs) : Salies-de-Béarn (45 min), Orthez (55 min), Pau (1 h 10)
   et Mont-de-Marsan (1 h 15). Plus loin, comme Oloron, sur demande.
 - Styles : funk, soul, blues, rock (groupe de reprises)
 - Formation : cinq musiciens — Quentin (basse, chant), Thomas (guitare soliste),
@@ -42,6 +42,22 @@
   Pays Basque et dans le Sud des Landes
 - [Sud des Landes](https://thejammerz.github.io/sud-landes/) : concerts et soirées
   dans le Sud des Landes (Capbreton, Hossegor, Soustons, Tyrosse, Dax, Tarnos)
+- [Villes desservies](https://thejammerz.github.io/zones/) : liste des villes où le
+  groupe se déplace, avec le temps de route depuis Bayonne. Une page par ville :
+  - [Anglet](https://thejammerz.github.io/zones/anglet/) : environ 10 min de route depuis Bayonne
+  - [Tarnos](https://thejammerz.github.io/zones/tarnos/) : environ 10 min de route depuis Bayonne
+  - [Biarritz](https://thejammerz.github.io/zones/biarritz/) : environ 15 min de route depuis Bayonne
+  - [Saint-Jean-de-Luz](https://thejammerz.github.io/zones/saint-jean-de-luz/) : environ 20 min de route depuis Bayonne
+  - [Capbreton](https://thejammerz.github.io/zones/capbreton/) : environ 20 min de route depuis Bayonne
+  - [Cambo-les-Bains](https://thejammerz.github.io/zones/cambo-les-bains/) : environ 25 min de route depuis Bayonne
+  - [Hossegor](https://thejammerz.github.io/zones/hossegor/) : environ 25 min de route depuis Bayonne
+  - [Saint-Vincent-de-Tyrosse](https://thejammerz.github.io/zones/saint-vincent-de-tyrosse/) : environ 30 min de route depuis Bayonne
+  - [Hendaye](https://thejammerz.github.io/zones/hendaye/) : environ 30 min de route depuis Bayonne
+  - [Soustons](https://thejammerz.github.io/zones/soustons/) : environ 40 min de route depuis Bayonne
+  - [Dax](https://thejammerz.github.io/zones/dax/) : environ 40 min de route depuis Bayonne
+  - [Orthez](https://thejammerz.github.io/zones/orthez/) : environ 55 min de route depuis Bayonne
+  - [Pau](https://thejammerz.github.io/zones/pau/) : environ 1 h 10 de route depuis Bayonne
+  - [Mont-de-Marsan](https://thejammerz.github.io/zones/mont-de-marsan/) : environ 1 h 15 de route depuis Bayonne
 
 ## Contact
 
