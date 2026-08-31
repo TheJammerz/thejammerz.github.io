@@ -32,8 +32,10 @@ IPV4 = ["185.199.108.153", "185.199.109.153", "185.199.110.153", "185.199.111.15
 IPV6 = ["2606:50c0:8000::153", "2606:50c0:8001::153",
         "2606:50c0:8002::153", "2606:50c0:8003::153"]
 
-EXT = (".html", ".xml", ".txt", ".py")
-IGNORE = (".git", "__pycache__", "assets")
+# Large exprès : tout fichier texte du depot doit passer sous le radar.
+EXT = (".html", ".xml", ".txt", ".py", ".js", ".css", ".yml", ".yaml",
+       ".json", ".md", ".webmanifest", ".svg")
+IGNORE = (".git", "__pycache__")
 
 
 def fichiers():
