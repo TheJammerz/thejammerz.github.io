@@ -322,14 +322,14 @@ def render_events_jsonld(events: list[dict]) -> str:
             "startDate": iso_paris(ev["start"], ev["all_day"]),
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-            "url": "https://thejammerz.github.io/#agenda",
-            "image": "https://thejammerz.github.io/assets/images/og-image.jpg",
+            "url": "https://thejammerz.com/#agenda",
+            "image": "https://thejammerz.com/assets/images/og-image.jpg",
             "location": {
                 "@type": "Place",
                 "name": ev["location"],
                 "address": ev["location"],
             },
-            "performer": {"@id": "https://thejammerz.github.io/#groupe"},
+            "performer": {"@id": "https://thejammerz.com/#groupe"},
         }
         if ev["end"] is not None:
             node["endDate"] = iso_paris(ev["end"], ev["all_day"])
