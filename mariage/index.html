@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Groupe de musique pour mariage au Pays Basque — The Jammerz</title>
+  <meta name="description" content="Orchestre live de 5 musiciens pour votre mariage au Pays Basque et dans le Sud des Landes. Funk, soul, blues et rock. De 400 € à 1 900 €, tarifs affichés.">
+  <meta name="author" content="The Jammerz">
+  <meta name="theme-color" content="#0A0A14">
+  <link rel="canonical" href="https://thejammerz.github.io/mariage/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Jammerz">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://thejammerz.github.io/mariage/">
+  <meta property="og:title" content="Groupe de musique pour mariage au Pays Basque &amp; dans les Landes">
+  <meta property="og:description" content="Orchestre live de 5 musiciens pour votre mariage au Pays Basque et dans le Sud des Landes. Funk, soul, blues et rock. De 400 € à 1 900 €, tarifs affichés.">
+  <meta property="og:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Groupe de musique pour mariage au Pays Basque — The Jammerz">
+  <meta name="twitter:description" content="Orchestre live de 5 musiciens pour votre mariage au Pays Basque et dans le Sud des Landes. Funk, soul, blues et rock. De 400 € à 1 900 €, tarifs affichés.">
+  <meta name="twitter:image" content="https://thejammerz.github.io/assets/images/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon-180.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Polices chargees SANS bloquer l affichage : media="print" les sort du
+       chemin critique, onload les remet en jeu. Le saut visuel a l arrivee
+       des polices est neutralise par les replis a metriques calees
+       (@font-face "Anton repli" / "Montserrat repli" dans styles.css). -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Montserrat:wght@300;400;500;600;700;900&display=swap"></noscript>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Page autonome : aucun JS, donc rien qui depende de GSAP ni du loader. */
+    .lp-nav { position: sticky; top: 0; z-index: 50; background: rgba(10,10,20,.88);
+              backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .lp-nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+                    display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .lp-nav img { height: 44px; width: auto; }
+    .lp-hero { padding: 84px 0 56px; text-align: center; }
+    .lp-hero h1 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400; letter-spacing: .5px;
+                  font-size: clamp(30px, 5.4vw, 60px); line-height: 1.08; margin-bottom: 20px; }
+    .lp-hero p.lead { max-width: 720px; margin: 0 auto 30px; color: var(--c-text-dim);
+                      font-size: clamp(16px, 1.9vw, 19px); }
+    .lp-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .lp-sec { padding: 52px 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .lp-sec h2 { font-family: 'Anton', "Anton repli", sans-serif; font-weight: 400;
+                 font-size: clamp(22px, 3.4vw, 34px); margin-bottom: 20px; line-height: 1.15; }
+    .lp-sec h3 { font-size: clamp(16px, 2vw, 19px); margin-bottom: 8px; }
+    .lp-sec p, .lp-sec li { color: var(--c-text-dim); }
+    .lp-sec p { margin-bottom: 16px; max-width: 780px; }
+    .lp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .lp-box { padding: 26px 22px; border-radius: var(--radius-lg);
+              background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+    .lp-box .price { font-family: 'Anton', "Anton repli", sans-serif; font-size: 26px; color: var(--c-pink); margin-top: 10px; }
+    .lp-list { display: grid; gap: 10px; margin-bottom: 16px; }
+    .lp-list li { padding-left: 22px; position: relative; }
+    .lp-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--c-pink); }
+    .lp-villes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .lp-villes span { padding: 7px 15px; border-radius: 999px; font-size: 14px;
+                      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); }
+    .lp-foot { padding: 40px 0 56px; border-top: 1px solid rgba(255,255,255,.07);
+               color: var(--c-text-dim); font-size: 14px; }
+    .lp-foot a { color: var(--c-pink); text-decoration: underline; }
+    .lp-more { display: inline-block; color: var(--c-text-dim); font-size: 14px; }
+    .lp-more:hover { color: var(--c-pink); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://thejammerz.github.io/mariage/#page",
+        "url": "https://thejammerz.github.io/mariage/",
+        "name": "Groupe de musique pour mariage au Pays Basque et dans les Landes - The Jammerz",
+        "description": "Orchestre live de 5 musiciens pour un mariage au Pays Basque et dans le Sud des Landes, dans un rayon d'environ 1 h de route autour de Bayonne. Funk, soul, blues et rock. De 400 a 1 900 euros.",
+        "inLanguage": "fr-FR",
+        "isPartOf": { "@id": "https://thejammerz.github.io/#site" },
+        "about": { "@id": "https://thejammerz.github.io/#groupe" },
+        "primaryImageOfPage": "https://thejammerz.github.io/assets/images/og-image.jpg",
+        "breadcrumb": { "@id": "https://thejammerz.github.io/mariage/#fil" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://thejammerz.github.io/mariage/#fil",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://thejammerz.github.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Mariage" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <nav class="lp-nav">
+    <div class="lp-nav-inner">
+      <a href="/" aria-label="The Jammerz - retour accueil">
+        <img src="/assets/images/logo-nav.webp" alt="The Jammerz" width="140" height="112">
+      </a>
+      <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+    </div>
+  </nav>
+
+  <header class="lp-hero">
+    <div class="container">
+      <h1>Groupe de musique pour <span class="accent">mariage</span><br>au Pays Basque &amp; dans les Landes</h1>
+      <p class="lead">The Jammerz, c'est cinq musiciens live : funk, soul et rock joués pour de vrai, avec des reprises que tout le monde connaît. De 400 € en acoustique à 1 900 € en formation complète — les tarifs sont affichés, sans surprise.</p>
+      <div class="lp-cta">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="/#live" class="btn btn-ghost">▶ Voir un live</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Un vrai groupe live, pas une playlist</h2>
+      <p>Un mariage se joue en plusieurs moments, et ils n'appellent pas la même musique. Nous adaptons la formation au moment que vous choisissez :</p>
+      <ul class="lp-list">
+        <li><strong>Vin d'honneur ou cocktail</strong> — format acoustique, en solo ou en duo. De quoi poser une ambiance sans couvrir les conversations.</li>
+        <li><strong>Repas</strong> — formation réduite ou complète, volume tenu.</li>
+        <li><strong>Soirée dansante</strong> — les cinq musiciens en set complet : funk, soul, rock, du groove qui tient la piste.</li>
+      </ul>
+      <p>La prestation va de <strong>1 h à 4 h de live</strong>, découpée en sets selon votre déroulé. Pour couvrir une soirée entière de 5 h à 6 h, c'est possible : la prestation est alors chiffrée sur devis.</p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Combien coûte un groupe de musique pour un mariage ?</h2>
+      <p>Nos tarifs sont affichés. Ils dépendent de la durée, du format et de la distance — rien d'autre.</p>
+      <div class="lp-grid">
+        <div class="lp-box">
+          <h3>Mariage / événement privé</h3>
+          <p>Formation complète, 5 musiciens, 1 h à 4 h de live.</p>
+          <div class="price">500 € – 1 900 €</div>
+        </div>
+        <div class="lp-box">
+          <h3>Acoustique solo ou duo</h3>
+          <p>Vin d'honneur, cocktail, moment calme.</p>
+          <div class="price">400 €</div>
+        </div>
+        <div class="lp-box">
+          <h3>Soirée complète (5 h – 6 h)</h3>
+          <p>Du début à la fin de la soirée.</p>
+          <div class="price">Sur devis</div>
+        </div>
+        <div class="lp-box">
+          <h3>Déplacement</h3>
+          <p>Départ de Bayonne. Au-delà de 20 km, les frais de route s'ajoutent.</p>
+          <div class="price">8 € / km</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Où nous jouons</h2>
+      <p>Nous partons de <strong>Bayonne</strong> et nous déplaçons dans un rayon d’environ <strong>1 h de route</strong> — tout le Pays Basque et tout le Sud des Landes :</p>
+      <div class="lp-villes">
+        <span>Bayonne</span><span>Anglet</span><span>Biarritz</span><span>Bidart</span><span>Guéthary</span>
+        <span>Saint-Jean-de-Luz</span><span>Ciboure</span><span>Hendaye</span><span>Ascain</span>
+        <span>Saint-Pée-sur-Nivelle</span><span>Ustaritz</span><span>Cambo-les-Bains</span><span>Espelette</span>
+        <span>Hasparren</span><span>Saint-Jean-Pied-de-Port</span>
+        <span>Tarnos</span><span>Ondres</span><span>Labenne</span><span>Capbreton</span><span>Hossegor</span>
+        <span>Seignosse</span><span>Soustons</span><span>Saint-Vincent-de-Tyrosse</span><span>Dax</span>
+        <span>Peyrehorade</span>
+      </div>
+      <p>Et les communes alentour — Mont-de-Marsan, Pau, Orthez et Oloron sur demande. Au-delà de 20 km de Bayonne, les frais de route sont de 8 € par kilomètre. <a href="/sud-landes/" class="lp-more">→ Détail pour le Sud des Landes</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Qui joue</h2>
+      <p>Cinq musiciens : <strong>Quentin</strong> à la basse et au chant, <strong>Thomas</strong> à la guitare soliste, <strong>Tristan</strong> à la batterie, <strong>Andrea</strong> au chant et <strong>Camilo</strong> au saxophone, en invité.</p>
+      <p><a href="/#members" class="lp-more">→ Voir le groupe en détail</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Le répertoire</h2>
+      <p>Nous sommes un groupe de reprises. Au programme : Stevie Wonder, James Brown, Aretha Franklin, Chic, Sharon Jones, Lenny Kravitz, Jamiroquai, Queen, Bruno Mars, les Blues Brothers, Muse, Toto, les Doobie Brothers…</p>
+      <p>Le répertoire complet, en deux sets, est publié sur le site et tenu à jour.</p>
+      <p><a href="/#repertoire" class="lp-more">→ Voir le répertoire complet</a></p>
+    </div>
+  </section>
+
+  <section class="lp-sec">
+    <div class="container">
+      <h2>Réserver le groupe</h2>
+      <p>Dites-nous la <strong>date</strong>, le <strong>lieu</strong> et la <strong>durée</strong> souhaitée : c'est ce qui nous permet de chiffrer précisément.</p>
+      <div class="lp-cta" style="justify-content:flex-start">
+        <a href="/#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="mailto:thejammerz64@gmail.com" class="btn btn-ghost">thejammerz64@gmail.com</a>
+        <a href="tel:+33671857524" class="btn btn-ghost">06 71 85 75 24</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lp-foot">
+    <div class="container">
+      <p><a href="/concerts/">Groupe pour concert live</a> · <a href="/sud-landes/">Groupe dans le Sud des Landes</a></p>
+      <p><a href="/">← Retour à l'accueil</a> · <a href="/#agenda">Prochaines dates</a> · <a href="/#tarifs">Toutes les prestations</a> · <a href="/#faq">Questions fréquentes</a></p>
+      <p>The Jammerz — groupe de musique live, Bayonne, Pays Basque.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
