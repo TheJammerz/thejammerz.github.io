@@ -1,20 +1,21 @@
 # The Jammerz
 
 > Groupe de musique live basé à Bayonne (Pays Basque). Cinq musiciens, reprises
-> funk, soul, blues et rock. Le groupe se déplace dans un rayon d'environ 1 h de
+> funk, soul, blues et rock. Le groupe se déplace dans un rayon d'environ 1 h 30 de
 > route autour de Bayonne : tout le Pays Basque et tout le Sud des Landes.
 
 ## Le groupe
 
 - Nom : The Jammerz
 - Base : Bayonne (64100), Pyrénées-Atlantiques, France
-- Zone de jeu : Pays Basque et Sud des Landes, environ 1 h de route autour de
+- Zone de jeu : Pays Basque et Sud des Landes, environ 1 h 30 de route autour de
   Bayonne (Anglet, Biarritz, Bidart, Guéthary, Saint-Jean-de-Luz, Ciboure,
   Urrugne, Hendaye, Ascain, Saint-Pée-sur-Nivelle, Ustaritz, Cambo-les-Bains,
   Espelette, Hasparren, Saint-Palais, Saint-Jean-Pied-de-Port, Tarnos, Ondres,
   Labenne, Capbreton, Hossegor, Seignosse, Soustons, Vieux-Boucau,
   Saint-Vincent-de-Tyrosse, Dax, Saint-Paul-lès-Dax, Peyrehorade).
-  Plus loin sur demande : Mont-de-Marsan, Pau, Orthez, Oloron.
+  Aussi dans la zone : Salies-de-Béarn (45 min), Orthez (55 min), Pau (1 h 10)
+  et Mont-de-Marsan (1 h 15). Plus loin, comme Oloron, sur demande.
 - Styles : funk, soul, blues, rock (groupe de reprises)
 - Formation : cinq musiciens — Quentin (basse, chant), Thomas (guitare soliste),
   Tristan (batterie), Andrea (chant), Camilo (saxophone, en invité).

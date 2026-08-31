@@ -1303,3 +1303,52 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 .hero-zone a { color: var(--c-pink); text-decoration: none; white-space: nowrap; }
 .hero-zone a:hover { text-decoration: underline; }
 @media (max-width: 600px) { .hero-zone { font-size: 13px; } }
+
+/* ----- 22. BOUTON WHATSAPP FLOTTANT ----- */
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 9990;
+  display: inline-flex; align-items: center; gap: 0;
+  height: 56px; padding: 0 4px 0 0;
+  border-radius: 100px; text-decoration: none;
+  background: #25D366; color: #fff;
+  box-shadow: 0 10px 28px rgba(0,0,0,.38), 0 0 0 4px rgba(37,211,102,.16);
+  transition: box-shadow .28s ease, transform .28s ease, gap .28s ease, padding .28s ease;
+}
+.wa-float__icon {
+  flex: 0 0 56px; width: 56px; height: 56px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.wa-float__icon svg { width: 30px; height: 30px; display: block; fill: #fff; }
+.wa-float__txt {
+  max-width: 0; opacity: 0; white-space: nowrap; overflow: hidden; line-height: 1;
+  font-family: var(--f-body); font-weight: 700; font-size: 14px; letter-spacing: .01em;
+  transition: max-width .28s ease, opacity .2s ease;
+}
+.wa-float:hover, .wa-float:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 0 6px rgba(37,211,102,.22);
+  gap: 2px; padding-right: 22px;
+}
+.wa-float:hover .wa-float__txt,
+.wa-float:focus-visible .wa-float__txt { max-width: 220px; opacity: 1; }
+.wa-float:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+/* halo qui respire, discret */
+.wa-float::after {
+  content: ''; position: absolute; inset: 0; border-radius: 100px;
+  box-shadow: 0 0 0 0 rgba(37,211,102,.55);
+  animation: wa-pulse 3.2s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes wa-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.5); }
+  60%  { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+}
+@media (max-width: 600px) {
+  .wa-float { right: 14px; bottom: 14px; height: 52px; }
+  .wa-float__icon { flex-basis: 52px; width: 52px; height: 52px; }
+  .wa-float__txt { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-float, .wa-float::after { transition: none; animation: none; }
+}
