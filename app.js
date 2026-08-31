@@ -25,10 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- 1. LOADER ---------- */
   const loader = document.getElementById('loader');
   window.addEventListener('load', () => {
-    setTimeout(() => loader.classList.add('hidden'), 600);
+    setTimeout(() => loader.classList.add('hidden'), 200);
   });
-  // Filet : cache le loader après 3s même si load ne fire pas
-  setTimeout(() => loader && loader.classList.add('hidden'), 1200);
+  // Filet : cache le loader même si load ne fire pas (iframes, CDN lent...).
+  // C'est ce délai qui commandait le LCP mesuré par Google : l'image du hero
+  // reste cachée derrière le voile du loader tant qu'il est affiché.
+  setTimeout(() => loader && loader.classList.add('hidden'), 700);
 
   /* ---------- 2. YEAR ---------- */
   const yearEl = document.getElementById('year');
