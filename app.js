@@ -1,6 +1,6 @@
 /* ====================================================================
    THE JAMMERZ — app.js
-   GSAP + ScrollTrigger + Lenis smooth scroll + interactions
+   GSAP + ScrollTrigger + interactions (defilement 100% natif)
    ==================================================================== */
 
 // Active la classe gsap-ready UNIQUEMENT si GSAP + ScrollTrigger sont disponibles.
@@ -36,63 +36,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------- 3. LENIS SMOOTH SCROLL ---------- */
-  // Garde-fou : si le CDN Lenis ne charge pas (unpkg bloque par ORB, coupure
-  // reseau, bloqueur de pub...), on degrade proprement au lieu de casser TOUT
-  // le JS de la page. Le scroll natif prend alors le relais.
-  let lenis = null;
-  if (typeof Lenis !== 'undefined') {
-    lenis = new Lenis({
-      duration: 0.55,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2
-    });
-    window.lenis = lenis;
-
-    if (window.gsap && window.ScrollTrigger) {
-      // UN SEUL pilote (corrige le 01/09/2026).
-      // Avant : lenis.raf() etait appele DEUX fois par frame, par deux horloges
-      // differentes -- la boucle requestAnimationFrame maison (temps depuis le
-      // chargement de la page) ET gsap.ticker (temps depuis le demarrage de
-      // GSAP, converti en ms). Les deux sont decalees de plusieurs centaines de
-      // ms, donc le delta de temps vu par Lenis alternait entre un grand
-      // positif et un grand negatif a chaque frame. La doc Lenis l'interdit :
-      // un seul pilote. On garde gsap.ticker, qui sert deja a ScrollTrigger.
-      gsap.registerPlugin(ScrollTrigger);
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => lenis.raf(time * 1000));
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      // Pas de GSAP sur la page : c'est la boucle maison qui pilote Lenis.
-      const raf = (time) => {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      };
-      requestAnimationFrame(raf);
-    }
-  } else if (window.gsap && window.ScrollTrigger) {
-    // Lenis absent : on enregistre quand meme ScrollTrigger pour les animations.
+  /* ---------- 3. DEFILEMENT : 100% NATIF ---------- */
+  // Lenis (defilement "smooth" en JS) a ete RETIRE le 01/09/2026.
+  // Pourquoi : Lenis intercepte la molette et deplace la page lui-meme, image
+  // par image, sur le THREAD PRINCIPAL. Des que ce thread est occupe (GSAP,
+  // repeinture d'un flou, iframes YouTube/Instagram), la page ne bouge PLUS
+  // DU TOUT tant qu'il n'est pas libre -> c'est exactement la "latence a la
+  // molette" signalee. Le defilement natif, lui, est gere par le compositeur
+  // (un autre thread) : il repond toujours, meme si le JS rame.
+  // ScrollTrigger fonctionne nativement avec le scroll du navigateur.
+  if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
+    gsap.ticker.lagSmoothing(0);
   }
 
   /* ---------- 4. CUSTOM CURSOR ---------- */
   const cursor = document.getElementById('cursor');
   const cursorFollower = document.getElementById('cursorFollower');
   if (cursor && cursorFollower && window.matchMedia('(pointer: fine)').matches) {
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
+    // On ecrit UNIQUEMENT des transform, et UNIQUEMENT dans la boucle rAF.
+    // Avant : chaque mousemove ecrivait left/top -> recalcul de mise en page a
+    // chaque micro-mouvement de souris, y compris pendant le defilement.
+    let mouseX = -100, mouseY = -100;
+    let followerX = -100, followerY = -100;
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX; mouseY = e.clientY;
-      cursor.style.left = mouseX + 'px';
-      cursor.style.top = mouseY + 'px';
-    });
+    }, { passive: true });
     function animateFollower() {
+      cursor.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
       followerX += (mouseX - followerX) * 0.15;
       followerY += (mouseY - followerY) * 0.15;
-      cursorFollower.style.left = followerX + 'px';
-      cursorFollower.style.top = followerY + 'px';
+      cursorFollower.style.transform = 'translate3d(' + followerX.toFixed(1) + 'px,' + followerY.toFixed(1) + 'px,0) translate(-50%,-50%)';
       requestAnimationFrame(animateFollower);
     }
     animateFollower();
@@ -121,23 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Smooth scroll pour les liens internes (Lenis si dispo, sinon natif)
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      const targetId = anchor.getAttribute('href');
-      if (targetId === '#') return;
-      const target = document.querySelector(targetId);
-      if (target) {
-        e.preventDefault();
-        if (lenis) {
-          lenis.scrollTo(target, { offset: -80, duration: 1.4 });
-        } else {
-          const y = target.getBoundingClientRect().top + window.pageYOffset - 80;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }
-      }
-    });
-  });
+  // Liens internes : plus AUCUN javascript (01/09/2026).
+  // Le navigateur fait le travail tout seul, grace a deux lignes de CSS :
+  //   html { scroll-behavior: smooth }   -> le defilement est doux
+  //   html { scroll-padding-top: 90px }  -> la cible ne passe pas sous le menu
+  // Avantages : ca marche meme si le JS plante ou n'est pas encore charge, et
+  // c'est le compositeur du navigateur qui anime (pas le thread principal).
 
   /* ---------- 6. GSAP SCROLL ANIMATIONS ---------- */
   if (window.gsap && window.ScrollTrigger) {
@@ -179,18 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     });
 
-    // Hero parallax + scale au scroll
-    gsap.to('.hero-name', {
-      scale: 1.15,
-      opacity: 0.4,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true
-      }
-    });
+    // Parallaxe du hero : RETIREE le 01/09/2026. Elle visait '.hero-name', une
+    // classe qui n'existe dans AUCUNE page (GSAP le signalait dans la console).
+    // Elle creait pour rien un ScrollTrigger en "scrub", donc un calcul a chaque
+    // image de defilement.
     // (fix 22/07/2026 : l'ancien fondu parallaxe de .hero-tag/.hero-subtitle/
     //  .hero-actions au scroll est retiré — demande Quentin, la zone sous le
     //  logo doit rester visible et défiler naturellement.)
@@ -364,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- 6.6 CARROUSEL AGENDA ----------
      Le controleur du carrousel « Nos prochains lives » est volontairement place
      HORS de ce handler (en bas du fichier, IIFE autonome initGigsCarousel) pour
-     qu'il fonctionne meme si une lib externe (GSAP/Lenis) casse ce bloc. */
+     qu'il fonctionne meme si une lib externe (GSAP) casse ce bloc. */
 
   /* ---------- 7. REPERTOIRE TABS ---------- */
   document.querySelectorAll('.tab').forEach(tab => {
@@ -429,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ====================================================================
    CARROUSEL AGENDA / PROCHAINS LIVES  —  IIFE AUTONOME
    Volontairement HORS du handler DOMContentLoaded principal : si une lib
-   externe (GSAP/Lenis) casse ce handler, le carrousel continue de marcher.
+   externe (GSAP) casse ce handler, le carrousel continue de marcher.
    Defilement horizontal natif (scroll-snap) + fleches + barre de progression.
    Si tout tient dans la largeur -> mode statique (cartes centrees, controles
    caches). Auto-init que le DOM soit deja pret ou non. Aucune dependance.
@@ -519,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
    FX 3D — pack validé 2026-07-22 — IIFE AUTONOME
    Tilt 3D des cartes membres (+ reflet qui suit la souris) et pause
    hors écran du vinyle / de l'équalizer. Aucune dépendance (ni GSAP,
-   ni Lenis) : si une lib externe casse, ces effets tiennent seuls.
+   ) : si une lib externe casse, ces effets tiennent seuls.
    Réversible : supprimer ce bloc + le bloc « 24. FX 3D » de styles.css
    + les 2 inserts HTML (vinyle répertoire, équalizer footer).
    ==================================================================== */

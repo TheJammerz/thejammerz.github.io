@@ -15,7 +15,15 @@
 
 /* ----- 1. RESET & BASE ----- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+/* overflow-x:clip = plus aucune barre horizontale parasite, et contrairement a
+   overflow:hidden ca ne cree PAS de conteneur de defilement (les elements en
+   position:fixed et le defilement doux des ancres continuent de marcher). */
+html {
+  scroll-behavior: smooth;          /* defilement doux natif des ancres */
+  scroll-padding-top: 90px;         /* la cible d'une ancre ne passe plus sous le menu fixe */
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
 body {
   font-family: 'Montserrat', "Montserrat repli", -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 400;
@@ -65,13 +73,27 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 .container { max-width: var(--container); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
 .accent { background: var(--grad-primary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .btn {
-  display: inline-flex; align-items: center; gap: 12px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
   padding: 18px 36px; border-radius: 100px;
   font-family: var(--f-body); font-weight: 700; font-size: 15px;
   letter-spacing: 0.05em; text-transform: uppercase;
   transition: all .35s cubic-bezier(.22,1,.36,1);
   cursor: pointer; position: relative; overflow: hidden;
   white-space: nowrap;
+  max-width: 100%;
+}
+/* 01/09/2026 : sous ~430px de large (ou a 200% de zoom sur un mobile), les
+   libelles des boutons etaient COUPES : white-space:nowrap + overflow:hidden.
+   En dessous de ce seuil on autorise le retour a la ligne. */
+@media (max-width: 430px) {
+  .btn {
+    white-space: normal; text-align: center;
+    padding: 16px 22px; letter-spacing: 0.03em;
+  }
+  /* 2 colonnes de chiffres ne tiennent pas sous 430px : les cartes .stat
+     debordaient de 57px hors de l ecran (grid-template 1fr 1fr + min-width auto). */
+  .about-stats { grid-template-columns: 1fr; }
+  .stat { padding: 24px 16px; }
 }
 .btn-primary {
   background: var(--grad-primary);
@@ -119,9 +141,12 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 /* ----- 5. CUSTOM CURSOR ----- */
 .cursor, .cursor-follower {
   position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
-  transform: translate(-50%, -50%);
   transition: opacity .3s ease;
-  mix-blend-mode: difference;
+  will-change: transform;
+  /* 01/09/2026 : mix-blend-mode:difference RETIRE. Un calque fixe en "difference"
+     par-dessus toute la page oblige le navigateur a re-melanger le fond entier a
+     CHAQUE image -> le defilement saccade. Le site etant sombre partout, le rendu
+     est quasi identique sans. La position est ecrite en transform par app.js. */
 }
 .cursor {
   width: 8px; height: 8px; background: #fff; border-radius: 50%;
@@ -161,24 +186,31 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   background: var(--c-pink); top: 40%; left: 50%;
   animation: blobFloat3 20s ease-in-out infinite;
 }
+/* 01/09/2026 : les scale() ont ete RETIRES. Redimensionner un element floute a
+   120px oblige le navigateur a recalculer le flou (tres cher) a chaque image, en
+   boucle infinie. Une translation seule est deplacee par le compositeur : cout
+   quasi nul. Rendu visuel identique a l'oeil (ce sont des taches floues). */
 @keyframes blobFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(150px, 100px) scale(1.15); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(150px, 100px, 0); }
 }
 @keyframes blobFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-180px, -120px) scale(0.85); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-180px, -120px, 0); }
 }
 @keyframes blobFloat3 {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-30%, -60%) scale(1.2); }
+  0%, 100% { transform: translate3d(-50%, -50%, 0); }
+  50% { transform: translate3d(-30%, -60%, 0); }
 }
 
 /* ----- 7. NAV ----- */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 18px 0;
-  transition: all .4s ease;
+  /* 01/09/2026 : etait "all .4s" -> ca ANIMAIT aussi le backdrop-filter (flou
+     20px) pendant 400 ms pile au premier coup de molette. On ne transitionne
+     plus que des proprietes bon marche. */
+  transition: background-color .3s ease, padding .3s ease, border-color .3s ease;
 }
 .nav.scrolled {
   background: rgba(10, 10, 20, 0.85);
@@ -232,12 +264,21 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 .nav-burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ----- 8. HERO ----- */
+/* 01/09/2026 - BUG DE SUPERPOSITION AU ZOOM :
+   avant, .hero-scroll etait en position:absolute (bottom:32px) et .hero ne
+   reservait que 80px de marge basse. Des qu'on zoomait, le contenu centre
+   grandissait et venait s'ecrire PAR-DESSUS le "SCROLL". Maintenant le hero est
+   une colonne flex et l'indicateur est DANS LE FLUX : la superposition est
+   mecaniquement impossible, a n'importe quel niveau de zoom.
+   Les deux margin-top:auto se partagent l'espace libre a parts egales -> le
+   contenu reste visuellement centre et le "SCROLL" reste colle en bas. */
 .hero {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  position: relative; padding: 120px var(--pad) 80px;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; padding: 120px var(--pad) 48px;
   text-align: center;
 }
-.hero-content { max-width: 1100px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.hero-content { max-width: 1100px; width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: auto; }
 .hero-logo {
   width: clamp(280px, 60vw, 720px);
   height: auto;
@@ -261,20 +302,27 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 .hero-actions { margin-top: 40px; }
 .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 .hero-scroll {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 12px;
+  margin-top: auto; padding-top: 32px;
 }
 .hero-scroll span { font-size: 11px; letter-spacing: 0.5em; color: var(--c-text-dim); }
+/* 01/09/2026 - LATENCE : les images-cles changeaient transform-origin. Des
+   qu'une animation touche une propriete non acceleree, le navigateur retire
+   TOUTE l'animation de la carte graphique et la recalcule sur le thread
+   principal, image par image, en boucle - juste sous le hero, la ou on scrolle.
+   Meme resultat visuel avec transform seul : le trait grandit vers le bas, puis
+   il est glisse de sa hauteur (50px) pendant qu'il se retracte, donc son bas
+   reste en place. C'est exactement l'ancien effet, mais gratuit. */
 .scroll-line {
   width: 1px; height: 50px;
   background: linear-gradient(180deg, transparent, var(--c-text-dim), transparent);
+  transform-origin: top;
   animation: scrollLine 2s ease-in-out infinite;
 }
 @keyframes scrollLine {
-  0%, 100% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  50.01% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+  0%     { transform: translateY(0) scaleY(0); }
+  50%    { transform: translateY(0) scaleY(1); }
+  100%   { transform: translateY(50px) scaleY(0); }
 }
 
 /* ----- 9. SECTIONS ----- */
@@ -347,6 +395,16 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   margin-bottom: 8px;
 }
 .stat-label { font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--c-text-dim); font-weight: 500; }
+
+/* 01/09/2026 : un enfant de grille vaut min-width:auto par defaut, donc il
+   refuse de descendre sous la largeur de son plus long mot (un mail, un numero,
+   une URL) et fait deborder toute la page en 320px / zoom 200%. min-width:0
+   l'autorise a retrecir, overflow-wrap coupe les mots trop longs. */
+.about-grid > *, .contact-grid > *, .live-grid > *, .footer-grid > *,
+.members-grid > *, .form-row > *, .about-stats > * { min-width: 0; }
+.contact-list a, .contact-list span,
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+.about-text, .contact-info { overflow-wrap: break-word; }
 
 /* ----- 11. MARQUEE ----- */
 .marquee-wrap {
@@ -978,11 +1036,23 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 }
 
 /* ----- 17. FOOTER ----- */
+/* 01/09/2026 : le bouton WhatsApp est en position:fixed en bas a droite. Arrive
+   tout en bas de la page, il se posait PAR-DESSUS la derniere ligne du pied de
+   page ("The Jammerz - groupe de musique live..." / "Site fait avec ...") : ce
+   texte etait masque pour de bon, impossible de le lire en defilant. On reserve
+   sous le contenu la hauteur du bouton (56px) + sa marge (20px) + un peu d'air.
+   Constate sur les 20 pages qui portent le bouton, de 1024px a 320px de large. */
 .footer {
-  padding: 80px 0 32px;
+  padding: 80px 0 96px;
   border-top: 1px solid rgba(255,255,255,0.06);
   position: relative;
 }
+/* Meme probleme sur les 19 pages d'atterrissage (concerts, mariage, soiree,
+   sud-landes, zones/*) : leur pied de page s'appelle .lp-foot et il est defini
+   dans un <style> ecrit DANS chaque page, donc apres styles.css. Un simple
+   ".lp-foot" ne gagnerait pas. "body .lp-foot" est plus precis, il passe devant
+   sans avoir besoin de !important - et ca evite de repeter la correction 19 fois. */
+body .lp-foot { padding-bottom: 96px; }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -1162,6 +1232,16 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 /* --- Bandeau mindset : plan incliné 3D --- */
 .marquee-wrap {
   transform: perspective(700px) rotateX(14deg) rotateZ(-1.6deg) scale(1.06);
+}
+/* 01/09/2026 : le scale(1.06) + la rotation faisaient depasser le bandeau de la
+   page -> barre de defilement horizontale et textes rognes sur toute l'accueil.
+   .marquee-clip (ajoute autour dans index.html) coupe ce depassement. Le padding
+   vertical laisse respirer les coins releves par la rotation, et la marge
+   negative annule ce padding dans la mise en page (hauteur totale inchangee). */
+.marquee-clip {
+  overflow: hidden;
+  padding: 44px 0;
+  margin: -44px 0;
 }
 
 /* --- Vinyle décoratif (section Répertoire) --- */
@@ -1343,16 +1423,24 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
 .wa-float:focus-visible .wa-float__txt { max-width: 220px; opacity: 1; }
 .wa-float:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 /* halo qui respire, discret */
+/* 01/09/2026 - LATENCE : ce halo animait box-shadow, une propriete que le
+   navigateur ne sait PAS confier a la carte graphique. Resultat : il repeignait
+   sur le thread principal a CHAQUE image, sans arret, sur un element toujours
+   visible a l'ecran -> autant de temps vole au defilement. Le halo est maintenant
+   dessine UNE FOIS (ombre fixe) puis simplement agrandi et estompe : transform +
+   opacity sont les deux seules proprietes animees par la carte graphique.
+   Rendu identique a l'oeil : un cercle vert qui s'ecarte et disparait. */
 .wa-float::after {
   content: ''; position: absolute; inset: 0; border-radius: 100px;
-  box-shadow: 0 0 0 0 rgba(37,211,102,.55);
+  box-shadow: 0 0 0 8px rgba(37,211,102,.5);
   animation: wa-pulse 3.2s ease-out infinite;
   pointer-events: none;
+  will-change: transform, opacity;
 }
 @keyframes wa-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.5); }
-  60%  { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
-  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  0%   { transform: scale(.72); opacity: 1; }
+  60%  { transform: scale(1.29); opacity: 0; }
+  100% { transform: scale(1.29); opacity: 0; }
 }
 @media (max-width: 600px) {
   .wa-float { right: 14px; bottom: 14px; height: 52px; }
