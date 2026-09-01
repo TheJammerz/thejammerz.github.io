@@ -43,23 +43,34 @@ document.addEventListener('DOMContentLoaded', () => {
   let lenis = null;
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
-      duration: 1.1,
+      duration: 0.55,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2
     });
-    const raf = (time) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
+    window.lenis = lenis;
 
     if (window.gsap && window.ScrollTrigger) {
+      // UN SEUL pilote (corrige le 01/09/2026).
+      // Avant : lenis.raf() etait appele DEUX fois par frame, par deux horloges
+      // differentes -- la boucle requestAnimationFrame maison (temps depuis le
+      // chargement de la page) ET gsap.ticker (temps depuis le demarrage de
+      // GSAP, converti en ms). Les deux sont decalees de plusieurs centaines de
+      // ms, donc le delta de temps vu par Lenis alternait entre un grand
+      // positif et un grand negatif a chaque frame. La doc Lenis l'interdit :
+      // un seul pilote. On garde gsap.ticker, qui sert deja a ScrollTrigger.
       gsap.registerPlugin(ScrollTrigger);
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((time) => lenis.raf(time * 1000));
       gsap.ticker.lagSmoothing(0);
+    } else {
+      // Pas de GSAP sur la page : c'est la boucle maison qui pilote Lenis.
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
     }
   } else if (window.gsap && window.ScrollTrigger) {
     // Lenis absent : on enregistre quand meme ScrollTrigger pour les animations.
@@ -132,12 +143,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.gsap && window.ScrollTrigger) {
 
     // Nav scrolled state
+    // onUpdate part a CHAQUE frame de scroll : avant, on ecrivait dans le DOM
+    // 60 fois par seconde pour rien. On ne touche a la classe que si l'etat
+    // change reellement (01/09/2026).
+    let navScrolled = null;
     ScrollTrigger.create({
       start: 'top -50',
       end: 99999,
       onUpdate: (self) => {
-        if (self.scroll() > 50) nav.classList.add('scrolled');
-        else nav.classList.remove('scrolled');
+        const actif = self.scroll() > 50;
+        if (actif !== navScrolled) {
+          navScrolled = actif;
+          nav.classList.toggle('scrolled', actif);
+        }
       }
     });
 
@@ -154,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
           scrollTrigger: {
             trigger: el,
             start: 'top bottom-=50',
-            toggleActions: 'play none none none'
+            toggleActions: 'play none none none',
+            once: true
           }
         }
       );
@@ -178,10 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Stats counter — voir bloc plus bas (IntersectionObserver, plus robuste)
 
-    // Background blobs parallax
-    gsap.to('.blob-1', { y: -150, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
-    gsap.to('.blob-2', { y: -300, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
-    gsap.to('.blob-3', { y: -200, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.5 } });
+    // Parallaxe des blobs de fond : RETIREE le 01/09/2026.
+    // Ces 3 tweens n'avaient AUCUN effet visible. .blob-1/2/3 portent deja une
+    // animation CSS (@keyframes blobFloat1/2/3) qui anime transform, et une
+    // animation CSS l'emporte sur un style inline dans la cascade. Verifie en
+    // direct sur thejammerz.com : poser transform:translateY(-9999px) en inline
+    // sur .blob-1 laisse le transform calcule a matrix(1,0,0,1,0,0).
+    // C'etaient donc 3 ScrollTrigger en "scrub" recalcules a chaque frame de
+    // scroll pour zero pixel de difference a l'ecran.
 
     // Section title : entrée 3D « claquée » depuis la profondeur.
     // SANS translation verticale (fix 22/07 : avec y:80 le titre traversait le
@@ -199,7 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
           scrollTrigger: {
             trigger: title,
             start: 'top 80%',
-            toggleActions: 'play none none none'
+            toggleActions: 'play none none none',
+            once: true
           }
         }
       );
@@ -216,7 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollTrigger: {
           trigger: '.members-grid',
           start: 'top 75%',
-          toggleActions: 'play none none none'
+          toggleActions: 'play none none none',
+          once: true
         }
       }
     );
@@ -232,7 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollTrigger: {
           trigger: '.tarifs-grid',
           start: 'top 80%',
-          toggleActions: 'play none none none'
+          toggleActions: 'play none none none',
+          once: true
         }
       }
     );
@@ -250,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
           scrollTrigger: {
             trigger: li,
             start: 'top bottom-=20',
-            toggleActions: 'play none none none'
+            toggleActions: 'play none none none',
+            once: true
           }
         }
       );

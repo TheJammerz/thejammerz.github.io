@@ -461,6 +461,11 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   background: #000;
   aspect-ratio: 16/9;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+  /* Les 3 lecteurs YouTube et les 4 reels Instagram sont autant de documents
+     tiers, chacun avec son propre moteur de rendu. Hors ecran, le navigateur
+     saute completement leur rendu et leur composition : le scroll n'a plus a
+     les redessiner. La hauteur reste juste grace a aspect-ratio (01/09/2026). */
+  content-visibility: auto;
 }
 .video-vertical { aspect-ratio: 9/16; }
 .video-thumb {
@@ -547,6 +552,11 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
   background: #000;
   box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06);
   transition: transform .4s cubic-bezier(.22,1,.36,1);
+  /* Les 3 lecteurs YouTube et les 4 reels Instagram sont autant de documents
+     tiers, chacun avec son propre moteur de rendu. Hors ecran, le navigateur
+     saute completement leur rendu et leur composition : le scroll n'a plus a
+     les redessiner. La hauteur reste juste grace a aspect-ratio (01/09/2026). */
+  content-visibility: auto;
 }
 .reel-wrap:hover { transform: translateY(-6px); }
 .reel-wrap iframe {
