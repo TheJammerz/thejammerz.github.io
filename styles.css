@@ -1476,3 +1476,103 @@ body .lp-foot { padding-bottom: 96px; }
 @media (prefers-reduced-motion: reduce) {
   .wa-float, .wa-float::after { transition: none; animation: none; }
 }
+
+/* ----- 25. AVIS GOOGLE EN ORBITE (rubrique « Nos prochains lives ») -----
+   Les cartes tournent autour de la rubrique : devant elles passent en grand,
+   derriere elles s'effacent presque. Deux regles tenues du debut a la fin :
+   1) pointer-events: none partout -> on peut toujours cliquer sur une date ;
+   2) le mouvement ne touche QUE transform et opacity, comme le reste du site
+      depuis la correction de la fluidite. Pas de backdrop-filter, pas d'ombre
+      animee : c'est ce qui coutait le plus cher a la molette. */
+.avis-orbite {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;          /* une carte ne sort jamais de la rubrique */
+  pointer-events: none;      /* rien ici n'intercepte un clic */
+  /* PAS de z-index ici : sinon les cartes seraient enfermees dans cette
+     couche et ne pourraient plus passer devant puis derriere le contenu. */
+  contain: layout paint;
+}
+/* Le contenu de la rubrique se place entre l'avant (3) et l'arriere (1). */
+.agenda > .container { position: relative; z-index: 2; }
+
+.avis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 246px;
+  padding: 12px 13px 11px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 8px;
+  background: rgba(16, 14, 34, .93);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .42);
+  font-family: var(--f-body);
+  will-change: transform, opacity;
+  opacity: 0;                /* le JS prend la main des la premiere image */
+  transform: translate(-50%, -50%);
+}
+.avis-tete { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+.avis-pastille {
+  flex: none; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center; overflow: hidden;
+  font-size: 12px; font-weight: 700; color: #fff; letter-spacing: .02em;
+}
+.avis-pastille img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avis-qui { min-width: 0; }
+.avis-nom {
+  display: block; font-size: 12.5px; font-weight: 600; color: var(--c-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.avis-etoiles { display: flex; gap: 1.5px; margin-top: 1px; }
+.avis-etoiles svg { width: 11px; height: 11px; display: block; }
+.avis-texte {
+  margin: 0; font-size: 12.5px; line-height: 1.48; color: #ded9ea;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.avis-pied {
+  display: flex; align-items: center; gap: 5px;
+  margin: 9px 0 0; padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, .09);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .04em;
+  color: var(--c-text-dim);
+}
+.avis-pied svg { width: 11px; height: 11px; flex: none; }
+.avis-quand { margin-left: auto; font-weight: 500; opacity: .75; }
+
+/* Sur telephone il n'y a pas la place de tourner : les avis passent en bas de
+   la rubrique, un par un, sans rien recouvrir. */
+.avis-defile {
+  display: none;
+  margin: 28px auto 0;
+  max-width: 420px;
+  min-height: 132px;
+  position: relative;
+}
+.avis-defile .avis {
+  position: absolute; inset: 0 auto auto 0;
+  top: 0; left: 0; width: 100%;
+  transform: none;
+  transition: opacity .45s ease;
+}
+@media (max-width: 899px) {
+  .avis-orbite { display: none; }
+  .avis-defile.est-actif { display: block; }
+}
+@media (max-width: 520px) { .avis { width: 208px; } }
+
+/* Mouvement reduit demande par le systeme : les cartes se figent la ou elles
+   sont, on garde l'information sans l'animation. */
+@media (prefers-reduced-motion: reduce) {
+  .avis { transition: none !important; }
+}
+
+/* Les cartes en orbite bougent sans arret : pour un lecteur d'ecran ce serait
+   illisible. La couche animee est donc masquee pour lui (aria-hidden), et la
+   meme liste d'avis est deposee ici, immobile et complete. */
+.avis-lecture {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap;
+}

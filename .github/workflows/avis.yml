@@ -1,0 +1,62 @@
+name: Mise à jour avis Google
+
+# Recopie 1x/jour les avis 5/5 avec commentaire de la fiche Google Business
+# Profile dans index.html. La clé Google reste dans les secrets du dépôt : elle
+# n'apparaît JAMAIS dans la page publiée.
+#
+# Tant que le secret GOOGLE_MAPS_API_KEY n'existe pas, le script ne fait rien et
+# le workflow reste vert : la rubrique s'affiche simplement sans avis.
+#
+# Secrets attendus :
+#   GOOGLE_MAPS_API_KEY  (obligatoire) clé Google Cloud, « Places API (New) »
+#   GOOGLE_PLACE_ID      (facultatif)  identifiant de la fiche. Absent, le
+#                                      script la cherche par son nom et affiche
+#                                      l'identifiant trouvé dans le journal.
+
+on:
+  schedule:
+    - cron: "20 5 * * *"   # 05:20 UTC, 20 min après l'agenda pour ne pas se croiser
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/update_avis.py"
+      - ".github/workflows/avis.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: avis-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Récupérer les avis
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+        run: python scripts/update_avis.py
+
+      - name: Commit si changement
+        run: |
+          if [ -n "$(git status --porcelain index.html)" ]; then
+            git config user.name  "jammerz-avis-bot"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "chore(avis): maj auto des avis Google"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Avis mis à jour et poussés."
+          else
+            echo "Rien à mettre à jour."
+          fi

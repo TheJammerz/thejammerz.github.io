@@ -527,3 +527,321 @@ document.addEventListener('DOMContentLoaded', () => {
     setup();
   }
 })();
+
+/* ====================================================================
+   AVIS GOOGLE EN ORBITE — autour de « Nos prochains lives »
+   --------------------------------------------------------------------
+   Les cartes tournent autour de la rubrique. Devant, elles passent en
+   grand et bien lisibles ; derriere, elles s'effacent presque, comme si
+   elles etaient plus loin.
+
+   Trois promesses tenues ici :
+   1. On peut TOUJOURS cliquer sur une date : la couche entiere est en
+      pointer-events: none (voir styles.css).
+   2. On finit par voir TOUS les avis : quand une carte disparait
+      derriere, on lui donne l'avis suivant de la liste avant qu'elle ne
+      revienne. La liste vient du bloc AVIS:AUTO, rempli chaque nuit
+      depuis Google par scripts/update_avis.py.
+   3. Ca ne coute rien a la molette : seuls transform et opacity bougent,
+      et l'animation s'arrete des que la rubrique n'est plus a l'ecran.
+   ==================================================================== */
+(function () {
+  'use strict';
+
+  var VITESSE = 0.55;        // la vitesse « lente » validee sur la maquette 01
+  var MAX_ORBITE = 6;        // cartes en vol en meme temps
+  var SEUIL_ECHANGE = 0.08;  // en dessous, la carte est invisible : on l'echange
+  var DUREE_MOBILE = 7000;   // ms entre deux avis sur telephone
+
+  var ETOILE = '<svg viewBox="0 0 24 24" fill="#fbbc04" aria-hidden="true">' +
+    '<path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>';
+  var LOGO_G = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path fill="#4285f4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2a5.3 5.3 0 01-2.3 3.5v2.9h3.7c2.2-2 3.4-5 3.4-8.6z"/>' +
+    '<path fill="#34a853" d="M12 23.5c3.1 0 5.7-1 7.6-2.8l-3.7-2.9c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3A11.5 11.5 0 0012 23.5z"/>' +
+    '<path fill="#fbbc04" d="M5.6 14.2a6.9 6.9 0 010-4.4v-3H1.8a11.5 11.5 0 000 10.4z"/>' +
+    '<path fill="#ea4335" d="M12 5.1c1.7 0 3.2.6 4.4 1.7l3.3-3.3A11.5 11.5 0 001.8 6.8l3.8 3a6.9 6.9 0 016.4-4.7z"/></svg>';
+
+  function neuf(balise, classe) {
+    var e = document.createElement(balise);
+    if (classe) e.className = classe;
+    return e;
+  }
+
+  /* Le squelette d'une carte. On le construit UNE fois puis on ne fait que
+     changer les textes : rien n'est recree a chaque tour. Les textes viennent
+     de clients Google, donc ils passent par textContent et jamais par
+     innerHTML — un avis contenant un chevron ne peut rien casser. */
+  function squelette() {
+    var el = neuf('div', 'avis');
+    var tete = neuf('div', 'avis-tete');
+    var pastille = neuf('span', 'avis-pastille');
+    var qui = neuf('span', 'avis-qui');
+    var nom = neuf('span', 'avis-nom');
+    var etoiles = neuf('span', 'avis-etoiles');
+    etoiles.innerHTML = ETOILE + ETOILE + ETOILE + ETOILE + ETOILE;
+    qui.appendChild(nom);
+    qui.appendChild(etoiles);
+    tete.appendChild(pastille);
+    tete.appendChild(qui);
+
+    var texte = neuf('p', 'avis-texte');
+
+    var pied = neuf('p', 'avis-pied');
+    var logo = neuf('span', 'avis-logo');
+    logo.innerHTML = LOGO_G;
+    var quoi = neuf('span');
+    quoi.textContent = 'Avis Google';
+    var quand = neuf('span', 'avis-quand');
+    pied.appendChild(logo);
+    pied.appendChild(quoi);
+    pied.appendChild(quand);
+
+    el.appendChild(tete);
+    el.appendChild(texte);
+    el.appendChild(pied);
+    el._nom = nom;
+    el._texte = texte;
+    el._quand = quand;
+    el._pastille = pastille;
+    return el;
+  }
+
+  function remplir(el, a) {
+    el._nom.textContent = a.nom || '';
+    el._texte.textContent = a.texte || '';
+    el._quand.textContent = a.quand || '';
+    var p = el._pastille;
+    p.textContent = '';
+    p.style.background = 'hsl(' + (a.teinte || 0) + ' 52% 42%)';
+    if (a.photo) {
+      var img = new Image();
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      // Google renvoie parfois une photo qui refuse de s'afficher ailleurs que
+      // chez lui : si elle tombe, on retombe sur l'initiale, jamais sur un trou.
+      img.referrerPolicy = 'no-referrer';
+      img.onerror = function () {
+        if (img.parentNode) img.parentNode.removeChild(img);
+        p.textContent = a.ini || '?';
+      };
+      img.src = a.photo;
+      p.appendChild(img);
+    } else {
+      p.textContent = a.ini || '?';
+    }
+  }
+
+  /* La meme liste, immobile et complete, pour les lecteurs d'ecran : la couche
+     animee, elle, leur est masquee. */
+  function listeLecture(avis) {
+    var ul = neuf('ul', 'avis-lecture');
+    for (var i = 0; i < avis.length; i++) {
+      var li = neuf('li');
+      li.textContent = (avis[i].nom || 'Client') + ' — 5 sur 5 — ' +
+                       (avis[i].texte || '') + ' — Avis Google';
+      ul.appendChild(li);
+    }
+    return ul;
+  }
+
+  function setup() {
+    var source = document.getElementById('avis-google');
+    var couche = document.getElementById('avisOrbite');
+    var defile = document.getElementById('avisDefile');
+    var section = document.getElementById('agenda');
+    if (!source || !couche || !defile || !section) return;
+
+    var AVIS = [];
+    try { AVIS = JSON.parse(source.textContent || '[]'); } catch (e) { AVIS = []; }
+    if (!Array.isArray(AVIS)) AVIS = [];
+    // Ceinture et bretelles : on ne montre que des avis qui ont vraiment un
+    // texte. Sans avis, la rubrique reste exactement comme avant.
+    AVIS = AVIS.filter(function (a) { return a && a.texte; });
+    if (!AVIS.length) return;
+
+    section.appendChild(listeLecture(AVIS));
+    couche.setAttribute('aria-hidden', 'true');
+    defile.setAttribute('aria-hidden', 'true');
+
+    var doux = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var grand = window.matchMedia ? window.matchMedia('(min-width: 900px)') : null;
+
+    // ---------------------------------------------------- version telephone
+    var minuterie = null;
+    var carteMobile = null;
+    var iMobile = 0;
+
+    function demarrerMobile() {
+      if (carteMobile) return;
+      carteMobile = squelette();
+      remplir(carteMobile, AVIS[0]);
+      carteMobile.style.opacity = '1';
+      defile.appendChild(carteMobile);
+      defile.classList.add('est-actif');
+      if (doux || AVIS.length < 2) return;   // mouvement reduit : on en laisse un
+      minuterie = window.setInterval(function () {
+        carteMobile.style.opacity = '0';
+        window.setTimeout(function () {
+          if (!carteMobile) return;
+          iMobile = (iMobile + 1) % AVIS.length;
+          remplir(carteMobile, AVIS[iMobile]);
+          carteMobile.style.opacity = '1';
+        }, 450);
+      }, DUREE_MOBILE);
+    }
+
+    function arreterMobile() {
+      if (minuterie) { window.clearInterval(minuterie); minuterie = null; }
+      if (carteMobile) { defile.removeChild(carteMobile); carteMobile = null; }
+      defile.classList.remove('est-actif');
+    }
+
+    // ------------------------------------------------------ version orbite
+    var cartes = [];
+    var curseur = 0;
+    var t = 0;
+    var dernier = 0;
+    var image = null;
+    var visible = false;
+    var L = 0, H = 0, cw = 246, ch = 170;
+
+    function mesurer() {
+      var r = couche.getBoundingClientRect();
+      L = r.width;
+      H = r.height;
+      if (cartes.length) {
+        cw = cartes[0].offsetWidth || 246;
+        ch = 170;
+        for (var i = 0; i < cartes.length; i++) {
+          if (cartes[i].offsetHeight > ch) ch = cartes[i].offsetHeight;
+        }
+      }
+    }
+
+    function construire() {
+      if (cartes.length) return;
+      var n = Math.min(MAX_ORBITE, AVIS.length);
+      for (var i = 0; i < n; i++) {
+        var el = squelette();
+        remplir(el, AVIS[i]);
+        el._p = 1;
+        couche.appendChild(el);
+        cartes.push(el);
+      }
+      curseur = n % AVIS.length;
+      mesurer();
+      dessiner();   // une premiere image tout de suite, sans attendre la boucle
+    }
+
+    function detruire() {
+      if (image) { window.cancelAnimationFrame(image); image = null; }
+      while (cartes.length) couche.removeChild(cartes.pop());
+    }
+
+    /* L'ellipse large et horizontale de la maquette 01. p = la profondeur :
+       1 = tout devant, 0 = tout derriere. */
+    function dessiner() {
+      var n = cartes.length;
+      if (!n || !L) return;
+      var rx = Math.min(L * 0.42, 620, Math.max(70, L / 2 - cw * 0.38));
+      var ry = Math.min(H * 0.30, 210, Math.max(60, H / 2 - ch * 0.55));
+      for (var i = 0; i < n; i++) {
+        var el = cartes[i];
+        var a = t * 0.34 + i * (Math.PI * 2 / n);
+        var p = (Math.cos(a) + 1) / 2;
+        var x = Math.sin(a) * rx;
+        var y = Math.cos(a) * ry;
+
+        // C'est ici qu'on tient la promesse « on voit TOUS les avis » : la
+        // carte vient de passer sous le seuil d'invisibilite, donc personne ne
+        // la regarde -> on lui glisse l'avis suivant avant qu'elle ne revienne.
+        if (AVIS.length > n && el._p >= SEUIL_ECHANGE && p < SEUIL_ECHANGE) {
+          remplir(el, AVIS[curseur]);
+          curseur = (curseur + 1) % AVIS.length;
+        }
+        el._p = p;
+
+        var ech = 0.52 + 0.48 * p;
+        var op = 0.06 + 0.94 * Math.pow(p, 1.7);
+        // Filet de securite : ce qui depasse du cadre s'efface au lieu d'etre
+        // coupe net par le bord de la rubrique.
+        var dehors = Math.abs(x) + (cw * ech) / 2 - L / 2;
+        if (dehors > 0) op *= Math.max(0, 1 - dehors / (cw * 0.45));
+
+        el.style.transform = 'translate(-50%,-50%) translate3d(' + x.toFixed(1) +
+                             'px,' + y.toFixed(1) + 'px,0) scale(' + ech.toFixed(3) + ')';
+        el.style.opacity = op.toFixed(3);
+        // 3 = devant le contenu, 1 = derriere. Jamais au-dessus du menu (100).
+        el.style.zIndex = p > 0.5 ? 3 : 1;
+      }
+    }
+
+    function boucle(ms) {
+      if (!visible) { image = null; return; }   // hors ecran : on ne calcule rien
+      if (!dernier) dernier = ms;
+      var dt = Math.min((ms - dernier) / 1000, 0.05);
+      dernier = ms;
+      t += dt * VITESSE;
+      dessiner();
+      image = window.requestAnimationFrame(boucle);
+    }
+
+    function relancer() {
+      if (doux || image || !cartes.length) return;
+      dernier = 0;
+      image = window.requestAnimationFrame(boucle);
+    }
+
+    function demarrerOrbite() {
+      construire();
+      if (doux) { t = 1.2; dessiner(); return; }   // mouvement reduit : fige
+      if (visible) relancer();
+    }
+
+    // ------------------------------------------------------- aiguillage
+    function estGrand() { return grand ? grand.matches : window.innerWidth >= 900; }
+
+    function appliquer() {
+      if (estGrand()) {
+        arreterMobile();
+        demarrerOrbite();
+      } else {
+        detruire();
+        demarrerMobile();
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entrees) {
+        for (var i = 0; i < entrees.length; i++) visible = entrees[i].isIntersecting;
+        if (visible) relancer();
+      }, { rootMargin: '150px' }).observe(section);
+    } else {
+      visible = true;
+    }
+
+    var attente = null;
+    function reagir() {
+      if (attente) window.clearTimeout(attente);
+      attente = window.setTimeout(function () { appliquer(); mesurer(); dessiner(); }, 200);
+    }
+    window.addEventListener('resize', reagir, { passive: true });
+    // Un onglet ouvert en arriere-plan n'a aucune largeur au depart, et il ne
+    // recoit PAS d'evenement resize le jour ou on l'affiche enfin : sans ce
+    // guetteur la rubrique resterait bloquee sur la version telephone.
+    if ('ResizeObserver' in window) new ResizeObserver(reagir).observe(section);
+
+    // Un onglet qui revient de loin ne doit pas faire un bond de plusieurs tours.
+    document.addEventListener('visibilitychange', function () { dernier = 0; });
+
+    appliquer();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+})();
