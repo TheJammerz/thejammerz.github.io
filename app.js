@@ -606,10 +606,32 @@ document.addEventListener('DOMContentLoaded', () => {
     return el;
   }
 
+  /* « il y a 3 mois ». Le fichier depose par le robot ne contient que la date
+     brute (2026-05-14) : une phrase toute faite vieillirait dans la page et
+     obligerait le robot a la reecrire chaque nuit pour rien. On la calcule
+     donc ici, au moment d'afficher. Rien n'est invente : c'est la vraie date
+     de l'avis, juste dite en francais. */
+  function quandLisible(a) {
+    if (a.quand) return a.quand;              /* ancien format, on respecte */
+    if (!a.date) return '';
+    var t = Date.parse(a.date);
+    if (isNaN(t)) return '';
+    var jours = Math.floor((Date.now() - t) / 86400000);
+    if (jours < 0) return '';
+    if (jours < 7) return "cette semaine";
+    if (jours < 14) return "il y a une semaine";
+    if (jours < 31) return "il y a " + Math.floor(jours / 7) + " semaines";
+    var mois = Math.floor(jours / 30.4);
+    if (mois < 2) return "il y a un mois";
+    if (mois < 12) return "il y a " + mois + " mois";
+    var ans = Math.floor(jours / 365.25);
+    return ans < 2 ? "il y a un an" : "il y a " + ans + " ans";
+  }
+
   function remplir(el, a) {
     el._nom.textContent = a.nom || '';
     el._texte.textContent = a.texte || '';
-    el._quand.textContent = a.quand || '';
+    el._quand.textContent = quandLisible(a);
     var p = el._pastille;
     p.textContent = '';
     p.style.background = 'hsl(' + (a.teinte || 0) + ' 52% 42%)';
@@ -622,7 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // chez lui : si elle tombe, on retombe sur l'initiale, jamais sur un trou.
       img.referrerPolicy = 'no-referrer';
       img.onerror = function () {
-        if (img.parentNode) img.parentNode.removeChild(img);
+        // Une photo lente peut echouer APRES que la carte a change d'avis :
+        // sans ce garde, on collait l'initiale de l'ancien a cote du nom du
+        // nouveau — un vrai avis signe par la mauvaise personne.
+        if (img.parentNode !== p) return;
+        p.removeChild(img);
         p.textContent = a.ini || '?';
       };
       img.src = a.photo;

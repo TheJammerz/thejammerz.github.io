@@ -1,17 +1,29 @@
 name: Mise à jour avis Google
 
-# Recopie 1x/jour les avis 5/5 avec commentaire de la fiche Google Business
-# Profile dans index.html. La clé Google reste dans les secrets du dépôt : elle
-# n'apparaît JAMAIS dans la page publiée.
+# Recopie 1x/jour dans index.html les avis 5/5 avec commentaire de la fiche
+# Google Business Profile. Les identifiants restent dans les secrets du dépôt :
+# ils n'apparaissent JAMAIS dans la page publiée.
 #
-# Tant que le secret GOOGLE_MAPS_API_KEY n'existe pas, le script ne fait rien et
-# le workflow reste vert : la rubrique s'affiche simplement sans avis.
+# On passe par l'API « Google Business Profile » (gratuite, elle sert à gérer
+# SA PROPRE fiche) et surtout PAS par l'API Places : les conditions Google Maps
+# Platform, article 3.2.3(a), interdisent de « copier et enregistrer les avis
+# d'utilisateurs » — or c'est exactement ce que fait ce robot.
 #
-# Secrets attendus :
-#   GOOGLE_MAPS_API_KEY  (obligatoire) clé Google Cloud, « Places API (New) »
-#   GOOGLE_PLACE_ID      (facultatif)  identifiant de la fiche. Absent, le
-#                                      script la cherche par son nom et affiche
-#                                      l'identifiant trouvé dans le journal.
+# Tant qu'aucune source n'est branchée, le script ne fait rien et le workflow
+# reste vert : la rubrique s'affiche simplement sans avis.
+#
+# Deux façons d'alimenter la page :
+#   1. Automatique — les trois secrets GBP_* ci-dessous.
+#   2. Manuelle, disponible tout de suite — un export Google Takeout de la
+#      fiche, déposé dans data/avis_source.json.
+#
+# Secrets attendus (mode automatique) :
+#   GBP_CLIENT_ID       identifiant OAuth « application de bureau »
+#   GBP_CLIENT_SECRET   son secret
+#   GBP_REFRESH_TOKEN   jeton long, obtenu une seule fois avec
+#                       « python scripts/avis_jeton.py »
+#   GBP_ACCOUNT_ID      facultatif — évite un appel à une API dont le quota
+#   GBP_LOCATION_ID     facultatif   se demande séparément (piège classique)
 
 on:
   schedule:
@@ -21,6 +33,7 @@ on:
     paths:
       - "scripts/update_avis.py"
       - ".github/workflows/avis.yml"
+      - "data/avis_source.json"
 
 permissions:
   contents: write
@@ -43,8 +56,11 @@ jobs:
 
       - name: Récupérer les avis
         env:
-          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+          GBP_CLIENT_ID: ${{ secrets.GBP_CLIENT_ID }}
+          GBP_CLIENT_SECRET: ${{ secrets.GBP_CLIENT_SECRET }}
+          GBP_REFRESH_TOKEN: ${{ secrets.GBP_REFRESH_TOKEN }}
+          GBP_ACCOUNT_ID: ${{ secrets.GBP_ACCOUNT_ID }}
+          GBP_LOCATION_ID: ${{ secrets.GBP_LOCATION_ID }}
         run: python scripts/update_avis.py
 
       - name: Commit si changement

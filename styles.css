@@ -1489,9 +1489,11 @@ body .lp-foot { padding-bottom: 96px; }
   inset: 0;
   overflow: hidden;          /* une carte ne sort jamais de la rubrique */
   pointer-events: none;      /* rien ici n'intercepte un clic */
-  /* PAS de z-index ici : sinon les cartes seraient enfermees dans cette
-     couche et ne pourraient plus passer devant puis derriere le contenu. */
-  contain: layout paint;
+  /* PAS de z-index ici, et PAS de « contain » non plus : layout comme paint
+     creent chacun un contexte d'empilement, ce qui enfermait les cartes dans
+     cette couche — le z-index:3 pose par app.js restait prisonnier et une
+     carte « devant » passait quand meme SOUS le titre. overflow:hidden suffit
+     a garder une carte dans la rubrique (la couche est leur bloc conteneur). */
 }
 /* Le contenu de la rubrique se place entre l'avant (3) et l'arriere (1). */
 .agenda > .container { position: relative; z-index: 2; }
