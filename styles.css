@@ -1380,19 +1380,45 @@ body .lp-foot { padding-bottom: 96px; }
   .faq-answer { padding: 0 18px 18px; }
 }
 
-/* Ligne de zone geographique sous les boutons du hero (SEO local + contact direct). */
+/* 02/09/2026 - le hero portait une phrase longue (« Bases a Bayonne - on se
+   deplace a 1 h 30 de route : Anglet, Biarritz, ... ») suivie du numero de
+   telephone. Trop de texte juste sous le logo, et pas beau. C'est devenu une
+   pastille courte. Rien n'est perdu cote referencement : la liste complete des
+   villes est deja ecrite DEUX fois plus bas sur la meme page (bloc tarifs et
+   reponse de la FAQ « Ou vous deplacez-vous ? »), donc Google lit exactement les
+   memes villes qu'avant. Le numero, lui, reste dans les donnees structurees
+   JSON-LD : Google le connait toujours, on ne l'affiche simplement plus. */
 .hero-zone {
-  margin-top: 22px;
-  max-width: 720px;
-  font-size: 14px;
-  line-height: 1.6;
+  margin: 26px auto 0;
+  width: fit-content;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 16px 7px 13px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 100px;
+  background: rgba(255,255,255,.035);
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: .11em;
+  text-transform: uppercase;
   color: var(--c-text-dim);
   text-align: center;
 }
+/* le point rose : une pastille de reperage, dessinee une fois, jamais animee */
+.hero-zone::before {
+  content: '';
+  flex: none;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--c-pink);
+  box-shadow: 0 0 0 4px rgba(255,61,46,.16);
+}
 .hero-zone strong { color: var(--c-text); }
-.hero-zone a { color: var(--c-pink); text-decoration: none; white-space: nowrap; }
-.hero-zone a:hover { text-decoration: underline; }
-@media (max-width: 600px) { .hero-zone { font-size: 13px; } }
+@media (max-width: 600px) {
+  .hero-zone { font-size: 11px; letter-spacing: .07em; padding: 6px 13px 6px 11px; }
+}
 
 /* ----- 22. BOUTON WHATSAPP FLOTTANT ----- */
 .wa-float {
