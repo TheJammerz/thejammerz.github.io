@@ -157,8 +157,8 @@ class PasEncoreAutorise(RuntimeError):
     """Google repond, mais le quota du projet vaut ZERO.
 
     C'est la situation normale entre le depot du formulaire « Application for
-    Basic API Access » et la reponse de Google (annoncee sous 14 jours). Ce
-    n'est PAS une panne : il ne faut ni rougir le workflow (sinon GitHub
+    Basic API Access » et la reponse de Google (annoncee sous 7 a 10 jours ouvres).
+    Ce n'est PAS une panne : il ne faut ni rougir le workflow (sinon GitHub
     envoie un mail d'echec chaque nuit pendant deux semaines), ni toucher a la
     page. On la traite donc comme « aucune source branchee ».
     """
@@ -182,7 +182,12 @@ def http(url: str, entetes: dict, corps: bytes | None = None,
         with urllib.request.urlopen(req, timeout=30) as rep:
             return json.loads(rep.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", "replace")[:600]
+        # ⚠ On lit le corps EN ENTIER pour la detection, et on ne coupe QUE
+        # pour l'affichage : Google place « quota_limit_value » tout a la fin
+        # de sa reponse, au-dela du 600e caractere (constate le 03/09/2026 —
+        # avec la coupe avant la detection, le robot rougissait chaque nuit).
+        brut = e.read().decode("utf-8", "replace")
+        detail = brut[:600]
         indice = ""
         if e.code == 403:
             indice = (" — un 403 ici veut presque toujours dire « quota a 0 » :"
@@ -195,7 +200,7 @@ def http(url: str, entetes: dict, corps: bytes | None = None,
         # Quota a ZERO = acces pas encore accorde, pas une panne. Google le dit
         # dans le corps de la reponse ; l'espacement du JSON change parfois,
         # d'ou la comparaison sur une version sans espaces.
-        if '"quota_limit_value":"0"' in "".join(detail.split()):
+        if '"quota_limit_value":"0"' in "".join(brut.split()):
             raise PasEncoreAutorise(
                 "quota a 0 sur %s : Google n'a pas encore accorde l'acces "
                 "(formulaire « Application for Basic API Access »)."
@@ -459,7 +464,8 @@ def recuperer() -> list[dict] | None:
             dire("Les identifiants sont bons (Google a accepte le jeton), il "
                  "manque seulement le feu vert. J'attends, et je ne touche a "
                  "rien : la page garde les avis deja en ligne.")
-            return None
+            # Pas de « return » ici : tant que Google n'a pas dit oui, on
+            # retombe volontairement sur l'export manuel juste en dessous.
 
     if SOURCE_LOCALE.exists():
         dire("source : export manuel %s." % SOURCE_LOCALE.name)
