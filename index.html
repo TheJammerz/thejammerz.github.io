@@ -383,26 +383,13 @@
       {
         "@type": "VideoObject",
         "@id": "https://thejammerz.com/#video-presskit",
-        "name": "Press kit VIDEO - The Jammerz",
-        "description": "Presentation video du groupe The Jammerz : cinq musiciens, du funk, de la soul, du blues et du rock, au Pays Basque et dans le Sud des Landes.",
-        "thumbnailUrl": "https://i.ytimg.com/vi/ORGKd1ntL4w/maxresdefault.jpg",
-        "uploadDate": "2026-05-04T01:23:48-07:00",
-        "duration": "PT52S",
-        "embedUrl": "https://www.youtube-nocookie.com/embed/ORGKd1ntL4w",
-        "contentUrl": "https://www.youtube.com/watch?v=ORGKd1ntL4w",
-        "isPartOf": { "@id": "https://thejammerz.com/#site" },
-        "publisher": { "@id": "https://thejammerz.com/#groupe" }
-      },
-      {
-        "@type": "VideoObject",
-        "@id": "https://thejammerz.com/#video-trailer",
-        "name": "Trailer - The Jammerz",
-        "description": "Extrait live de The Jammerz, groupe de reprises funk, soul, blues et rock a Bayonne.",
-        "thumbnailUrl": "https://i.ytimg.com/vi/05GayswAIxE/maxresdefault.jpg",
-        "uploadDate": "2026-05-04T01:21:34-07:00",
-        "duration": "PT1M1S",
-        "embedUrl": "https://www.youtube-nocookie.com/embed/05GayswAIxE",
-        "contentUrl": "https://www.youtube.com/watch?v=05GayswAIxE",
+        "name": "The Jammerz - Press kit",
+        "description": "Press kit de presentation du groupe The Jammerz : cinq musiciens, du funk, de la soul, du blues et du rock, au Pays Basque et dans le Sud des Landes.",
+        "thumbnailUrl": "https://i.ytimg.com/vi/uspzpi3vpCs/maxresdefault.jpg",
+        "uploadDate": "2026-09-03T01:50:42-07:00",
+        "duration": "PT49S",
+        "embedUrl": "https://www.youtube-nocookie.com/embed/uspzpi3vpCs",
+        "contentUrl": "https://www.youtube.com/watch?v=uspzpi3vpCs",
         "isPartOf": { "@id": "https://thejammerz.com/#site" },
         "publisher": { "@id": "https://thejammerz.com/#groupe" }
       },
@@ -968,31 +955,45 @@
         </p>
       </div>
 
-      <div class="live-grid">
-        <div class="live-main" data-reveal>
-          <div class="video-wrap">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/ORGKd1ntL4w?rel=0&modestbranding=1"
-              title="The Jammerz — Press Kit"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-              loading="lazy"></iframe>
-          </div>
-          <p class="video-caption">📽️ Press Kit — Découvrez le groupe</p>
-        </div>
-        <div class="live-side" data-reveal>
-          <div class="video-wrap video-vertical">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/05GayswAIxE?rel=0&modestbranding=1"
-              title="The Jammerz — Démo Live"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-              loading="lazy"></iframe>
-          </div>
-          <p class="video-caption">🎵 Démo Live — 1 min</p>
-        </div>
+      <!-- 🎬 PRESS KIT — une seule video, centree, juste sous la video a la une.
+
+           ⚠ POURQUOI UNE AFFICHE CLIQUABLE ET PAS UN LECTEUR INTEGRE ?
+           La video uspzpi3vpCs porte une revendication Content ID de WMG (pour Atlantic
+           Records) sur « Fly As Me » (Silk Sonic), qui couvre TOUT le son (0:00-0:49).
+           Consequence constatee le 03/09/2026 : dans un <iframe>, YouTube affiche
+           « Cette video n'est pas disponible ». Sur youtube.com elle se lit tres bien.
+           La video « Rock Steady » juste au-dessus, elle, n'a aucune revendication et
+           s'integre sans probleme : c'est bien la revendication qui bloque.
+
+           POUR REVENIR AU VRAI LECTEUR INTEGRE (quand la bande-son sera remplacee
+           par une musique du groupe, ou la revendication levee) : remplacer le bloc
+           <a class="video-wrap"> ci-dessous par exactement ceci ->
+             <div class="video-wrap">
+               <iframe src="https://www.youtube-nocookie.com/embed/uspzpi3vpCs?rel=0&modestbranding=1"
+                 title="The Jammerz - Press kit" frameborder="0"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                 allowfullscreen loading="lazy"></iframe>
+             </div>
+           Pour changer de video : remplacer l'ID uspzpi3vpCs partout dans ce bloc. -->
+      <div class="presskit-video" data-reveal>
+        <a class="video-wrap"
+           href="https://www.youtube.com/watch?v=uspzpi3vpCs"
+           target="_blank" rel="noopener"
+           aria-label="Voir le press kit de The Jammerz sur YouTube">
+          <span class="video-thumb"
+                style="background-image:url('https://i.ytimg.com/vi/uspzpi3vpCs/maxresdefault.jpg')">
+            <span class="video-play">
+              <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <circle cx="50" cy="50" r="50"></circle>
+                <polygon points="40,28 74,50 40,72"></polygon>
+              </svg>
+            </span>
+          </span>
+          <span class="video-label">Press kit</span>
+        </a>
+        <p class="video-caption">
+          <a href="https://www.youtube.com/watch?v=uspzpi3vpCs" target="_blank" rel="noopener">🎬 Press Kit — découvrez le groupe</a>
+        </p>
       </div>
 
       <!-- Reels Instagram secondaires (plus petits) -->

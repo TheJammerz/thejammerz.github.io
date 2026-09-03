@@ -400,7 +400,7 @@ button { font-family: inherit; cursor: pointer; border: 0; background: none; col
    refuse de descendre sous la largeur de son plus long mot (un mail, un numero,
    une URL) et fait deborder toute la page en 320px / zoom 200%. min-width:0
    l'autorise a retrecir, overflow-wrap coupe les mots trop longs. */
-.about-grid > *, .contact-grid > *, .live-grid > *, .footer-grid > *,
+.about-grid > *, .contact-grid > *, .footer-grid > *,
 .members-grid > *, .form-row > *, .about-stats > * { min-width: 0; }
 .contact-list a, .contact-list span,
 a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
@@ -509,13 +509,8 @@ a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
 }
 
 /* ----- 13. LIVE ----- */
-.live-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-}
 .video-wrap {
-  position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  position: relative; display: block; border-radius: var(--radius-lg); overflow: hidden;
   background: #000;
   aspect-ratio: 16/9;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
@@ -525,7 +520,6 @@ a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
      les redessiner. La hauteur reste juste grace a aspect-ratio (01/09/2026). */
   content-visibility: auto;
 }
-.video-vertical { aspect-ratio: 9/16; }
 .video-thumb {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
@@ -560,6 +554,9 @@ a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
 .video-wrap iframe {
   position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
 }
+/* L'affiche cliquable du press kit : le lien doit se comporter comme un bloc. */
+a.video-wrap { color: inherit; text-decoration: none; }
+a.video-wrap:focus-visible { outline: 3px solid var(--c-accent, #ff3d2e); outline-offset: 3px; }
 .video-caption {
   margin-top: 14px;
   font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
@@ -575,6 +572,8 @@ a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
 
 /* Vidéo à la une (reflète la vidéo mise en avant de la chaîne YouTube) */
 .featured-video { max-width: 860px; margin: 0 auto 56px; text-align: center; }
+/* Press kit : une seule video, meme largeur, centree sous la video a la une. */
+.presskit-video { max-width: 860px; margin: 0 auto; text-align: center; }
 .featured-badge {
   display: inline-block; margin-bottom: 18px;
   font-family: var(--f-body); font-weight: 700; font-size: 12px;
@@ -1118,8 +1117,6 @@ body .lp-foot { padding-bottom: 96px; }
   .nav-burger { display: flex; }
 
   .about-grid { grid-template-columns: 1fr; }
-  .live-grid { grid-template-columns: 1fr; }
-  .video-vertical { max-width: 360px; margin: 0 auto; }
 
   .contact-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
