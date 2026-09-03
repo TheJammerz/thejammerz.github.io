@@ -109,6 +109,45 @@ ORIGINAL = "(Original)"
 # Google rend la note en toutes lettres dans cette API.
 NOTES = {"ONE": 1, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5}
 
+# Des clients commencent (ou finissent) leur avis par une rangee d'etoiles
+# dessinees a la main : « ⭐⭐⭐⭐⭐ <retour a la ligne> Un groupe qui... ».
+# La carte affiche DEJA les 5 etoiles au-dessus du texte : garder celles du
+# client donnerait deux rangees l'une sous l'autre, et ces caracteres mangent
+# la moitie des 4 lignes visibles. On les retire A L'AFFICHAGE seulement.
+# ⚠️ On ne retire QUE de la decoration : pas un mot du client n'est touche.
+DECOR = "⭐★☆✪✩✭✯✰\U0001f31f✨"
+RANGEE_DEBUT = re.compile("^[\\s" + DECOR + "]+")
+RANGEE_FIN = re.compile("[\\s" + DECOR + "]+$")
+
+# Quand quelqu'un met une note SANS ecrire, Google ne laisse pas le champ vide :
+# il ecrit cette phrase a la place. Sans ce garde-fou elle partirait en ligne
+# comme un vrai temoignage. Consigne de Quentin : que des avis AVEC ecriture.
+SANS_ECRITURE = (
+    "n'a pas rédigé d'avis",
+    "n'a pas redige d'avis",
+    "didn't write a review",
+    "did not write a review",
+    "hasn't written a review",
+)
+
+
+def nettoyer(txt: str) -> str:
+    """Retire la decoration autour du texte et refuse ce qui n'est pas ecrit.
+
+    Rend "" quand il ne reste aucune lettre ni aucun chiffre : une rangee
+    d'etoiles toute seule n'est pas un commentaire, c'est une note.
+    """
+    if not txt:
+        return ""
+    bas = txt.lower()
+    for phrase in SANS_ECRITURE:
+        if phrase in bas:
+            return ""
+    txt = RANGEE_FIN.sub("", RANGEE_DEBUT.sub("", txt))
+    if not any(c.isalnum() for c in txt):
+        return ""
+    return txt.strip()
+
 
 def dire(msg: str) -> None:
     print("[avis] " + msg, flush=True)
@@ -263,7 +302,12 @@ def commentaire_de(avis: dict) -> str:
         if val:
             if TRADUIT in val and ORIGINAL in val:
                 val = val.split(ORIGINAL, 1)[1].strip() or val
-            return val
+            # nettoyer() peut rendre "" : une note sans un mot ecrit n'est pas
+            # un commentaire. On continue alors la boucle plutot que de rendre
+            # "" tout de suite — le vrai texte est peut-etre dans un autre champ.
+            val = nettoyer(val)
+            if val:
+                return val
     return ""
 
 

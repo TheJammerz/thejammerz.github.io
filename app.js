@@ -731,7 +731,41 @@ document.addEventListener('DOMContentLoaded', () => {
     var dernier = 0;
     var image = null;
     var visible = false;
-    var L = 0, H = 0, cw = 246, ch = 170;
+    var L = 0, H = 0, cw = 246, ch = 180, oy = 0, ryMax = 210;
+
+    /* Hauteur d'un bloc DANS la rubrique, en ignorant les animations.
+       On additionne les offsetTop plutot que de lire un rectangle a l'ecran :
+       a l'arrivee, les blocs montent en glissant (data-reveal). Un rectangle
+       lu pendant ce glissement donne une place FAUSSE de quelques dizaines de
+       pixels, et le cercle se posait donc un peu au hasard selon le moment de
+       la mesure. offsetTop, lui, donne la place au repos. */
+    function hautDansSection(el) {
+      var y = 0;
+      while (el && el !== section) {
+        y += el.offsetTop;
+        el = el.offsetParent;
+      }
+      return el === section ? y : -1;
+    }
+
+    /* Ou passe le cercle ?
+       PAS au milieu de la rubrique. Ce milieu-la tombe sur le titre, et les
+       cartes tournaient donc autour de « NOS PROCHAINS LIVES ». Quentin a
+       demande le 03/09/2026 de DESCENDRE le cercle pour qu'il tourne autour
+       des dates et de ce qu'il y a en dessous.
+       On vise donc une bande qui commence en HAUT du bloc des dates et finit
+       en BAS de la rubrique, puis on centre l'orbite dessus. La bande est
+       MESUREE, jamais ecrite en dur : elle suit le nombre de dates affichees
+       et la largeur de l'ecran. */
+    function bande() {
+      var haut = H * 0.45;
+      var bloc = section.querySelector('.gigs-carousel');
+      if (bloc) {
+        var h = hautDansSection(bloc);
+        if (h > 0 && h < H) haut = h;
+      }
+      return { haut: haut, bas: Math.max(haut + 1, H - 6) };
+    }
 
     function mesurer() {
       var r = couche.getBoundingClientRect();
@@ -739,11 +773,23 @@ document.addEventListener('DOMContentLoaded', () => {
       H = r.height;
       if (cartes.length) {
         cw = cartes[0].offsetWidth || 246;
-        ch = 170;
+        /* 180 est le plancher : une carte peut grandir jusqu'a 4 lignes de
+           texte APRES la mesure (elle change d'avis en tournant). On reserve
+           la place du pire cas, sinon la carte la plus haute serait rognee. */
+        ch = 180;
         for (var i = 0; i < cartes.length; i++) {
           if (cartes[i].offsetHeight > ch) ch = cartes[i].offsetHeight;
         }
       }
+      /* Devant, une carte est a l'echelle 1 ; derriere, a 0.52 (voir « ech »
+         dans dessiner). La place a reserver n'est donc pas la meme en haut
+         qu'en bas : c'est ce qui fait descendre le centre encore un peu. */
+      var b = bande();
+      var hautChemin = b.haut + ch * 0.26;
+      var basChemin = b.bas - ch * 0.5;
+      if (basChemin < hautChemin) hautChemin = basChemin = (b.haut + b.bas) / 2;
+      oy = (hautChemin + basChemin) / 2 - H / 2;
+      ryMax = Math.max(60, (basChemin - hautChemin) / 2);
     }
 
     function construire() {
@@ -771,14 +817,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function dessiner() {
       var n = cartes.length;
       if (!n || !L) return;
-      var rx = Math.min(L * 0.42, 620, Math.max(70, L / 2 - cw * 0.38));
-      var ry = Math.min(H * 0.30, 210, Math.max(60, H / 2 - ch * 0.55));
+      /* 0.52 = la demi-largeur d'une carte (0.5) plus un cheveu de marge : le
+         cercle est assez etroit pour qu'aucune carte ne sorte du cadre. Avant
+         c'etait 0.38, et sur un ecran de 1024 la carte de gauche etait coupee
+         net par le bord. */
+      var rx = Math.min(L * 0.42, 620, Math.max(70, L / 2 - cw * 0.52));
+      /* ryMax et oy viennent de mesurer() : ils garantissent qu'aucune carte
+         ne depasse de la rubrique, en haut comme en bas. Le 300 n'est la que
+         pour eviter un cercle demesure sur un tres grand ecran. */
+      var ry = Math.min(ryMax, 300);
       for (var i = 0; i < n; i++) {
         var el = cartes[i];
         var a = t * 0.34 + i * (Math.PI * 2 / n);
         var p = (Math.cos(a) + 1) / 2;
         var x = Math.sin(a) * rx;
-        var y = Math.cos(a) * ry;
+        var y = Math.cos(a) * ry + oy;
 
         // C'est ici qu'on tient la promesse « on voit TOUS les avis » : la
         // carte vient de passer sous le seuil d'invisibilite, donc personne ne
@@ -792,9 +845,14 @@ document.addEventListener('DOMContentLoaded', () => {
         var ech = 0.52 + 0.48 * p;
         var op = 0.06 + 0.94 * Math.pow(p, 1.7);
         // Filet de securite : ce qui depasse du cadre s'efface au lieu d'etre
-        // coupe net par le bord de la rubrique.
+        // coupe net par le bord de la rubrique. A gauche/droite d'abord...
         var dehors = Math.abs(x) + (cw * ech) / 2 - L / 2;
         if (dehors > 0) op *= Math.max(0, 1 - dehors / (cw * 0.45));
+        // ...et en haut/bas ensuite, depuis que le cercle est descendu : le
+        // bord bas de la rubrique est maintenant tout pres du bas du cercle.
+        var demiH = (ch * ech) / 2;
+        var sortie = Math.max(0, (H / 2 + y) + demiH - H, demiH - (H / 2 + y));
+        if (sortie > 0) op *= Math.max(0, 1 - sortie / (ch * 0.45));
 
         el.style.transform = 'translate(-50%,-50%) translate3d(' + x.toFixed(1) +
                              'px,' + y.toFixed(1) + 'px,0) scale(' + ech.toFixed(3) + ')';

@@ -1498,6 +1498,17 @@ body .lp-foot { padding-bottom: 96px; }
 /* Le contenu de la rubrique se place entre l'avant (3) et l'arriere (1). */
 .agenda > .container { position: relative; z-index: 2; }
 
+/* Le cercle des avis a ete DESCENDU le 03/09/2026 (demande de Quentin : il
+   tournait autour du titre, il doit tourner autour des dates). Le bas du
+   cercle arrive donc tout pres du bord bas de la rubrique : on lui donne la
+   place, sinon une carte serait effacee par le filet de securite juste au
+   moment ou elle est la plus grande et la plus lisible.
+   Rien sur telephone : la-bas l'orbite n'existe pas (les avis defilent), et
+   ce serait du vide pour rien. */
+@media (min-width: 900px) {
+  .section.agenda { padding-bottom: calc(clamp(80px, 12vw, 160px) + 96px); }
+}
+
 .avis {
   position: absolute;
   top: 50%;
