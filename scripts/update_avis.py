@@ -153,6 +153,17 @@ def dire(msg: str) -> None:
     print("[avis] " + msg, flush=True)
 
 
+class PasEncoreAutorise(RuntimeError):
+    """Google repond, mais le quota du projet vaut ZERO.
+
+    C'est la situation normale entre le depot du formulaire « Application for
+    Basic API Access » et la reponse de Google (annoncee sous 14 jours). Ce
+    n'est PAS une panne : il ne faut ni rougir le workflow (sinon GitHub
+    envoie un mail d'echec chaque nuit pendant deux semaines), ni toucher a la
+    page. On la traite donc comme « aucune source branchee ».
+    """
+
+
 # --------------------------------------------------------------------------- #
 # Appels Google
 # --------------------------------------------------------------------------- #
@@ -181,6 +192,14 @@ def http(url: str, entetes: dict, corps: bytes | None = None,
                       " consentement OAuth est reste en « Test », le jeton"
                       " expire au bout de 7 jours : il faut le publier en"
                       " « Production ».")
+        # Quota a ZERO = acces pas encore accorde, pas une panne. Google le dit
+        # dans le corps de la reponse ; l'espacement du JSON change parfois,
+        # d'ou la comparaison sur une version sans espaces.
+        if '"quota_limit_value":"0"' in "".join(detail.split()):
+            raise PasEncoreAutorise(
+                "quota a 0 sur %s : Google n'a pas encore accorde l'acces "
+                "(formulaire « Application for Basic API Access »)."
+                % url.split("/")[2])
         raise RuntimeError("Google repond %s : %s%s" % (e.code, detail, indice))
 
 
@@ -420,18 +439,27 @@ def recuperer() -> list[dict] | None:
 
     if cid and secret and refresh:
         dire("source : API Google Business Profile (gratuite).")
-        jeton = acces(cid, secret, refresh)
-        compte = (os.environ.get("GBP_ACCOUNT_ID") or "").strip()
-        fiche = (os.environ.get("GBP_LOCATION_ID") or "").strip()
-        if not compte:
-            dire("pas de GBP_ACCOUNT_ID : je cherche le compte.")
-            compte = trouver_compte(jeton)
-            dire("compte retenu : %s (a coller en secret GBP_ACCOUNT_ID)" % compte)
-        if not fiche:
-            dire("pas de GBP_LOCATION_ID : je cherche la fiche.")
-            fiche = trouver_fiche(jeton, compte)
-            dire("fiche retenue : %s (a coller en secret GBP_LOCATION_ID)" % fiche)
-        return lire_avis(jeton, compte, fiche)
+        try:
+            jeton = acces(cid, secret, refresh)
+            compte = (os.environ.get("GBP_ACCOUNT_ID") or "").strip()
+            fiche = (os.environ.get("GBP_LOCATION_ID") or "").strip()
+            if not compte:
+                dire("pas de GBP_ACCOUNT_ID : je cherche le compte.")
+                compte = trouver_compte(jeton)
+                dire("compte retenu : %s (a coller en secret GBP_ACCOUNT_ID)"
+                     % compte)
+            if not fiche:
+                dire("pas de GBP_LOCATION_ID : je cherche la fiche.")
+                fiche = trouver_fiche(jeton, compte)
+                dire("fiche retenue : %s (a coller en secret GBP_LOCATION_ID)"
+                     % fiche)
+            return lire_avis(jeton, compte, fiche)
+        except PasEncoreAutorise as e:
+            dire("%s" % e)
+            dire("Les identifiants sont bons (Google a accepte le jeton), il "
+                 "manque seulement le feu vert. J'attends, et je ne touche a "
+                 "rien : la page garde les avis deja en ligne.")
+            return None
 
     if SOURCE_LOCALE.exists():
         dire("source : export manuel %s." % SOURCE_LOCALE.name)
