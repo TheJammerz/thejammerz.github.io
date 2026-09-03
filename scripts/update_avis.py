@@ -209,7 +209,9 @@ def lire_avis(jeton: str, compte: str, fiche: str) -> list[dict]:
 def lire_fichier(chemin: Path) -> list[dict]:
     """Un export Takeout. Le format bouge d'une annee sur l'autre : on accepte
     une liste nue, ou un objet qui contient une liste sous un nom courant."""
-    brut = json.loads(chemin.read_text(encoding="utf-8"))
+    # utf-8-sig : le Bloc-notes, Excel et PowerShell collent souvent un BOM
+    # invisible en tete de fichier. Ce codec lit les deux cas.
+    brut = json.loads(chemin.read_text(encoding="utf-8-sig"))
     if isinstance(brut, list):
         return [a for a in brut if isinstance(a, dict)]
     if isinstance(brut, dict):
@@ -414,6 +416,12 @@ def main() -> int:
         dire("ATTENTION : la source n'a renvoye aucun avis. La page n'est PAS "
              "modifiee (on ne vide jamais la rubrique sur un simple silence).")
         return 0
+
+    if not retenus:
+        dire("ATTENTION : %d avis lus mais AUCUN retenu. Je n'ecris rien : "
+             "c'est presque toujours un changement de format cote source, pas "
+             "une vraie absence d'avis." % len(tous))
+        return 1
 
     page = INDEX.read_text(encoding="utf-8")
     neuve = splice(page, bloc_json(retenus))
