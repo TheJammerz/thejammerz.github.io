@@ -22,6 +22,8 @@ CE QU'IL FAUT AVANT (une seule fois, dans Google Cloud) :
 
 UTILISATION :
     python scripts/avis_jeton.py
+Si le serveur d'apercu du site tourne (port 8765), pas de souci : le
+programme prend tout seul le port libre suivant.
 Le navigateur s'ouvre, tu te connectes avec le compte PROPRIETAIRE de la
 fiche, tu acceptes, et le jeton s'affiche ici.
 """
@@ -35,8 +37,8 @@ import urllib.parse
 import urllib.request
 import webbrowser
 
-PORT = 8765
-REDIRECTION = "http://localhost:%d" % PORT
+PORTS = range(8765, 8776)   # 8765 sert deja au serveur d'apercu du site
+ATTENTE = 300               # secondes : au-dela, Google ne reviendra plus
 PORTAIL = "https://accounts.google.com/o/oauth2/v2/auth"
 JETON = "https://oauth2.googleapis.com/token"
 DROIT = "https://www.googleapis.com/auth/business.manage"
@@ -63,6 +65,28 @@ class Guichet(http.server.BaseHTTPRequestHandler):
         pass
 
 
+def ouvrir_guichet():
+    """Ouvre le petit guichet local sur le premier port libre.
+
+    Le port 8765 est aussi celui du serveur d'apercu du site : si les deux
+    tournent en meme temps, l'ancien code plantait avec une erreur systeme
+    illisible. On essaie donc les suivants. Un identifiant OAuth de type
+    << Application de bureau >> accepte n'importe quel port sur localhost.
+    """
+    dernier = None
+    for port in PORTS:
+        try:
+            serveur = http.server.HTTPServer(("localhost", port), Guichet)
+        except OSError as e:                         # port deja pris
+            dernier = e
+            continue
+        serveur.timeout = ATTENTE
+        return serveur, port
+    print("Aucun port libre entre %d et %d (%s)." % (PORTS[0], PORTS[-1], dernier))
+    print("Ferme le serveur d'apercu du site, puis relance.")
+    sys.exit(1)
+
+
 def demander(question: str) -> str:
     val = input(question).strip()
     if not val:
@@ -76,9 +100,13 @@ def main() -> int:
     cid = demander("Identifiant client OAuth (client_id) : ")
     secret = demander("Secret client (client_secret) : ")
 
+    serveur, port = ouvrir_guichet()
+    redirection = "http://localhost:%d" % port
+    print("\nGuichet local ouvert sur le port %d." % port)
+
     adresse = PORTAIL + "?" + urllib.parse.urlencode({
         "client_id": cid,
-        "redirect_uri": REDIRECTION,
+        "redirect_uri": redirection,
         "response_type": "code",
         "scope": DROIT,
         # indispensables : sans eux Google ne redonne pas de jeton long
@@ -93,9 +121,20 @@ def main() -> int:
     except Exception:                                    # noqa: BLE001
         pass
 
-    serveur = http.server.HTTPServer(("localhost", PORT), Guichet)
     serveur.handle_request()
     serveur.server_close()
+
+    if not recu:
+        # Sans minuterie, ce cas laissait la fenetre figee pour toujours :
+        # on attendait un retour de Google qui n'arrivera jamais.
+        print("\nRien recu en %d secondes : Google n'est jamais revenu ici."
+              % ATTENTE)
+        print("Cause la plus frequente : l'identifiant OAuth n'est pas de type "
+              "<< Application de bureau >>. Recree-le dans Google Cloud avec "
+              "ce type-la.")
+        print("Autre cause : l'adresse n'a jamais ete ouverte. Recolle-la a "
+              "la main dans le navigateur.")
+        return 1
 
     if "code" not in recu:
         print("\nEchec : pas de code. Detail : %s" % recu.get("error", "inconnu"))
@@ -105,7 +144,7 @@ def main() -> int:
         "code": recu["code"],
         "client_id": cid,
         "client_secret": secret,
-        "redirect_uri": REDIRECTION,
+        "redirect_uri": redirection,
         "grant_type": "authorization_code",
     }).encode("utf-8")
     req = urllib.request.Request(JETON, data=corps, method="POST")
