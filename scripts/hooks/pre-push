@@ -1,0 +1,67 @@
+#!/bin/sh
+# Hook git pre-push du site The Jammerz : garde-fou SEO avant chaque push.
+# Pour chaque commit poussé, lance « python scripts/check_seo.py --commit <sha> » :
+# le contrôle porte sur le contenu EXACT de ce commit (pas sur les fichiers non
+# commités du dossier) et BLOQUE le push s'il trouve un problème bloquant.
+#
+# Source versionnée : scripts/hooks/pre-push
+# Installation (une fois par copie du dépôt, depuis la racine) :
+#     cp scripts/hooks/pre-push .git/hooks/pre-push
+# Ce fichier doit garder des fins de ligne LF (sinon Git pour Windows ne le lance pas).
+
+racine=$(git rev-parse --show-toplevel 2>/dev/null) || {
+    echo "pre-push : impossible de trouver la racine du dépôt, push bloqué." >&2
+    exit 1
+}
+cd "$racine" || exit 1
+
+if [ ! -f scripts/check_seo.py ]; then
+    echo "" >&2
+    echo "PUSH BLOQUÉ : le contrôle SEO scripts/check_seo.py est introuvable." >&2
+    echo "Remets le fichier en place avant de pousser." >&2
+    exit 1
+fi
+
+PY=""
+for candidat in python python3; do
+    if command -v "$candidat" >/dev/null 2>&1 &&
+       "$candidat" -c "import sys; sys.exit(0 if sys.version_info[0] == 3 else 1)" >/dev/null 2>&1; then
+        PY="$candidat"
+        break
+    fi
+done
+if [ -z "$PY" ]; then
+    echo "" >&2
+    echo "PUSH BLOQUÉ : Python 3 introuvable (ni « python » ni « python3 »)," >&2
+    echo "le contrôle SEO ne peut pas tourner." >&2
+    exit 1
+fi
+
+bloque() {
+    echo "" >&2
+    echo "=================================================================" >&2
+    echo "PUSH BLOQUÉ par le contrôle SEO (scripts/check_seo.py)." >&2
+    echo "Lis les lignes « BLOQUANT » ci-dessus, corrige, puis relance le push." >&2
+    echo "Rien n'a été envoyé sur GitHub." >&2
+    echo "=================================================================" >&2
+    exit 1
+}
+
+# Git fournit sur l'entrée standard : <réf locale> <sha local> <réf distante> <sha distant>
+zero=0000000000000000000000000000000000000000
+vus=" "
+controles=0
+while read -r ref_locale sha_local ref_distante sha_distant; do
+    [ -n "$sha_local" ] || continue
+    [ "$sha_local" = "$zero" ] && continue          # suppression d'une branche distante
+    case "$vus" in *" $sha_local "*) continue ;; esac
+    vus="$vus$sha_local "
+    "$PY" scripts/check_seo.py --commit "$sha_local" || bloque
+    controles=$((controles + 1))
+done
+
+# Rien reçu (hook lancé à la main) : contrôle des fichiers du dossier.
+if [ "$controles" -eq 0 ]; then
+    "$PY" scripts/check_seo.py || bloque
+fi
+exit 0
