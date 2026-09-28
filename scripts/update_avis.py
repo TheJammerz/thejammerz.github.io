@@ -89,6 +89,20 @@ AVIS = "https://mybusiness.googleapis.com/v4"
 START_MARK = "<!-- AVIS:AUTO:START"
 END_MARK = "<!-- AVIS:AUTO:END -->"
 
+# --------------------------------------------------------------------------- #
+# VERROU D'IDENTITE — pose le 28/09/2026.
+# Le compte Google gere TROIS fiches : « Quentin DUMAS conseiller immobilier
+# IAD », « The Jammerz » et « Solydari ». L'ancienne version prenait la
+# PREMIERE fiche de la liste (lieux[0]) = la fiche immobiliere, et a publie
+# 24 avis d'agent immobilier sur CE site de groupe pendant 4 jours.
+# Desormais la fiche est choisie par son NOM (« jammerz »), jamais par sa
+# position, et son numero doit correspondre a l'ID connu ci-dessous. Au
+# moindre doute (0 ou plusieurs fiches « jammerz », ou un ID different), le
+# script REFUSE d'ecrire : mieux vaut une page inchangee qu'une mauvaise fiche.
+# --------------------------------------------------------------------------- #
+FICHE_JAMMERZ_ID = "17700908329130117413"    # accounts/.../locations/<ID>
+NOM_JAMMERZ = "jammerz"                       # doit figurer dans le titre de la fiche
+
 ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "index.html"
 # Le fichier d'export manuel (Takeout), s'il existe. Il est versionne : ce sont
@@ -223,6 +237,19 @@ def acces(cid: str, secret: str, refresh: str) -> str:
     return jeton
 
 
+def num_ou_refus(nom: str, val: str) -> str:
+    """Un identifiant Google (compte, fiche) est une suite de CHIFFRES et rien
+    d'autre. Un '/', un '?', une lettre ou un espace = tentative d'injection de
+    chemin dans l'URL des avis (ex. GBP_ACCOUNT_ID='<compte>/locations/<autre>/
+    reviews?z=' ferait router Google vers une AUTRE fiche malgre le pin). On
+    refuse plutot que de batir une URL douteuse. Verrou pose le 28/09/2026."""
+    if not re.fullmatch(r"[0-9]+", val or ""):
+        raise RuntimeError(
+            "VERROU : %s='%s' n'est pas un identifiant numerique simple ; je "
+            "refuse (injection de chemin possible dans l'URL)." % (nom, val))
+    return val
+
+
 def trouver_compte(jeton: str) -> str:
     """Numero du compte Business Profile. Demande le quota sur l'API Account
     Management, qui se demande separement."""
@@ -237,7 +264,13 @@ def trouver_compte(jeton: str) -> str:
 
 
 def trouver_fiche(jeton: str, compte: str) -> str:
-    """Numero de la fiche (l'etablissement) dans ce compte."""
+    """Numero de la fiche « The Jammerz » dans ce compte.
+
+    VERROU (28/09/2026) : ce compte gere plusieurs fiches (immobilier IAD,
+    Jammerz, Solydari). On choisit celle dont le TITRE contient « jammerz »,
+    JAMAIS la premiere de la liste, et on verifie qu'elle porte bien l'ID
+    connu. Sinon on leve une erreur : mieux vaut ne rien publier que
+    republier la mauvaise fiche."""
     url = ("%s/accounts/%s/locations?readMask=name,title&pageSize=50"
            % (FICHES, compte))
     rep = http(url, {"Authorization": "Bearer " + jeton})
@@ -246,11 +279,27 @@ def trouver_fiche(jeton: str, compte: str) -> str:
         raise RuntimeError("aucune fiche dans le compte %s" % compte)
     for l in lieux:
         dire("fiche : %s (%s)" % (l.get("title", "?"), l.get("name", "?")))
-    return (lieux[0].get("name", "")).split("/")[-1]
+    candidats = [l for l in lieux
+                 if NOM_JAMMERZ in (l.get("title", "") or "").casefold()]
+    if len(candidats) != 1:
+        raise RuntimeError(
+            "VERROU : %d fiche(s) « %s » sur %d dans ce compte — je refuse de "
+            "choisir a la place de l'humain (jamais lieux[0] au hasard)."
+            % (len(candidats), NOM_JAMMERZ, len(lieux)))
+    fid = (candidats[0].get("name", "")).split("/")[-1]
+    if fid != FICHE_JAMMERZ_ID:
+        raise RuntimeError(
+            "VERROU : la fiche « %s » porte l'ID %s, different de l'ID attendu "
+            "%s. Je refuse par securite." % (NOM_JAMMERZ, fid, FICHE_JAMMERZ_ID))
+    return fid
 
 
 def lire_avis(jeton: str, compte: str, fiche: str) -> list[dict]:
     """Tous les avis de la fiche, page par page (50 max par page)."""
+    # Dernier verrou avant de batir l'URL : compte ET fiche doivent etre des
+    # numeros purs, sinon un '/' ou un '?' injecte rerouterait la requete.
+    compte = num_ou_refus("compte", compte)
+    fiche = num_ou_refus("fiche", fiche)
     parent = "accounts/%s/locations/%s" % (compte, fiche)
     tous: list[dict] = []
     page = ""
@@ -453,11 +502,16 @@ def recuperer() -> list[dict] | None:
                 compte = trouver_compte(jeton)
                 dire("compte retenu : %s (a coller en secret GBP_ACCOUNT_ID)"
                      % compte)
+            compte = num_ou_refus("GBP_ACCOUNT_ID", compte)
             if not fiche:
                 dire("pas de GBP_LOCATION_ID : je cherche la fiche.")
                 fiche = trouver_fiche(jeton, compte)
                 dire("fiche retenue : %s (a coller en secret GBP_LOCATION_ID)"
                      % fiche)
+            elif fiche != FICHE_JAMMERZ_ID:
+                raise RuntimeError(
+                    "VERROU : GBP_LOCATION_ID=%s n'est pas la fiche The Jammerz "
+                    "(%s). Je refuse d'ecrire." % (fiche, FICHE_JAMMERZ_ID))
             return lire_avis(jeton, compte, fiche)
         except PasEncoreAutorise as e:
             dire("%s" % e)
