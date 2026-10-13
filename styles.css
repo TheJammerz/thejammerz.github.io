@@ -939,7 +939,7 @@ a.video-wrap:focus-visible { outline: 3px solid var(--c-accent, #ff3d2e); outlin
   background: var(--grad-primary); color: #fff;
   z-index: 2;
 }
-.tarif-card-info { background: rgba(123, 44, 191, 0.06); border-color: rgba(123, 44, 191, 0.2); }
+.tarif-card-info { background: rgba(123, 44, 191, 0.06); border-color: rgba(123, 44, 191, 0.2); grid-column: 1 / -1; } /* pleine largeur sous les formules (7 cartes depuis la jam, 13/10/2026) */
 .tarif-cta {
   display: inline-block; margin-top: 12px;
   font-weight: 700; font-size: 14px; letter-spacing: 0.05em;
