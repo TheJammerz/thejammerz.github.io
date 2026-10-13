@@ -26,6 +26,10 @@
 - Types de prestations : concert en bar ou restaurant, soirée publique et fête
   locale, mariage, événement privé et soirée d'entreprise, festival et salle de
   concert, prestation acoustique.
+- Jam sessions / scènes ouvertes : le groupe en organise, tous styles de musique,
+  tous instruments. Entrée gratuite, sono et backline fournis, instruments
+  disponibles sur place (chacun peut aussi venir avec le sien). Un niveau minimum
+  est demandé pour monter sur scène.
 
 ## Tarifs (affichés publiquement sur le site)
 
@@ -33,6 +37,8 @@
 - Mariage / événement privé : 500 € à 1 900 € (1 h à 4 h de live à cinq)
 - Acoustique solo ou duo : 400 €
 - Soirée complète de 5 h à 6 h : sur devis
+- Jam session / scène ouverte organisée et animée dans votre bar ou votre salle :
+  400 € à 700 €
 - Frais de déplacement : 8 € par kilomètre au-delà de 20 km de Bayonne
 
 ## Pages
