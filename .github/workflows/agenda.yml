@@ -3,7 +3,7 @@ name: Mise à jour agenda
 # Régénère la rubrique « Nos prochains lives » depuis le Google Agenda public.
 on:
   schedule:
-    - cron: "0 5 * * *"        # tous les jours 05:00 UTC (07h Paris l'été, 06h l'hiver)
+    - cron: "*/30 * * * *"     # toutes les 30 min : un event ajouté, modifié ou SUPPRIMÉ dans Google Agenda se reflète vite sur le site (le bot ne commite que s il y a un changement)
   workflow_dispatch:            # bouton « Run workflow » manuel
   push:                         # première exécution dès l'ajout du script/workflow
     paths:
